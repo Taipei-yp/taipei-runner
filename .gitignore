@@ -1,0 +1,15 @@
+.idea/
+*.iml
+.vscode/
+
+node_modules/
+dist/
+.tmp/
+.eslintcache
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+.env

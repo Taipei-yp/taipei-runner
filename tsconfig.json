@@ -1,0 +1,36 @@
+{
+  "include": [
+    "./client",
+    "./global.d.ts",
+  ],
+  "exclude": [
+    "node_modules"
+  ],
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "rootDir": "./client",
+    "strict": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "alwaysStrict": true,
+    "strictNullChecks": true,
+    "noFallthroughCasesInSwitch": true,
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "inlineSources": true,
+    "esModuleInterop": true,
+    "types": [
+      "node",
+      "jest"
+    ],
+    "jsx": "react"
+  }
+}
