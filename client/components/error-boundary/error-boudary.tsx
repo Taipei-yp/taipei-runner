@@ -19,7 +19,7 @@ class ErrorBoundary extends React.Component<Props, State> {
     console.warn(`У нас ошибка! ${error.message}`, errorInfo.componentStack);
   }
 
-  getDerivedStateFromError() {
+  static getDerivedStateFromError() {
     return {
       isError: true,
     };
