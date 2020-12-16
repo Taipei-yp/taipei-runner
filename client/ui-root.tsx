@@ -1,7 +1,7 @@
 import { hot } from "react-hot-loader/root";
 import * as React from "react";
-import App from "./app";
-import AppError from "./app-error";
+import App from "./main/app/app";
+import AppError from "./main/app-error/app-error";
 import ErrorBoundary from "./components/error-boundary/error-boudary";
 
 const UiRoot: React.FC = () => {
