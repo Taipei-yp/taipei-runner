@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import AppRoot from "./ui-root";
+import UiRoot from "./ui-root";
 
 interface IBuildInfo {
   buildDate: number;
@@ -21,4 +21,4 @@ function printBuildInfo(buildInfoString: string): void {
 }
 
 printBuildInfo((process.env.BUILD_INFO as unknown) as string);
-ReactDOM.render(<AppRoot />, document.getElementById("app"));
+ReactDOM.render(<UiRoot />, document.getElementById("app"));
