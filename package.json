@@ -17,7 +17,7 @@
     "url": "https://github.com/Taipei-yp/taipei-runner/issues"
   },
   "homepage": "https://github.com/Taipei-yp/taipei-runner#readme",
-  "main": "client/app.tsx",
+  "main": "client/index.tsx",
   "scripts": {
     "start": "cross-env NODE_ENV=development webpack serve --config webpack/webpack.dev.js",
     "build": "run-s build-prod",
