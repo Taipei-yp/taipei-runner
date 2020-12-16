@@ -1,36 +1,34 @@
-import React from "react";
+import { Component, ErrorInfo, ReactElement } from "react";
 
 interface Props {
-  content?: React.ReactElement;
-  errorContent?: React.ReactElement;
+  content: ReactElement;
+  errorContent: ReactElement;
 }
 
 interface State {
-  isError: boolean;
+  hasError: boolean;
 }
 
 // eslint-disable-next-line react/prefer-stateless-function
-class ErrorBoundary extends React.Component<Props, State> {
-  state = {
-    isError: false,
-  };
-
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.warn(`У нас ошибка! ${error.message}`, errorInfo.componentStack);
-  }
-
+export class ErrorBoundary extends Component<Props, State> {
   static getDerivedStateFromError() {
     return {
-      isError: true,
+      hasError: true,
     };
+  }
+
+  state = {
+    hasError: false,
+  };
+
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error(`У нас ошибка! ${error.message}`, errorInfo.componentStack);
   }
 
   render() {
     const { content, errorContent } = this.props;
-    const { isError } = this.state;
+    const { hasError } = this.state;
 
-    return <>{isError ? errorContent : content}</>;
+    return hasError ? errorContent : content;
   }
 }
-
-export default ErrorBoundary;
