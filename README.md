@@ -65,4 +65,5 @@ BROWSER=false - отключение авто открытия браузера 
 `npm test`
 
 `npm run lint` - проверка стиля
+
 `npm run lint-write` - фикс стиля
