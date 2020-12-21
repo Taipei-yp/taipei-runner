@@ -1,0 +1,34 @@
+@import "./variables.css";
+
+@font-face {
+  font-family: "ArcadeClassic";
+  src: url("../assets/fonts/arcade-classic/ArcadeClassic.eot");
+  src: local("ArcadeClassic"),
+    url("../assets/fonts/arcade-classic/ArcadeClassic.eot?#iefix")
+      format("embedded-opentype"),
+    url("../assets/fonts/arcade-classic/ArcadeClassic.woff2") format("woff2"),
+    url("../assets/fonts/arcade-classic/ArcadeClassic.woff") format("woff"),
+    url("../assets/fonts/arcade-classic/ArcadeClassic.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+html,
+body {
+  min-width: 100%;
+  width: 100%;
+  max-width: 100%;
+  min-height: 100%;
+  height: 100%;
+  max-height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--tpr-color-dark-deep);
+  color: var(--tpr-color-dark-contrast);
+  font-size: 18px;
+  font-family: ArcadeClassic, sans-serif;
+}

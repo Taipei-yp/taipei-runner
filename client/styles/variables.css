@@ -1,0 +1,13 @@
+:root {
+  --tpr-color-primary: #fa5be8;
+  --tpr-color-primary-contrast: #ffffff;
+  --tpr-color-secondary: #2ce8f4;
+  --tpr-color-secondary-contrast: #ffffff;
+  --tpr-color-accent: #ffc700;
+  --tpr-color-accent-contrast: #ffffff;
+  --tpr-color-dark: #181854;
+  --tpr-color-dark-contrast: #ffffff;
+  --tpr-color-dark-deep: #000239;
+  --tpr-color-dark-shade: #530252;
+  --tpr-color-light: #cbcbcb;
+}
