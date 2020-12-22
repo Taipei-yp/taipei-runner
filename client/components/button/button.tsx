@@ -6,19 +6,19 @@ import "./button.css";
 const b = block("button");
 
 export type Props = {
+  onClick: (e: React.MouseEvent) => void;
   children: React.ReactNode;
   viewType?: "primary" | "secondary";
   className?: string;
   type?: "submit" | "button" | "reset";
-  onClick?: (e: React.MouseEvent) => void;
 };
 
 const Button: FC<Props> = ({
+  onClick,
   children,
   viewType = "primary",
   className = "",
   type = "button",
-  onClick,
 }) => {
   return (
     <button
