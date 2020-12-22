@@ -1,0 +1,14 @@
+.textarea {
+  min-width: 280px;
+  min-height: 127px;
+  padding: 25px 16px;
+  border: 3px solid var(--tpr-color-primary);
+  box-sizing: border-box;
+  background: var(--tpr-color-dark-deep);
+  color: var(--tpr-color-dark-contrast);
+  font-family: inherit;
+
+  &:focus {
+    outline: var(--tpr-color-light) auto 1px;
+  }
+}
