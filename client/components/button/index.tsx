@@ -1,5 +1,3 @@
-import { memo } from "react";
+import { Button } from "./button";
 
-import { Button, Props } from "./button";
-
-export default memo<Props>(Button);
+export default Button;

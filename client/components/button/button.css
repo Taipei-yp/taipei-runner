@@ -7,8 +7,11 @@
   font-size: 24px;
   text-align: center;
   cursor: pointer;
-  outline: none;
   font-family: inherit;
+
+  &:focus {
+    outline: var(--tpr-color-light) auto 1px;
+  }
 
   &_view-type_primary {
     background-color: var(--tpr-color-primary);

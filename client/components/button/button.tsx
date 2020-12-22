@@ -1,4 +1,4 @@
-import React, { FC, HTMLAttributes } from "react";
+import React, { FC, memo } from "react";
 import block from "bem-cn";
 
 import "./button.css";
@@ -6,23 +6,30 @@ import "./button.css";
 const b = block("button");
 
 export type Props = {
+  children: React.ReactNode;
   viewType?: "primary" | "secondary";
   className?: string;
   type?: "submit" | "button" | "reset";
-} & HTMLAttributes<HTMLButtonElement>;
+  onClick?: (e: React.MouseEvent) => void;
+};
 
-export const Button: FC<Props> = ({
+const Button: FC<Props> = ({
   children,
   viewType = "primary",
   className = "",
   type = "button",
-  ...props
+  onClick,
 }) => {
-  const bemClassName = b.mix(b({ "view-type": viewType }), className);
-
   return (
-    <button type={type} className={bemClassName} {...props}>
+    <button
+      type={type}
+      className={b.mix(b({ "view-type": viewType }), className)}
+      onClick={onClick}
+    >
       {children}
     </button>
   );
 };
+
+const WrappedButton = memo(Button);
+export { WrappedButton as Button };
