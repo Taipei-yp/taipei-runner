@@ -5,5 +5,6 @@ module.exports = {
         },
         'postcss-import-ext-glob': {},
         'postcss-import': {},
+        'postcss-nested': {}
     },
 };
