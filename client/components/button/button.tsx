@@ -6,15 +6,14 @@ import "./button.css";
 const b = block("button");
 
 export type Props = {
-  onClick: (e: React.MouseEvent) => void;
   children: React.ReactNode;
+  onClick?: (e: React.MouseEvent) => void;
   viewType?: "primary" | "secondary";
   className?: string;
   type?: "submit" | "button" | "reset";
 };
 
 const Button: FC<Props> = ({
-  onClick,
   children,
   viewType = "primary",
   className = "",
@@ -24,7 +23,6 @@ const Button: FC<Props> = ({
     <button
       type={type}
       className={b.mix(b({ "view-type": viewType }), className)}
-      onClick={onClick}
     >
       {children}
     </button>

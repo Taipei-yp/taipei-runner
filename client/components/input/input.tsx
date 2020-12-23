@@ -1,32 +1,35 @@
 import React, { FC, ChangeEvent, memo } from "react";
 import block from "bem-cn";
 
-import "./textarea.css";
+import "./input.css";
 
-const b = block("textarea");
+const b = block("input");
 
 type Props = {
-  onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   value: string;
   className?: string;
   name?: string;
+  type?: "text" | "password" | "email";
 };
 
-const Textarea: FC<Props> = ({
+const Input: FC<Props> = ({
   onChange,
   value = "",
   className = "",
   name = "",
+  type = "text",
 }) => {
   return (
-    <textarea
+    <input
       className={b.mix(className)}
       onChange={onChange}
       value={value}
       name={name}
+      type={type}
     />
   );
 };
 
-const WrappedTextarea = memo(Textarea);
-export { WrappedTextarea as Textarea };
+const WrappedInput = memo(Input);
+export { WrappedInput as Input };

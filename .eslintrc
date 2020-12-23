@@ -69,7 +69,8 @@
     "react/button-has-type": "off",
     "jest/expect-expect": "off",
     "jest/no-standalone-expect": "off",
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "jsx-a11y/label-has-associated-control": "off"
   },
   "settings": {
     "react": {
