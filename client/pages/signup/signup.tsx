@@ -66,7 +66,7 @@ const SignUp: FC<Props> = ({ className = "" }) => {
     <div className={b.mix(className)}>
       <Panel>
         {/* TODO здесь появится Heading компонент, который сделаем позже */}
-        <h1>Sig up</h1>
+        <h1>Sign up</h1>
         <FormView onSubmit={OnSubmit} fields={SignUpFields} />
         {/* TODO здесь появится LinkView компонент, который сделаем позже */}
         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}

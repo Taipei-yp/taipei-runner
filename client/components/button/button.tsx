@@ -15,6 +15,7 @@ export type Props = {
 
 const Button: FC<Props> = ({
   children,
+  onClick,
   viewType = "primary",
   className = "",
   type = "button",
@@ -23,6 +24,7 @@ const Button: FC<Props> = ({
     <button
       type={type}
       className={b.mix(b({ "view-type": viewType }), className)}
+      onClick={onClick}
     >
       {children}
     </button>
