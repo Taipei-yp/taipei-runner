@@ -3,13 +3,14 @@
   font-weight: normal;
   font-size: 36px;
   line-height: 40px;
+  text-shadow: 0 5px 0 var(--tpr-color-dark-shade);
 
   &_view-type_primary {
-    color: var(--tpr-color-accent);
+    color: var(--tpr-color-primary);
   }
 
   &_view-type_secondary {
-    color: var(--tpr-color-primary);
+    color: var(--tpr-color-accent);
   }
 
   &_size_small {
