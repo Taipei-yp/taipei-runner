@@ -7,14 +7,14 @@ const b = block("heading");
 
 export type Props = {
   children: React.ReactNode;
-  viewType?: "primary" | "secondary";
+  viewType?: "primary" | "accent";
   viewSize?: "small" | "medium" | "large";
   className?: string;
 };
 
 const Heading: FC<Props> = ({
   children,
-  viewType = "primary",
+  viewType = "accent",
   viewSize = "medium",
   className = "",
 }) => {

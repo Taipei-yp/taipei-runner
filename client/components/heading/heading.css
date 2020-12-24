@@ -9,7 +9,7 @@
     color: var(--tpr-color-primary);
   }
 
-  &_view-type_secondary {
+  &_view-type_accent {
     color: var(--tpr-color-accent);
   }
 
