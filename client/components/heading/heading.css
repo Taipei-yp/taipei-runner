@@ -1,0 +1,23 @@
+.heading {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 36px;
+  line-height: 40px;
+
+  &_view-type_primary {
+    color: var(--tpr-color-accent);
+  }
+
+  &_view-type_secondary {
+    color: var(--tpr-color-primary);
+  }
+
+  &_size_small {
+    font-size: 28px;
+    font-size: 30px;
+  }
+  &_size_large {
+    font-size: 96px;
+    line-height: 100px;
+  }
+}
