@@ -5,11 +5,11 @@
   line-height: 40px;
   text-shadow: 0 5px 0 var(--tpr-color-dark-shade);
 
-  &_view-type_primary {
+  &_color_primary {
     color: var(--tpr-color-primary);
   }
 
-  &_view-type_accent {
+  &_color_accent {
     color: var(--tpr-color-accent);
   }
 
