@@ -1,0 +1,19 @@
+.text {
+  &_color_primary {
+    color: var(--tpr-color-primary);
+  }
+
+  &_color_light {
+    color: var(--tpr-color-light);
+  }
+
+  &_size_small {
+    font-size: 16px;
+    line-height: 9px;
+  }
+
+  &_size_large {
+    font-size: 28px;
+    line-height: 20px;
+  }
+}
