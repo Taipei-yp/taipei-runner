@@ -6,25 +6,19 @@ import "./text.css";
 const b = block("text");
 
 export type Props = {
-  children: React.ReactNode;
-  textColor?: "primary" | "light";
-  textSize?: "small" | "large";
+  color?: "primary" | "light" | "accent";
+  size?: "small" | "large";
+  text?: string;
   className?: string;
 };
 
 const Text: FC<Props> = ({
-  children,
-  textColor = null,
-  textSize = null,
+  color = null,
+  size = null,
   className = "",
+  text = "",
 }) => {
-  return (
-    <span
-      className={b.mix(b({ color: textColor }, { size: textSize }), className)}
-    >
-      {children}
-    </span>
-  );
+  return <span className={b({ color, size }).mix(className)}>{text}</span>;
 };
 
 const WrappedText = memo(Text);

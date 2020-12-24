@@ -1,4 +1,7 @@
 .text {
+  font-size: var(--tpr-fontsize);
+  line-height: var(--tpr-fontsize);
+
   &_color_primary {
     color: var(--tpr-color-primary);
   }
@@ -7,13 +10,17 @@
     color: var(--tpr-color-light);
   }
 
+  &_color_accent {
+    color: var(--tpr-color-accent);
+  }
+
   &_size_small {
-    font-size: 16px;
-    line-height: 9px;
+    font-size: var(--tpr-fontsize-s);
+    line-height: var(--tpr-fontsize-s);
   }
 
   &_size_large {
-    font-size: 28px;
-    line-height: 20px;
+    font-size: var(--tpr-fontsize-l);
+    line-height: var(--tpr-fontsize-l);
   }
 }
