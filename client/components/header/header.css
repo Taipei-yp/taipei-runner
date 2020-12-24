@@ -1,0 +1,9 @@
+.header {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 145px;
+  padding: 15px 55px;
+  box-sizing: border-box;
+}
