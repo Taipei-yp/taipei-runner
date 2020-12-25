@@ -1,4 +1,4 @@
-import React, { FC, memo } from "react";
+import React, { FC, memo, ReactNode } from "react";
 import block from "bem-cn";
 
 import "./header.css";
@@ -6,8 +6,8 @@ import "./header.css";
 const b = block("header");
 
 export type Props = {
-  left?: React.ReactNode;
-  right?: React.ReactNode;
+  left?: ReactNode;
+  right?: ReactNode;
   className?: string;
 };
 
