@@ -1,25 +1,12 @@
 import React, { FC } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-
-import { SignUp } from "./pages/signup";
+import { BrowserRouter as Router } from "react-router-dom";
+import { Routing } from "./components/routing";
 
 export const App: FC = () => {
   return (
     <div className="app">
       <Router>
-        <Switch>
-          <Route path="/signin" />
-          <Route path="/signup" component={SignUp} />
-          <Route path="/profile" />
-          <Route path="/leaderboard" />
-          <Route path="/forum" />
-          <Route path="/forum/topic/:id" />
-          <Route path="/feedback" />
-          <Route path="/game" />
-          <Route path="/game-over" />
-          <Route exact path="/" />
-          <Route path="/*" />
-        </Switch>
+        <Routing />
       </Router>
     </div>
   );
