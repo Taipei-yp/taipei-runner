@@ -6,6 +6,7 @@ import { SignUp } from "../../pages/signup";
 const Routing: FC = () => {
   return (
     <Switch>
+      <Route exact path="/" />
       <Route path="/signin" />
       <Route path="/signup" component={SignUp} />
       <Route path="/profile" />
@@ -15,8 +16,7 @@ const Routing: FC = () => {
       <Route path="/feedback" />
       <Route path="/game" />
       <Route path="/game-over" />
-      <Route exact path="/" />
-      <Route path="/*" />
+      <Route path="*" />
     </Switch>
   );
 };
