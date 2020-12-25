@@ -1,6 +1,7 @@
 .text {
   font-size: var(--tpr-fontsize);
   line-height: var(--tpr-fontsize);
+  margin: 0;
 
   &_color_primary {
     color: var(--tpr-color-primary);
@@ -22,5 +23,18 @@
   &_size_large {
     font-size: var(--tpr-fontsize-l);
     line-height: var(--tpr-fontsize-l);
+  }
+
+  &_size_extra {
+    font-size: var(--tpr-fontsize-x);
+    line-height: var(--tpr-fontsize-x);
+  }
+  &_size_extra2 {
+    font-size: var(--tpr-fontsize-x);
+    line-height: var(--tpr-fontsize-x);
+  }
+  &_size_extra3 {
+    font-size: var(--tpr-fontsize-x3);
+    line-height: var(--tpr-fontsize-x3);
   }
 }
