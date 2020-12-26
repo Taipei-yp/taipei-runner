@@ -11,16 +11,13 @@ import "./table.css";
 
 const b = block("table");
 
-type Props<
-  TData extends WithId = WithId,
-  TDataKeys extends keyof TData = keyof TData
-> = {
+type Props<TData extends WithId> = {
   className?: string;
   headers: Array<HeaderInfo<TData>>;
   data: TData[];
-  components?: Partial<Record<TDataKeys, InnerComponent>>;
+  components?: Partial<Record<keyof TData, InnerComponent>>;
   onSortRequest?: (
-    field: TDataKeys | null,
+    field: keyof TData | null,
     direction: SortDirection | null,
   ) => void;
 };
@@ -60,18 +57,23 @@ function Table<TData extends WithId>({
   const handleHeadClick = useCallback(
     (event: MouseEvent) => {
       const { field } = (event.target as HTMLTableSectionElement).dataset;
+
+      // updating sort: null -> asc -> desc -> null -> asc -> ...
       setSort(prevSort => {
         if (prevSort) {
           const [prevField, prevDirection] = prevSort.split("-");
+
           if (prevField === field && prevDirection === "asc") {
             onSortRequest(field, "desc");
             return `${field}-desc`;
           }
+
           if (prevField === field && prevDirection === "desc") {
             onSortRequest(null, null);
             return null;
           }
         }
+
         onSortRequest(field as keyof TData, "asc");
         return `${field}-asc`;
       });
