@@ -36,7 +36,7 @@ const data = [
 ];
 
 const Forum: FC<Props> = ({ className }) => {
-  /* right now it's all is just a test of the table component */
+  /* right now it all is just a test of the table component */
   const [sort, handleSortRequest] = useNullableTableSort();
 
   return (
