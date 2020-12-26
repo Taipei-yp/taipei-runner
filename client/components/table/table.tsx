@@ -16,7 +16,7 @@ type Props<TData extends WithId> = {
 
 type HeaderInfo<TData extends WithId> = {
   title: string;
-  field: keyof TData;
+  columnId: keyof TData;
 };
 
 type WithId = {
@@ -33,14 +33,18 @@ function Table<TData extends WithId>({
   headers,
   data,
   components = {},
-  sort = { field: null, direction: null },
+  sort = { sortFieldId: null, direction: null },
   onHeaderClick = () => {},
 }: Props<TData>) {
-  const allComponents = headers.reduce((acc, { field }) => {
-    acc[field] = components[field] ?? TextRenderer;
+  // С появлением api вот это преобразование уедет в парсер.
+  // Мемоизация тут может поломать сортировку в теории<div className=""></div>
+  const allComponents = headers.reduce((acc, { columnId }) => {
+    acc[columnId] = components[columnId] ?? TextRenderer;
     return acc;
   }, {} as Record<keyof TData, InnerComponent>);
 
+  // Лучше не мутирвоать какой то внешний объект из map, а создать функцию
+  // getDataComponent или renderDataComponent.
   let DataComponent: InnerComponent;
 
   const handleHeadClick = useCallback(
@@ -51,18 +55,25 @@ function Table<TData extends WithId>({
     [onHeaderClick],
   );
 
+  const { sortFieldId, direction } = sort;
+
   return (
     <table className={b.mix(className)}>
       <thead>
         <tr onClick={handleHeadClick}>
-          {headers.map(header => (
-            <td key={header.field as string} data-field={header.field}>
-              {header.title}
+          {headers.map(({ columnId, title }) => (
+            // Не надо делать as string, если ты считаешь, что здесь должна быть строка
+            // Лучше приводить значение к строке.
+            <td key={String(columnId)} data-field={columnId}>
+              {title}
               {/* TODO: change visual effects of sorting */}
-              {sort.field === header.field && sort.direction === "asc" && (
+              {/** Выглядит очень громоздно, лучше вынести это в функцию с ранним выходом */}
+              {sortFieldId === columnId && direction === "asc" && (
                 <span>+</span>
               )}
-              {sort.field === header.field && sort.direction === "desc" && (
+
+              {/** Эти проверки можно превратить в мапу Record<Direction, Symbol>. И если есть значение отдаем симфол, если нет, то не рисуем ничего. */}
+              {sortFieldId === columnId && direction === "desc" && (
                 <span>-</span>
               )}
             </td>
@@ -71,12 +82,12 @@ function Table<TData extends WithId>({
       </thead>
       <tbody>
         {data.map(datum => (
-          <tr key={datum.id as string}>
-            {headers.map(header => (
-              <td key={`${datum.id}-${header.field}`}>
+          <tr key={String(datum.id)}>
+            {headers.map(({ columnId }) => (
+              <td key={`${datum.id}-${columnId}`}>
                 {
-                  ((DataComponent = allComponents[header.field]),
-                  (<DataComponent value={datum[header.field]} />))
+                  ((DataComponent = allComponents[columnId]),
+                  (<DataComponent value={datum[columnId]} />))
                 }
               </td>
             ))}

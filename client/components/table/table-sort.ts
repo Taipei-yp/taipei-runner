@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 
 export type TableSort = {
-  field: string | null;
+  sortFieldId: string | null;
   direction: SortDirection | null;
 };
 
@@ -11,31 +11,37 @@ type SortRequestHandler = (field: string) => void;
 
 export function useNullableTableSort(): [TableSort, SortRequestHandler] {
   const [sort, setSort] = useState({
-    field: null,
+    // Хорошо бы давать более осмысленные названия переменным
+    // Инача от обилия field сложно разобраться в том, что проиходит
+    sortFieldId: null,
     direction: null,
   } as TableSort);
 
-  const handleSortRequest = useCallback((field: string) => {
+  const handleSortRequest = useCallback((fieldId: string) => {
     // updating sort: null -> asc -> desc -> null -> asc -> ...
-    setSort(({ field: prevField, direction: prevDirection }) => {
-      if (prevField) {
-        if (prevField === field && prevDirection === "asc") {
-          return {
-            field,
-            direction: "asc",
-          };
-        }
-
-        if (prevField === field && prevDirection === "desc") {
-          return {
-            field: null,
-            direction: null,
-          };
+    setSort(({ sortFieldId, direction: prevDirection }) => {
+      if (sortFieldId && sortFieldId === fieldId) {
+        switch (prevDirection) {
+          case "asc":
+            return {
+              sortFieldId: fieldId,
+              // Direction я бы превратил в enum.
+              direction: "asc",
+            };
+          case "desc":
+            return {
+              sortFieldId: null,
+              // Я правда не очень понимаю почему direction может быть null. Если избавить от этого условия
+              // код можно будет сильно упростить.
+              direction: null,
+            };
+          default:
+            break;
         }
       }
 
       return {
-        field,
+        sortFieldId: fieldId,
         direction: "asc",
       };
     });
