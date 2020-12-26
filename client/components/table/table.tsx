@@ -1,12 +1,6 @@
-import React, {
-  ComponentType,
-  memo,
-  useCallback,
-  MouseEvent,
-  useState,
-} from "react";
+import React, { ComponentType, memo, useCallback, MouseEvent } from "react";
 import block from "bem-cn";
-
+import { TableSort } from "./table-sort";
 import "./table.css";
 
 const b = block("table");
@@ -16,10 +10,8 @@ type Props<TData extends WithId> = {
   headers: Array<HeaderInfo<TData>>;
   data: TData[];
   components?: Partial<Record<keyof TData, InnerComponent>>;
-  onSortRequest?: (
-    field: keyof TData | null,
-    direction: SortDirection | null,
-  ) => void;
+  sort?: TableSort;
+  onHeaderClick?: (field: string) => void;
 };
 
 type HeaderInfo<TData extends WithId> = {
@@ -34,8 +26,6 @@ type WithId = {
 
 type InnerComponent = ComponentType<{ value: unknown }>;
 
-type SortDirection = "asc" | "desc";
-
 const TextRenderer = (({ value }) => value) as InnerComponent;
 
 function Table<TData extends WithId>({
@@ -43,42 +33,22 @@ function Table<TData extends WithId>({
   headers,
   data,
   components = {},
-  onSortRequest = () => {},
+  sort = { field: null, direction: null },
+  onHeaderClick = () => {},
 }: Props<TData>) {
-  const allComponents = headers.reduce((acc, header) => {
-    acc[header.field] = components[header.field] ?? TextRenderer;
+  const allComponents = headers.reduce((acc, { field }) => {
+    acc[field] = components[field] ?? TextRenderer;
     return acc;
   }, {} as Record<keyof TData, InnerComponent>);
 
   let DataComponent: InnerComponent;
 
-  const [sort, setSort] = useState(null as null | string);
-
   const handleHeadClick = useCallback(
     (event: MouseEvent) => {
       const { field } = (event.target as HTMLTableSectionElement).dataset;
-
-      // updating sort: null -> asc -> desc -> null -> asc -> ...
-      setSort(prevSort => {
-        if (prevSort) {
-          const [prevField, prevDirection] = prevSort.split("-");
-
-          if (prevField === field && prevDirection === "asc") {
-            onSortRequest(field, "desc");
-            return `${field}-desc`;
-          }
-
-          if (prevField === field && prevDirection === "desc") {
-            onSortRequest(null, null);
-            return null;
-          }
-        }
-
-        onSortRequest(field as keyof TData, "asc");
-        return `${field}-asc`;
-      });
+      onHeaderClick(field!);
     },
-    [onSortRequest],
+    [onHeaderClick],
   );
 
   return (
@@ -88,9 +58,13 @@ function Table<TData extends WithId>({
           {headers.map(header => (
             <td key={header.field as string} data-field={header.field}>
               {header.title}
-              {/* TODO: change visual effects for sorting */}
-              {sort === `${header.field}-asc` && <span>+</span>}
-              {sort === `${header.field}-desc` && <span>-</span>}
+              {/* TODO: change visual effects of sorting */}
+              {sort.field === header.field && sort.direction === "asc" && (
+                <span>+</span>
+              )}
+              {sort.field === header.field && sort.direction === "desc" && (
+                <span>-</span>
+              )}
             </td>
           ))}
         </tr>
