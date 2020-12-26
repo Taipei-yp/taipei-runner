@@ -9,6 +9,7 @@ export type SortDirection = "asc" | "desc";
 
 type SortRequestHandler = (field: string) => void;
 
+// Вообще это можно описать через switch и стейт машину, но кажется тут совсем изевый вариант для этого.
 const directionState: Record<SortDirection, SortDirection | null> = {
   asc: "desc",
   desc: null,
