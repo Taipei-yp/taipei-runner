@@ -1,0 +1,16 @@
+.link-view {
+  color: var(--tpr-color-secondary);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &_small {
+    font-size: 18px;
+  }
+
+  &_normal {
+    font-size: 36px;
+  }
+}
