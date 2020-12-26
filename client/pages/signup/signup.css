@@ -4,4 +4,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &__heading {
+    text-align: center;
+    margin: 15px 0 43px 0;
+  }
 }

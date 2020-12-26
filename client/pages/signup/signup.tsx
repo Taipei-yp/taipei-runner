@@ -1,9 +1,11 @@
 import React, { FC, memo } from "react";
 import block from "bem-cn";
+import { Link } from "react-router-dom";
 import { Panel } from "../../components/panel";
 import { FormViewField, FormView } from "../../components/form-view";
 
 import "./signup.css";
+import { Heading } from "../../components/heading";
 
 const OnSubmit = (values: Record<string, unknown>) => {
   console.log(values);
@@ -65,12 +67,18 @@ const SignUp: FC<Props> = ({ className = "" }) => {
   return (
     <div className={b.mix(className)}>
       <Panel>
-        {/* TODO здесь появится Heading компонент, который сделаем позже */}
-        <h1>Sign up</h1>
+        <Heading
+          size="medium"
+          color="accent"
+          text="Sign Up"
+          className={b("heading")}
+        />
         <FormView onSubmit={OnSubmit} fields={SignUpFields} />
         {/* TODO здесь появится LinkView компонент, который сделаем позже */}
         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-        <a>Already have an account</a>
+        <Link to="/signin" className={b("link")}>
+          Already have an account
+        </Link>
       </Panel>
     </div>
   );
