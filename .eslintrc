@@ -60,17 +60,18 @@
     "@typescript-eslint/no-floating-promises": "off",
     "@typescript-eslint/restrict-template-expressions": "off",
     "@typescript-eslint/unbound-method": "off",
-    "prettier/prettier": ["error", {
-     "endOfLine":"auto"
-    }],
+    "prettier/prettier": ["error",{"endOfLine":"auto"}],
     "promise/always-return": "off",
     "promise/catch-or-return": "off",
     "react/prop-types": "off",
     "react/jsx-props-no-spreading": "off",
     "react/state-in-constructor": "off",
+    "react/button-has-type": "off",
+    "react/require-default-props": "off",
     "jest/expect-expect": "off",
     "jest/no-standalone-expect": "off",
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "jsx-a11y/label-has-associated-control": "off"
   },
   "settings": {
     "react": {

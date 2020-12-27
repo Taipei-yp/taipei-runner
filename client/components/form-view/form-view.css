@@ -1,0 +1,5 @@
+.form-view {
+  &__form-field {
+    margin-bottom: 20px;
+  }
+}

@@ -1,0 +1,15 @@
+.input {
+  min-width: 280px;
+  height: 28px;
+  border: none;
+  border-bottom: 3px solid var(--tpr-color-primary);
+  font-size: 18px;
+  box-sizing: border-box;
+  background: inherit;
+  color: inherit;
+  font-family: inherit;
+
+  &:focus {
+    outline: var(--tpr-color-light) auto 1px;
+  }
+}

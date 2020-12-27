@@ -1,0 +1,21 @@
+.avatar {
+  position: relative;
+  display: inline-block;
+  width: 73px;
+  height: 73px;
+  border: 2px solid var(--tpr-color-dark-shade);
+  border-radius: 1px;
+  overflow: hidden;
+
+  &_size_large {
+    width: 129px;
+    height: 129px;
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    background-color: var(--tpr-color-dark);
+    object-fit: cover;
+  }
+}
