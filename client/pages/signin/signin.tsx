@@ -3,9 +3,9 @@ import block from "bem-cn";
 import { Link } from "react-router-dom";
 import { Panel } from "../../components/panel";
 import { FormViewField, FormView } from "../../components/form-view";
+import { Heading } from "../../components/heading";
 
 import "./signin.css";
-import { Heading } from "../../components/heading";
 
 const OnSubmit = (values: Record<string, unknown>) => {
   console.log(values);
