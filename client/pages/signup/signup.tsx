@@ -12,6 +12,7 @@ import { SignUpUser } from "../../models/user";
 import { useAuthService } from "../../services/auth";
 
 import "./signup.css";
+import { Heading } from "../../components/heading";
 
 const b = block("sign-up");
 
