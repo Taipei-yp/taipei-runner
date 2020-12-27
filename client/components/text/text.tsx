@@ -10,7 +10,7 @@ export type Props = {
   size?: "s" | "l" | "xl" | "xxl";
   text?: string;
   className?: string;
-  header: boolean;
+  header?: boolean;
 };
 
 const Text: FC<Props> = ({

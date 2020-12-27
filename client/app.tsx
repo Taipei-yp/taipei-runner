@@ -20,7 +20,10 @@ export const App: FC = () => {
           <Route path="/feedback" />
           <Route path="/game" component={Game} />
           <Route path="/game-over" />
-          <Route path="*" />
+          <Route
+            path="*"
+            component={() => <Error textTop="404" textBott="Not found" />}
+          />
         </Switch>
       </Router>
     </div>
