@@ -1,5 +1,6 @@
 import block from "bem-cn";
 import React, { FC, memo } from "react";
+import { Pagination } from "../../components/pagination";
 import { Table } from "../../components/table";
 import { useNullableTableSort } from "../../components/table/table-sort";
 import "./forum.css";
@@ -50,6 +51,7 @@ const Forum: FC<Props> = ({ className }) => {
         sort={sort}
         onHeaderClick={handleSortRequest}
       />
+      <Pagination pagesCount={5} currentPage={3} onPageClick={() => {}} />
     </div>
   );
 };
