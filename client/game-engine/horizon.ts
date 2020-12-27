@@ -2,14 +2,12 @@ import { Coords, Dimensions } from "./models";
 import { getRandomNum } from "./utils";
 import HorizonLine from "./horizon-line";
 import Obstacle, { ObstacleTypes } from "./obstacle";
-
-// #QA Runner.config.MAX_OBSTACLE_DUPLICATION
-const MAX_OBSTACLE_DUPLICATION = 3;
+import { gameConfig as config } from "./config";
 
 /**
  * Horizon background class.
  * @param {HTMLCanvasElement} canvas
- * @param {Object} spritePos Sprite positioning.
+ * @param {Object} spritePos Sprite positioning.F
  * @param {Object} dimensions Canvas dimensions.
  * @param {number} gapCoefficient
  * @constructor
@@ -19,13 +17,6 @@ export default class Horizon {
    * Horizon config.
    * @enum {number}
    */
-  static config = {
-    BG_CLOUD_SPEED: 0.2,
-    BUMPY_THRESHOLD: 0.3,
-    CLOUD_FREQUENCY: 0.5,
-    HORIZON_HEIGHT: 16,
-    MAX_CLOUDS: 6,
-  };
 
   canvasCtx: CanvasRenderingContext2D;
   horizonLines: HorizonLine[];
@@ -159,14 +150,14 @@ export default class Horizon {
       this.obstacleHistory.unshift(obstacleType.type);
 
       if (this.obstacleHistory.length > 1) {
-        this.obstacleHistory.splice(MAX_OBSTACLE_DUPLICATION);
+        this.obstacleHistory.splice(config.MAX_OBSTACLE_DUPLICATION);
       }
     }
   }
 
   /**
    * Returns whether the previous two obstacles are the same as the next one.
-   * Maximum duplication is set in config value MAX_OBSTACLE_DUPLICATION.
+   * Maximum duplication is set in config value config.MAX_OBSTACLE_DUPLICATION.
    * @return {boolean}
    */
   duplicateObstacleCheck(nextObstacleType: string) {
@@ -175,7 +166,7 @@ export default class Horizon {
       duplicateCount =
         this.obstacleHistory[i] === nextObstacleType ? duplicateCount + 1 : 0;
     }
-    return duplicateCount >= MAX_OBSTACLE_DUPLICATION;
+    return duplicateCount >= config.MAX_OBSTACLE_DUPLICATION;
   }
 
   /**

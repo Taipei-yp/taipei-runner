@@ -9,76 +9,16 @@ import {
 import Hero from "./hero";
 import Horizon from "./horizon";
 import Obstacle from "./obstacle";
+import { gameConfig as config } from "./config";
 // #QT window["Runner"] = Runner;
 
 /**
- * Default game width.
- * @const
- */
-const DEFAULT_WIDTH = 600;
-
-/**
- * Frames per second.
- * @const
- */
-const FPS = 60;
-
-/** @const */
-// const IS_HIDPI = window.devicePixelRatio > 1;
-
-/** @const */
-const IS_IOS =
-  window.navigator.userAgent.indexOf("CriOS") > -1 ||
-  window.navigator.userAgent === "UIWebViewForStaticFileContent";
-
-/** @const */
-const IS_MOBILE = window.navigator.userAgent.indexOf("Mobi") > -1 || IS_IOS;
-
-/** @const */
-// const IS_TOUCH_ENABLED = "ontouchstart" in window;
-
-/**
- * T-Rex runner.
+ * Runner.
  * @param {string} outerContainerId Outer containing element id.
- * @param {Object} opt_config
  * @constructor
  * @export
  */
 export default class Runner {
-  /**
-   * Default game configuration.
-   * @enum {number}
-   */
-  static config = {
-    ACCELERATION: 0.001,
-    BG_CLOUD_SPEED: 0.2,
-    BOTTOM_PAD: 10,
-    CLEAR_TIME: 3000,
-    CLOUD_FREQUENCY: 0.5,
-    GAMEOVER_CLEAR_TIME: 750,
-    GAP_COEFFICIENT: 0.6,
-    GRAVITY: 0.6,
-    INITIAL_JUMP_VELOCITY: 12,
-    MAX_CLOUDS: 6,
-    MAX_OBSTACLE_LENGTH: 3,
-    MAX_OBSTACLE_DUPLICATION: 2,
-    MAX_SPEED: 13,
-    MIN_JUMP_HEIGHT: 35,
-    MOBILE_SPEED_COEFFICIENT: 1.2,
-    RESOURCE_TEMPLATE_ID: "audio-resources",
-    SPEED: 6,
-    SPEED_DROP_COEFFICIENT: 3,
-  };
-
-  /**
-   * Default dimensions.
-   * @enum {string}
-   */
-  static defaultDimensions: Dimensions = {
-    WIDTH: DEFAULT_WIDTH,
-    HEIGHT: 150,
-  };
-
   /**
    * CSS class names.
    * @enum {string}
@@ -106,16 +46,6 @@ export default class Runner {
     RESTART: { x: 2, y: 2 },
     TEXT_SPRITE: { x: 484, y: 2 },
     hero: { x: 677, y: 2 },
-  };
-
-  /**
-   * Sound FX. Reference to the ID of the audio tag on interstitial page.
-   * @enum {string}
-   */
-  static sounds = {
-    BUTTON_PRESS: "offline-sound-press",
-    HIT: "offline-sound-hit",
-    SCORE: "offline-sound-reached",
   };
 
   /**
@@ -152,7 +82,6 @@ export default class Runner {
   static _instance: Runner;
   outerContainerEl!: HTMLElement;
   containerEl!: HTMLElement;
-  snackbarEl: null;
   dimensions!: Dimensions;
   canvas!: HTMLCanvasElement;
   canvasCtx!: CanvasRenderingContext2D;
@@ -187,10 +116,7 @@ export default class Runner {
   drawPending!: boolean;
   raqId!: number;
 
-  constructor(
-    outerContainerId: string,
-    opt_config: Record<string, string | number>,
-  ) {
+  constructor(outerContainerId: string) {
     // Singleton
 
     if (Runner._instance) {
@@ -203,9 +129,7 @@ export default class Runner {
     this.outerContainerEl = outerContainerEl;
     // this.detailsButton = this.outerContainerEl.querySelector('#details-button');
 
-    this.config = opt_config || Runner.config;
-
-    this.dimensions = Runner.defaultDimensions;
+    // this.dimensions = Runner.defaultDimensions;
 
     this.distanceMeter = null;
     this.distanceRan = 0;
@@ -214,7 +138,7 @@ export default class Runner {
 
     this.time = 0;
     this.runningTime = 0;
-    this.msPerFrame = 1000 / FPS;
+    this.msPerFrame = 1000 / config.FPS;
     this.currentSpeed = this.config.SPEED as number;
 
     this.obstacles = [];
@@ -314,36 +238,6 @@ export default class Runner {
   }
 
   /**
-   * Load and decode base 64 encoded sounds.
-   */
-  /* loadSounds() {
-    try {
-      if (!IS_IOS) {
-        this.audioContext = new AudioContext();
-
-        var resourceTemplate = document.getElementById(
-          this.config.RESOURCE_TEMPLATE_ID,
-        ).content;
-
-        for (var sound in Runner.sounds) {
-          var soundSrc = resourceTemplate.getElementById(Runner.sounds[sound])
-            .src;
-          soundSrc = soundSrc.substr(soundSrc.indexOf(",") + 1);
-          var buffer = decodeBase64ToArrayBuffer(soundSrc);
-
-          // Async, so no guarantee of order in array.
-          this.audioContext.decodeAudioData(
-            buffer,
-            function (index, audioData) {
-              this.soundFx[index] = audioData;
-            }.bind(this, sound),
-          );
-        }
-      }
-    } catch (e) {}
-  } */
-
-  /**
    * Sets the game speed. Adjust the speed accordingly if on a smaller screen.
    * @param {number} opt_speed
    */
@@ -351,9 +245,9 @@ export default class Runner {
     const speed = opt_speed || this.currentSpeed;
 
     // Reduce the speed on smaller mobile screens.
-    if (this.dimensions.WIDTH < DEFAULT_WIDTH) {
+    if (this.dimensions.WIDTH < config.DEFAULT_WIDTH) {
       const mobileSpeed =
-        ((speed * this.dimensions.WIDTH) / DEFAULT_WIDTH) *
+        ((speed * this.dimensions.WIDTH) / config.DEFAULT_WIDTH) *
         (this.config.MOBILE_SPEED_COEFFICIENT as number);
       this.currentSpeed = mobileSpeed > speed ? speed : mobileSpeed;
     } else if (opt_speed) {
@@ -389,7 +283,7 @@ export default class Runner {
     this.canvasCtx.fill();
     this.updateCanvasScaling();
 
-    // Horizon contains clouds, obstacles and the ground.
+    // Horizon contains obstacles and the ground.
     this.horizon = new Horizon(
       this.canvas,
       Runner.imageSprite,
@@ -414,10 +308,6 @@ export default class Runner {
 
     this.outerContainerEl.appendChild(this.containerEl);
 
-    if (IS_MOBILE) {
-      this.createTouchController();
-    }
-
     this.startListening();
     this.update();
 
@@ -425,14 +315,6 @@ export default class Runner {
       Runner.events.RESIZE,
       this.debounceResize.bind(this),
     );
-  }
-
-  /**
-   * Create the touch controller. A div that covers whole screen.
-   */
-  createTouchController() {
-    this.touchController = document.createElement("div");
-    this.touchController.className = Runner.classes.TOUCH_CONTROLLER;
   }
 
   /**
@@ -665,16 +547,10 @@ export default class Runner {
     document.addEventListener(Runner.events.KEYDOWN, this);
     document.addEventListener(Runner.events.KEYUP, this);
 
-    if (IS_MOBILE) {
-      // Mobile only touch devices.
-      this.touchController.addEventListener(Runner.events.TOUCHSTART, this);
-      this.touchController.addEventListener(Runner.events.TOUCHEND, this);
-      this.containerEl.addEventListener(Runner.events.TOUCHSTART, this);
-    } else {
-      // Mouse.
-      document.addEventListener(Runner.events.MOUSEDOWN, this);
-      document.addEventListener(Runner.events.MOUSEUP, this);
-    }
+    // Mouse.
+    document.addEventListener(Runner.events.MOUSEDOWN, this);
+    document.addEventListener(Runner.events.MOUSEUP, this);
+
     window.addEventListener(Runner.events.GAMEPADCONNECTED, this);
 
     if (navigator.getGamepads())
@@ -717,14 +593,8 @@ export default class Runner {
     document.removeEventListener(Runner.events.KEYDOWN, this);
     document.removeEventListener(Runner.events.KEYUP, this);
 
-    if (IS_MOBILE) {
-      this.touchController.removeEventListener(Runner.events.TOUCHSTART, this);
-      this.touchController.removeEventListener(Runner.events.TOUCHEND, this);
-      this.containerEl.removeEventListener(Runner.events.TOUCHSTART, this);
-    } else {
-      document.removeEventListener(Runner.events.MOUSEDOWN, this);
-      document.removeEventListener(Runner.events.MOUSEUP, this);
-    }
+    document.removeEventListener(Runner.events.MOUSEDOWN, this);
+    document.removeEventListener(Runner.events.MOUSEUP, this);
   }
 
   /**
@@ -732,11 +602,6 @@ export default class Runner {
    * @param {Event} e
    */
   onKeyDown(e: KeyboardEvent) {
-    // Prevent native page scrolling whilst tapping on mobile.
-    if (IS_MOBILE) {
-      e.preventDefault();
-    }
-
     // if (e.target != this.detailsButton) {
     if (
       !this.crashed &&
@@ -1024,7 +889,7 @@ export function checkForCollision(
   const obstacleBox = new CollisionBox(
     obstacle.xPos + 1,
     obstacle.yPos + 1,
-    obstacle.typeConfig.width * obstacle.size - 2,
+    obstacle.typeConfig.width,
     obstacle.typeConfig.height - 2,
   );
 

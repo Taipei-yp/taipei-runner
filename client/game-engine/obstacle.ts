@@ -1,9 +1,8 @@
 import { getRandomNum } from "./utils";
 import { Coords, Dimensions, CollisionBox } from "./models";
+import { gameConfig as config } from "./config";
 
-// #QT
-const IS_MOBILE = false;
-const FPS = 100;
+// import * from "./images/obstacle-sprite.png"
 /**
  * Obstacle.
  * @param {CanvasRenderingContext2D} canvasCtx
@@ -14,28 +13,19 @@ const FPS = 100;
  * @param speed
  */
 export default class Obstacle {
-  /** Maximum obstacle grouping count. */
-  static MAX_OBSTACLE_LENGTH = 3;
-  /** Coefficient for calculating the maximum gap. */
-  static MAX_GAP_COEFFICIENT = 1.5;
-
   canvasCtx: CanvasRenderingContext2D;
   spritePos: Coords;
   typeConfig: ObstacleType;
   gapCoefficient: number;
-  size: number;
   dimensions: Dimensions;
   remove: boolean;
   xPos: number;
   yPos: number;
-  width: number;
   collisionBoxes: CollisionBox[];
   gap: number;
-  speedOffset: number;
-  currentFrame: number;
-  timer: number;
   imageSprite: CanvasImageSource;
   followingObstacleCreated: boolean;
+  width: number;
 
   constructor(
     canvasCtx: CanvasRenderingContext2D,
@@ -50,21 +40,16 @@ export default class Obstacle {
     this.spritePos = spriteImgPos;
     this.typeConfig = type;
     this.gapCoefficient = gapCoefficient;
-    this.size = getRandomNum(1, Obstacle.MAX_OBSTACLE_LENGTH);
     this.dimensions = dimensions;
     this.remove = false;
     this.xPos = 0;
     this.yPos = 0;
-    this.width = 0;
     this.collisionBoxes = [];
     this.gap = 0;
-    this.speedOffset = 0;
     this.imageSprite = imageSprite;
-    // For animated obstacles.
-    this.currentFrame = 0;
-    this.timer = 0;
     this.followingObstacleCreated = false;
     this.init(speed);
+    this.width = 0;
   }
 
   /**
@@ -74,19 +59,7 @@ export default class Obstacle {
   init(speed: number) {
     this.cloneCollisionBoxes();
 
-    // Only allow sizing if we're at the right speed.
-    if (this.size > 1 && this.typeConfig.multipleSpeed > speed) {
-      this.size = 1;
-    }
-
-    this.width = this.typeConfig.width * this.size;
-    this.xPos = this.dimensions.WIDTH - this.width;
-
-    const yPosConfig =
-      IS_MOBILE && this.typeConfig.yPosMobile
-        ? this.typeConfig.yPosMobile
-        : this.typeConfig.yPos;
-    this.yPos = yPosConfig[getRandomNum(0, yPosConfig.length - 1)];
+    this.xPos = this.dimensions.WIDTH - this.typeConfig.width;
 
     this.draw();
 
@@ -98,21 +71,13 @@ export default class Obstacle {
     //   | | 1 | |   | |  2  | |   | |   3   | |
     //   |_|___|_|   |_|_____|_|   |_|_______|_|
     //
-    if (this.size > 1) {
+    /* if (this.size > 1) {
       this.collisionBoxes[1].width =
         this.width -
         this.collisionBoxes[0].width -
         this.collisionBoxes[2].width;
       this.collisionBoxes[2].x = this.width - this.collisionBoxes[2].width;
-    }
-
-    // For obstacles that go at a different speed from the horizon.
-    if (this.typeConfig.speedOffset) {
-      this.speedOffset =
-        Math.random() > 0.5
-          ? this.typeConfig.speedOffset
-          : -this.typeConfig.speedOffset;
-    }
+    } */
 
     this.gap = this.getGap(this.gapCoefficient, speed);
   }
@@ -121,27 +86,15 @@ export default class Obstacle {
    * Draw and crop based on size.
    */
   draw() {
-    const sourceWidth = this.typeConfig.width;
-    const sourceHeight = this.typeConfig.height;
-
-    // X position in sprite.
-    let sourceX =
-      sourceWidth * this.size * (0.5 * (this.size - 1)) + this.spritePos.x;
-
-    // Animation frames.
-    if (this.currentFrame > 0) {
-      sourceX += sourceWidth * this.currentFrame;
-    }
-
     this.canvasCtx.drawImage(
       this.imageSprite,
-      sourceX,
+      this.spritePos.x,
       this.spritePos.y,
-      sourceWidth * this.size,
-      sourceHeight,
+      this.typeConfig.width,
+      this.typeConfig.height,
       this.xPos,
       this.yPos,
-      this.typeConfig.width * this.size,
+      this.typeConfig.width,
       this.typeConfig.height,
     );
   }
@@ -152,24 +105,9 @@ export default class Obstacle {
    * @param speed
    */
   update(deltaTime: number, speedp: number) {
-    let speed = speedp;
+    const speed = speedp;
     if (!this.remove) {
-      if (this.typeConfig.speedOffset) {
-        speed += this.speedOffset;
-      }
-      this.xPos -= Math.floor(((speed * FPS) / 1000) * deltaTime);
-
-      // Update frame
-      if (this.typeConfig.numFrames && this.typeConfig.frameRate) {
-        this.timer += deltaTime;
-        if (this.timer >= this.typeConfig.frameRate) {
-          this.currentFrame =
-            this.currentFrame === this.typeConfig.numFrames - 1
-              ? 0
-              : this.currentFrame + 1;
-          this.timer = 0;
-        }
-      }
+      this.xPos -= Math.floor(((speed * config.FPS) / 1000) * deltaTime);
       this.draw();
 
       if (!this.isVisible()) {
@@ -187,9 +125,9 @@ export default class Obstacle {
    */
   getGap(gapCoefficient: number, speed: number) {
     const minGap = Math.round(
-      this.width * speed + this.typeConfig.minGap * gapCoefficient,
+      this.typeConfig.width * speed + this.typeConfig.minGap * gapCoefficient,
     );
-    const maxGap = Math.round(minGap * Obstacle.MAX_GAP_COEFFICIENT);
+    const maxGap = Math.round(minGap * config.MAX_GAP_COEFFICIENT);
     return getRandomNum(minGap, maxGap);
   }
 
@@ -198,7 +136,7 @@ export default class Obstacle {
    * @return {boolean} Whether the obstacle is in the game area.
    */
   isVisible(): boolean {
-    return this.xPos + this.width > 0;
+    return this.xPos + this.typeConfig.width > 0;
   }
 
   /**
@@ -225,9 +163,7 @@ export type ObstacleType = {
   width: number;
   height: number;
   /** Variable height */
-  yPos: number[];
-  /** Variable height mobile */
-  yPosMobile?: number[];
+  yPos: number;
   /** Speed at which multiples are allowed */
   multipleSpeed: number;
   /** Minimum speed which the obstacle can make an appearance */
@@ -235,12 +171,6 @@ export type ObstacleType = {
   /** minimum pixel space betweeen obstacles */
   minGap: number;
   collisionBoxes: CollisionBox[];
-
-  // For animated obstacles.
-  numFrames?: number;
-  frameRate?: number;
-  /** speed faster / slower than the horizon */
-  speedOffset?: number;
 };
 
 export const ObstacleTypes: ObstacleType[] = [
@@ -248,7 +178,7 @@ export const ObstacleTypes: ObstacleType[] = [
     type: "CACTUS_SMALL",
     width: 17,
     height: 35,
-    yPos: [105],
+    yPos: 105,
     multipleSpeed: 4,
     minGap: 120,
     minSpeed: 0,
@@ -262,7 +192,7 @@ export const ObstacleTypes: ObstacleType[] = [
     type: "CACTUS_LARGE",
     width: 25,
     height: 50,
-    yPos: [90],
+    yPos: 90,
     multipleSpeed: 7,
     minGap: 120,
     minSpeed: 0,
@@ -271,25 +201,5 @@ export const ObstacleTypes: ObstacleType[] = [
       new CollisionBox(8, 0, 7, 49),
       new CollisionBox(13, 10, 10, 38),
     ],
-  },
-  {
-    type: "PTERODACTYL",
-    width: 46,
-    height: 40,
-    yPos: [100, 75, 50], // Variable height.
-    yPosMobile: [100, 50], // Variable height mobile.
-    multipleSpeed: 999,
-    minSpeed: 8.5,
-    minGap: 150,
-    collisionBoxes: [
-      new CollisionBox(15, 15, 16, 5),
-      new CollisionBox(18, 21, 24, 6),
-      new CollisionBox(2, 14, 4, 3),
-      new CollisionBox(6, 10, 4, 7),
-      new CollisionBox(10, 8, 6, 9),
-    ],
-    numFrames: 2,
-    frameRate: 1000 / 6,
-    speedOffset: 0.8,
   },
 ];
