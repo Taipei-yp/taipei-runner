@@ -1,6 +1,8 @@
 import block from "bem-cn";
-import React, { FC, memo } from "react";
+import React, { FC, memo, useCallback, useState } from "react";
+import { Button } from "../../components/button";
 import { Pagination } from "../../components/pagination";
+import { Panel } from "../../components/panel";
 import { Table } from "../../components/table";
 import { useNullableTableSort } from "../../components/table/table-sort";
 import "./forum.css";
@@ -36,22 +38,59 @@ const data = [
   },
 ];
 
+const pagesCount = 5;
+
 const Forum: FC<Props> = ({ className }) => {
-  /* right now it all is just a test of the table component */
   const [sort, handleSortRequest] = useNullableTableSort();
+  const [page, setPage] = useState(1);
+
+  const handleCreateTopicClick = useCallback(() => {
+    alert("need to create a new topic!");
+  }, []);
+
+  const handlePageClick = useCallback((newPage: number) => {
+    setPage(newPage);
+  }, []);
+
+  const handleGoToFirstPageClick = useCallback(() => {
+    setPage(1);
+  }, []);
+
+  const handleGoToLastPageClick = useCallback(() => {
+    setPage(pagesCount);
+  }, []);
 
   return (
     <div className={b.mix(className)}>
-      <Table
-        headers={headers}
-        data={data}
-        components={{
-          topic: TestComponent,
-        }}
-        sort={sort}
-        onHeaderClick={handleSortRequest}
-      />
-      <Pagination pagesCount={5} currentPage={3} onPageClick={() => {}} />
+      <Panel className={b("panel")}>
+        <section className={b("table")}>
+          <Table
+            headers={headers}
+            data={data}
+            components={{
+              topic: TestComponent,
+            }}
+            sort={sort}
+            onHeaderClick={handleSortRequest}
+          />
+        </section>
+        <section className={b("under-table")}>
+          <Button
+            className={b("under-table", "create-topic")}
+            onClick={handleCreateTopicClick}
+          >
+            Create Topic
+          </Button>
+          <Pagination
+            className={b("under-table", "pagination")}
+            pagesCount={pagesCount}
+            currentPage={page}
+            onPageClick={handlePageClick}
+            onGoToFirstPageClick={handleGoToFirstPageClick}
+            onGoToLastPageClick={handleGoToLastPageClick}
+          />
+        </section>
+      </Panel>
     </div>
   );
 };

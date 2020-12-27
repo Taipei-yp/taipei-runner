@@ -1,0 +1,37 @@
+.forum {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__panel {
+    display: flex;
+    flex-direction: column;
+    width: 75%;
+    height: 75%;
+    padding: 2% 5%;
+  }
+
+  &__table {
+    flex-grow: 1;
+  }
+
+  &__under-table {
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+
+    &__create-topic {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    &__pagination {
+      /* margin by button width */
+      margin: 0 280px;
+    }
+  }
+}

@@ -5,6 +5,7 @@ import "./pagination.css";
 const b = block("pagination");
 
 type Props = {
+  className?: string;
   pagesCount: number;
   currentPage: number;
   onPageClick: (pageNumber: number) => void;
@@ -13,6 +14,7 @@ type Props = {
 };
 
 const Pagination: FC<Props> = ({
+  className,
   pagesCount,
   currentPage,
   onPageClick,
@@ -28,7 +30,7 @@ const Pagination: FC<Props> = ({
   );
 
   return (
-    <ul className={b()}>
+    <ul className={b.mix(className)}>
       <li className={b("item")} onClick={onGoToFirstPageClick}>
         {"<<"}
       </li>
