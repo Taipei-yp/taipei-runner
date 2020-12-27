@@ -28,6 +28,7 @@ export default class Obstacle {
   remove: boolean;
   /** Флаг следующее препятствие добавлено */
   followingObstacleCreated: boolean;
+  width: number;
 
   constructor(
     canvasCtx: CanvasRenderingContext2D,
@@ -52,6 +53,7 @@ export default class Obstacle {
       Obstacle._imageSprite = d;
     }
     this.init(speed);
+    this.width = 0;
   }
   /** Инициализация */
   init(speed: number) {
