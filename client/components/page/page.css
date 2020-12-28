@@ -16,9 +16,13 @@
     }
   }
   &__content {
-    flex: 1 1 auto;
+    flex: 0 1 50vh;
     display: flex;
     justify-content: center;
+
+    &_grow {
+      flex: 1 1 auto;
+    }
 
     &_align_center {
       align-items: center;
@@ -27,7 +31,7 @@
       align-items: flex-end;
     }
   }
-  &__item_stretch {
+  &__item_grow {
     flex-grow: 1;
   }
 }

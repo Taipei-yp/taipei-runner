@@ -21,7 +21,7 @@ export const App: FC = () => {
           <Route path="/game-over" />
           <Route
             path="*"
-            component={() => <Error textTop="404" textBott="Not found" />}
+            component={() => <Error title="404" description="Not found" />}
           />
         </Switch>
       </Router>

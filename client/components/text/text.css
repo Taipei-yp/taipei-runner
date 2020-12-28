@@ -2,6 +2,7 @@
   font-size: var(--tpr-fontsize);
   line-height: var(--tpr-fontsize);
   margin: 0;
+  letter-spacing: 2px;
 
   &_color_primary {
     color: var(--tpr-color-primary);
@@ -26,15 +27,15 @@
   }
 
   &_size_extra {
-    font-size: var(--tpr-fontsize-x);
-    line-height: var(--tpr-fontsize-x);
+    font-size: var(--tpr-fontsize-xl);
+    line-height: var(--tpr-fontsize-xl);
   }
   &_size_extra2 {
-    font-size: var(--tpr-fontsize-x);
-    line-height: var(--tpr-fontsize-x);
+    font-size: var(--tpr-fontsize-xxl);
+    line-height: var(--tpr-fontsize-xxl);
   }
   &_size_extra3 {
-    font-size: var(--tpr-fontsize-x3);
-    line-height: var(--tpr-fontsize-x3);
+    font-size: var(--tpr-fontsize-xxxl);
+    line-height: var(--tpr-fontsize-xxxl);
   }
 }

@@ -9,16 +9,24 @@ const b = block("error-page");
 
 type Props = {
   className?: string;
-  textTop?: string;
-  textBott?: string;
+  title?: string;
+  description?: string;
 };
 
-const Error: FC<Props> = ({ className = "", textTop = "", textBott = "" }) => {
+const Error: FC<Props> = ({ className = "", title = "", description = "" }) => {
   return (
     <>
-      <Page className={b().mix(className)} left={<Text text="menu" />}>
-        <Text header text={textTop} size="extra3" color="accent" />
-        <Text header text={textBott} size="extra2" />
+      <Page left={<Text text="menu" />}>
+        <div className={b.mix(className)}>
+          <Text
+            isHeader
+            text={title}
+            size="extra3"
+            color="accent"
+            className={b("title")}
+          />
+          <Text text={description} size="extra2" className={b("description")} />
+        </div>
       </Page>
     </>
   );

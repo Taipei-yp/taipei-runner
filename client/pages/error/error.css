@@ -1,3 +1,7 @@
 .error-page {
-  align-items: center;
+  text-align: center;
+
+  &__title.text {
+    margin: 40px 0;
+  }
 }
