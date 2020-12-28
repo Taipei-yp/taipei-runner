@@ -1,3 +1,4 @@
+import { ObstacleType, HorizontLineType, CollisionBox } from "./models";
 /** Game configuration. */
 const gameConfig = {
   ACCELERATION: 0.001,
@@ -26,4 +27,35 @@ const gameConfig = {
   DEFAULT_HEIGHT: 400,
 };
 
-export { gameConfig };
+const spriteDefinition = {
+  CLOUD: { x: 86, y: 2 },
+  HORIZON: { x: 2, y: 54 },
+  PTERODACTYL: { x: 134, y: 2 },
+  RESTART: { x: 2, y: 2 },
+  TEXT_SPRITE: { x: 484, y: 2 },
+  hero: { x: 677, y: 2 },
+};
+
+const obstacleTypes: ObstacleType[] = [
+  {
+    type: "BOX1",
+    spriteCoords: { x: 0, y: 20 },
+    dimensions: { width: 86, height: 80 },
+    multipleSpeed: 4,
+    minGap: 140,
+    minSpeed: 0,
+    collisionBoxes: [
+      new CollisionBox(0, 7, 5, 27),
+      new CollisionBox(4, 0, 6, 34),
+      new CollisionBox(10, 4, 7, 14),
+    ],
+  },
+];
+const horizontLineTypes: HorizontLineType[] = [
+  {
+    type: "FLOOR",
+    spriteCoords: { x: 0, y: 0 },
+    dimensions: { width: 623, height: 320 },
+  },
+];
+export { gameConfig, spriteDefinition, obstacleTypes, horizontLineTypes };

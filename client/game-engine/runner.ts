@@ -9,7 +9,7 @@ import {
 import Hero from "./hero";
 import Horizon from "./horizon";
 import Obstacle from "./obstacle";
-import { gameConfig as config } from "./config";
+import { gameConfig as config, spriteDefinition } from "./config";
 // #QT window["Runner"] = Runner;
 
 /**
@@ -31,21 +31,6 @@ export default class Runner {
     SNACKBAR: "snackbar",
     SNACKBAR_SHOW: "snackbar-show",
     TOUCH_CONTROLLER: "controller",
-  };
-
-  /**
-   * Sprite definition layout of the spritesheet.
-   * @enum {Object}
-   */
-  static spriteDefinition = {
-    CACTUS_LARGE: { x: 332, y: 2 },
-    CACTUS_SMALL: { x: 228, y: 2 },
-    CLOUD: { x: 86, y: 2 },
-    HORIZON: { x: 2, y: 54 },
-    PTERODACTYL: { x: 134, y: 2 },
-    RESTART: { x: 2, y: 2 },
-    TEXT_SPRITE: { x: 484, y: 2 },
-    hero: { x: 677, y: 2 },
   };
 
   /**
@@ -233,7 +218,7 @@ export default class Runner {
     Runner.imageSprite = document.getElementById(
       "offline-resources-1x",
     ) as CanvasImageSource;
-    this.spriteDef = Runner.spriteDefinition;
+    this.spriteDef = spriteDefinition;
     this.init();
   }
 
@@ -245,9 +230,9 @@ export default class Runner {
     const speed = opt_speed || this.currentSpeed;
 
     // Reduce the speed on smaller mobile screens.
-    if (this.dimensions.WIDTH < config.DEFAULT_WIDTH) {
+    if (this.dimensions.width < config.DEFAULT_WIDTH) {
       const mobileSpeed =
-        ((speed * this.dimensions.WIDTH) / config.DEFAULT_WIDTH) *
+        ((speed * this.dimensions.width) / config.DEFAULT_WIDTH) *
         (this.config.MOBILE_SPEED_COEFFICIENT as number);
       this.currentSpeed = mobileSpeed > speed ? speed : mobileSpeed;
     } else if (opt_speed) {
@@ -272,8 +257,8 @@ export default class Runner {
     // Player canvas container.
     this.canvas = createCanvas(
       this.containerEl,
-      this.dimensions.WIDTH,
-      this.dimensions.HEIGHT,
+      this.dimensions.width,
+      this.dimensions.height,
       [Runner.classes.CANVAS], // Runner.classes.PLAYER
     );
     const canvasCtx = this.canvas.getContext("2d");
@@ -284,19 +269,19 @@ export default class Runner {
     this.updateCanvasScaling();
 
     // Horizon contains obstacles and the ground.
-    this.horizon = new Horizon(
+    /* this.horizon = new Horizon(
       this.canvas,
+      this.dimensions,
       Runner.imageSprite,
       this.spriteDef,
-      this.dimensions,
-      this.config.GAP_COEFFICIENT as number,
-    );
+      config.GAP_COEFFICIENT,
+    ); */
 
     // Distance meter
     /* this.distanceMeter = new DistanceMeter(
       this.canvas,
       this.spriteDef.TEXT_SPRITE,
-      this.dimensions.WIDTH,
+      this.dimensions.width,
     ); */
 
     // Draw hero
@@ -338,24 +323,24 @@ export default class Runner {
       boxStyles.paddingLeft.substr(0, boxStyles.paddingLeft.length - 2),
     );
 
-    this.dimensions.WIDTH = this.outerContainerEl.offsetWidth - padding * 2;
+    this.dimensions.width = this.outerContainerEl.offsetWidth - padding * 2;
 
     // Redraw the elements back onto the canvas.
     if (this.canvas) {
-      this.canvas.width = this.dimensions.WIDTH;
-      this.canvas.height = this.dimensions.HEIGHT;
+      this.canvas.width = this.dimensions.width;
+      this.canvas.height = this.dimensions.height;
 
       this.updateCanvasScaling();
 
-      // this.distanceMeter.calcXPos(this.dimensions.WIDTH);
+      // this.distanceMeter.calcXPos(this.dimensions.width);
       this.clearCanvas();
       this.horizon.update(0, 0, true);
       this.hero.update(0);
 
       // Outer container and distance meter.
       if (this.activated || this.crashed || this.paused) {
-        this.containerEl.style.width = `${this.dimensions.WIDTH}px`;
-        this.containerEl.style.height = `${this.dimensions.HEIGHT}px`;
+        this.containerEl.style.width = `${this.dimensions.width}px`;
+        this.containerEl.style.height = `${this.dimensions.height}px`;
         // this.distanceMeter.update(0, Math.ceil(this.distanceRan));
         this.stop();
       } else {
@@ -364,7 +349,7 @@ export default class Runner {
 
       // Game over panel.
       /* if (this.crashed && this.gameOverPanel) {
-        this.gameOverPanel.updateDimensions(this.dimensions.WIDTH);
+        this.gameOverPanel.updateDimensions(this.dimensions.width);
         this.gameOverPanel.draw();
       } */
     }
@@ -382,9 +367,9 @@ export default class Runner {
       // CSS animation definition.
       const keyframes =
         `${`@-webkit-keyframes intro { from { width:`}${
-          this.hero.config.WIDTH
+          this.hero.config.width
         }px }` +
-        `to { width: ${this.dimensions.WIDTH}px }` +
+        `to { width: ${this.dimensions.width}px }` +
         `}`;
 
       try {
@@ -399,7 +384,7 @@ export default class Runner {
       );
 
       this.containerEl.style.webkitAnimation = "intro .4s ease-out 1 both";
-      this.containerEl.style.width = `${this.dimensions.WIDTH}px`;
+      this.containerEl.style.width = `${this.dimensions.width}px`;
 
       if (this.touchController) {
         this.outerContainerEl.appendChild(this.touchController);
@@ -445,8 +430,8 @@ export default class Runner {
     this.canvasCtx.clearRect(
       0,
       0,
-      this.dimensions.WIDTH,
-      this.dimensions.HEIGHT,
+      this.dimensions.width,
+      this.dimensions.height,
     );
   }
 
@@ -875,22 +860,22 @@ export function checkForCollision(
   hero: Hero,
   opt_canvasCtx: CanvasRenderingContext2D,
 ) {
-  // const obstacleBoxXPos = Runner.defaultDimensions.WIDTH + obstacle.xPos;
+  // const obstacleBoxXPos = Runner.defaultDimensions.width + obstacle.xPos;
 
   // Adjustments are made to the bounding box as there is a 1 pixel white
   // border around the t-rex and obstacles.
   const heroBox = new CollisionBox(
     hero.xPos + 1,
     hero.yPos + 1,
-    hero.config.WIDTH - 2,
+    hero.config.width - 2,
     hero.config.HEIGHT - 2,
   );
 
   const obstacleBox = new CollisionBox(
     obstacle.xPos + 1,
     obstacle.yPos + 1,
-    obstacle.typeConfig.width,
-    obstacle.typeConfig.height - 2,
+    obstacle.typeConfig.dimensions.width,
+    obstacle.typeConfig.dimensions.height - 2,
   );
 
   // Debug outer box

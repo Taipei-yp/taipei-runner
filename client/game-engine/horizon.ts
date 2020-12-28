@@ -1,98 +1,76 @@
-import { Coords, Dimensions } from "./models";
+import { Dimensions } from "./models";
 import { getRandomNum } from "./utils";
 import HorizonLine from "./horizon-line";
-import Obstacle, { ObstacleTypes } from "./obstacle";
-import { gameConfig as config } from "./config";
+import Obstacle from "./obstacle";
+import {
+  gameConfig as config,
+  obstacleTypes,
+  horizontLineTypes,
+} from "./config";
 
+import image from "./images/horizon-sprite.png";
 /**
  * Horizon background class.
- * @param {HTMLCanvasElement} canvas
- * @param {Object} spritePos Sprite positioning.F
- * @param {Object} dimensions Canvas dimensions.
- * @param {number} gapCoefficient
- * @constructor
  */
 export default class Horizon {
-  /**
-   * Horizon config.
-   * @enum {number}
-   */
+  static _imageSprite: CanvasImageSource;
 
   canvasCtx: CanvasRenderingContext2D;
+  canvasDimensions: Dimensions;
+  gapCoefficient: number;
   horizonLines: HorizonLine[];
   obstacleHistory: string[];
   obstacles: Obstacle[];
-  gapCoefficient: number;
-  dimensions: Dimensions;
-  horizonOffsets: number[];
-  spritePos: Record<string, Coords>;
-
-  imageSprite: CanvasImageSource;
 
   constructor(
-    canvas: HTMLCanvasElement,
-    imageSprite: CanvasImageSource,
-    spritePos: Record<string, Coords>,
-    dimensions: Dimensions,
+    canvasCtx: CanvasRenderingContext2D,
+    canvasDimensions: Dimensions,
     gapCoefficient: number,
   ) {
-    const canvasCtx = canvas.getContext("2d");
-    if (canvasCtx == null) throw new Error("Empty canvas context");
     this.canvasCtx = canvasCtx;
-
-    this.dimensions = dimensions;
+    this.canvasDimensions = canvasDimensions;
     this.gapCoefficient = gapCoefficient;
+
+    if (!Horizon._imageSprite) {
+      const d = document.createElement("img");
+      d.src = image;
+      Horizon._imageSprite = d;
+    }
+
     this.obstacles = [];
     this.obstacleHistory = [];
-    this.horizonOffsets = [0, 0];
-    this.spritePos = spritePos;
-    this.imageSprite = imageSprite;
-    // Horizon
     this.horizonLines = [];
-
     this.init();
   }
 
-  /**
-   * Initialise the horizon. Just add the line and a cloud. No obstacles.
-   */
   init() {
     this.horizonLines.push(
-      new HorizonLine(this.canvasCtx, this.imageSprite, this.spritePos.HORIZON),
+      new HorizonLine(
+        this.canvasCtx,
+        this.canvasDimensions,
+        Horizon._imageSprite,
+        horizontLineTypes[0],
+        0,
+        true,
+      ),
     );
   }
 
-  /**
-   * @param {number} deltaTime
-   * @param {number} currentSpeed
-   * @param {boolean} updateObstacles Used as an override to prevent
-   *     the obstacles from being updated / added. This happens in the
-   *     ease in section.
-   */
   update(deltaTime: number, currentSpeed: number, updateObstacles: boolean) {
-    // this.runningTime += deltaTime;
     this.horizonLines.forEach(el => el.update(deltaTime, currentSpeed));
-
     if (updateObstacles) {
       this.updateObstacles(deltaTime, currentSpeed);
     }
   }
 
-  /**
-   * Update the obstacle positions.
-   * @param {number} deltaTime
-   * @param {number} currentSpeed
-   */
   updateObstacles(deltaTime: number, currentSpeed: number): void {
-    // Obstacles, move to Horizon layer.
     const updatedObstacles = this.obstacles.slice(0);
 
     for (let i = 0; i < this.obstacles.length; i++) {
-      const obstacle = this.obstacles[i];
-      obstacle.update(deltaTime, currentSpeed);
+      this.obstacles[i].update(deltaTime, currentSpeed);
 
       // Clean up existing obstacles.
-      if (obstacle.remove) {
+      if (this.obstacles[i].remove) {
         updatedObstacles.shift();
       }
     }
@@ -100,19 +78,19 @@ export default class Horizon {
 
     if (this.obstacles.length > 0) {
       const lastObstacle = this.obstacles[this.obstacles.length - 1];
-
       if (
         lastObstacle &&
         !lastObstacle.followingObstacleCreated &&
         lastObstacle.isVisible() &&
-        lastObstacle.xPos + lastObstacle.width + lastObstacle.gap <
-          this.dimensions.WIDTH
+        lastObstacle.xPos +
+          lastObstacle.typeConfig.dimensions.width +
+          lastObstacle.gap <
+          this.canvasDimensions.width
       ) {
         this.addNewObstacle(currentSpeed);
         lastObstacle.followingObstacleCreated = true;
       }
     } else {
-      // Create new obstacles.
       this.addNewObstacle(currentSpeed);
     }
   }
@@ -122,8 +100,8 @@ export default class Horizon {
    * @param currentSpeed
    */
   addNewObstacle(currentSpeed: number) {
-    const obstacleTypeIndex = getRandomNum(0, ObstacleTypes.length - 1);
-    const obstacleType = ObstacleTypes[obstacleTypeIndex];
+    const obstacleTypeIndex = getRandomNum(0, obstacleTypes.length - 1);
+    const obstacleType = obstacleTypes[obstacleTypeIndex];
 
     // Check for multiples of the same type of obstacle.
     // Also check obstacle is available at current speed.
@@ -133,15 +111,11 @@ export default class Horizon {
     ) {
       this.addNewObstacle(currentSpeed);
     } else {
-      const obstacleSpritePos = this.spritePos[obstacleType.type];
-
       this.obstacles.push(
         new Obstacle(
           this.canvasCtx,
+          this.canvasDimensions,
           obstacleType,
-          obstacleSpritePos,
-          this.imageSprite,
-          this.dimensions,
           this.gapCoefficient,
           currentSpeed,
         ),

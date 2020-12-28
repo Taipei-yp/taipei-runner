@@ -1,134 +1,91 @@
-import { Coords, Dimensions } from "./models";
-// #QT
-const FPS = 100;
+import { Dimensions, HorizontLineType } from "./models";
+import { gameConfig as config } from "./config";
 /**
  * Horizon Line.
- * Consists of two connecting lines. Randomly assigns a flat / bumpy horizon.
- * @param {HTMLCanvasElement} canvas
- * @param {Coords} spritePos Horizon position in sprite.
+ * Consists of connecting lines.
  * @constructor
  */
 export default class HorizonLine {
-  /**
-   * Horizon line dimensions.
-   * @enum {number}
-   */
-  static dimensions: Dimensions & { YPOS: number } = {
-    WIDTH: 600,
-    HEIGHT: 12,
-    YPOS: 127,
-  };
-
-  spritePos: Coords;
   canvasCtx: CanvasRenderingContext2D;
-  dimensions: Dimensions;
-  sourceDimensions: Dimensions;
-  sourceXPos: number[];
-  xPos: number[];
-  yPos: number;
-  bumpThreshold: number;
-
+  canvasDimensions: Dimensions;
+  typeConfig: HorizontLineType;
   imageSprite: CanvasImageSource;
+  yPosLowerSide: boolean;
+  yPos: number;
+  xPos: number[];
 
   constructor(
     canvasCtx: CanvasRenderingContext2D,
+    canvasDimensions: Dimensions,
     imageSprite: CanvasImageSource,
-    spritePos: Coords,
+    type: HorizontLineType,
+    yPos = 0,
+    yPosLowerSide = false,
   ) {
     this.canvasCtx = canvasCtx;
+    this.canvasDimensions = canvasDimensions;
+    this.typeConfig = type;
     this.imageSprite = imageSprite;
-    this.spritePos = spritePos;
-    this.dimensions = HorizonLine.dimensions;
-    this.sourceDimensions = HorizonLine.dimensions;
-    this.sourceXPos = [
-      this.spritePos.x,
-      this.spritePos.x + this.dimensions.WIDTH,
-    ];
-
-    this.xPos = [0, HorizonLine.dimensions.WIDTH];
-    this.yPos = HorizonLine.dimensions.YPOS;
-
-    this.bumpThreshold = 0.5;
-
+    this.yPosLowerSide = yPosLowerSide;
+    this.yPos = yPos;
+    if (this.yPosLowerSide) {
+      this.yPos =
+        this.canvasDimensions.height -
+        this.typeConfig.dimensions.height -
+        this.yPos;
+    }
+    this.xPos = [];
+    this.defaultXPos();
     this.draw();
-  }
-
-  /**
-   * Return the crop x position of a type.
-   */
-  getRandomType() {
-    return Math.random() > this.bumpThreshold ? this.dimensions.WIDTH : 0;
   }
 
   /**
    * Draw the horizon line.
    */
   draw(): void {
-    this.canvasCtx.drawImage(
-      this.imageSprite,
-      this.sourceXPos[0],
-      this.spritePos.y,
-      this.sourceDimensions.WIDTH,
-      this.sourceDimensions.HEIGHT,
-      this.xPos[0],
-      this.yPos,
-      this.dimensions.WIDTH,
-      this.dimensions.HEIGHT,
-    );
-
-    this.canvasCtx.drawImage(
-      this.imageSprite,
-      this.sourceXPos[1],
-      this.spritePos.y,
-      this.sourceDimensions.WIDTH,
-      this.sourceDimensions.HEIGHT,
-      this.xPos[1],
-      this.yPos,
-      this.dimensions.WIDTH,
-      this.dimensions.HEIGHT,
-    );
+    this.xPos.forEach(el => {
+      this.canvasCtx.drawImage(
+        this.imageSprite,
+        this.typeConfig.spriteCoords.x,
+        this.typeConfig.spriteCoords.y,
+        this.typeConfig.dimensions.width,
+        this.typeConfig.dimensions.height,
+        el,
+        this.yPos,
+        this.typeConfig.dimensions.width,
+        this.typeConfig.dimensions.height,
+      );
+    });
   }
 
   /**
    * Update the x position of an indivdual piece of the line.
-   * @param {number} pos Line position.
-   * @param {number} increment
    */
-  updateXPos(pos: number, increment: number) {
-    const line1 = pos;
-    const line2 = pos === 0 ? 1 : 0;
-
-    this.xPos[line1] -= increment;
-    this.xPos[line2] = this.xPos[line1] + this.dimensions.WIDTH;
-
-    if (this.xPos[line1] <= -this.dimensions.WIDTH) {
-      this.xPos[line1] += this.dimensions.WIDTH * 2;
-      this.xPos[line2] = this.xPos[line1] - this.dimensions.WIDTH;
-      this.sourceXPos[line1] = this.getRandomType() + this.spritePos.x;
+  updateXPos(increment: number) {
+    for (let i = 0; i < this.xPos.length; i++) {
+      this.xPos[i] -= increment;
+      if (this.xPos[i] < -this.typeConfig.dimensions.width) {
+        this.xPos.shift();
+        this.xPos.push(this.xPos[this.xPos.length - 1] + increment);
+      }
     }
   }
 
-  /**
-   * Update the horizon line.
-   * @param {number} deltaTime
-   * @param {number} speed
-   */
   update(deltaTime: number, speed: number) {
-    const increment = Math.floor(speed * (FPS / 1000) * deltaTime);
-
-    if (this.xPos[0] <= 0) {
-      this.updateXPos(0, increment);
-    } else {
-      this.updateXPos(1, increment);
-    }
+    const increment = Math.floor(speed * (config.FPS / 1000) * deltaTime);
+    this.updateXPos(increment);
     this.draw();
   }
 
-  /**
-   * Reset horizon to the starting position.
-   */
+  defaultXPos(): void {
+    this.xPos = new Array<number>(
+      Math.ceil(
+        this.canvasDimensions.width / this.typeConfig.dimensions.width,
+      ) + 1,
+    ).map((_p, i) => i * this.typeConfig.dimensions.width);
+  }
+
   reset(): void {
-    this.xPos[0] = 0;
-    this.xPos[1] = HorizonLine.dimensions.WIDTH;
+    this.defaultXPos();
   }
 }

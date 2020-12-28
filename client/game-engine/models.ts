@@ -1,22 +1,13 @@
-/**
- * Coordinates object
- */
 export type Coords = {
   x: number;
   y: number;
 };
 
 export type Dimensions = {
-  WIDTH: number;
-  HEIGHT: number;
+  width: number;
+  height: number;
 };
 
-/** Collision box object.
- * @param x X position.
- * @param y Y Position.
- * @param w Width.
- * @param h Height.
- */
 export class CollisionBox {
   x: number;
   y: number;
@@ -30,3 +21,25 @@ export class CollisionBox {
     this.height = h;
   }
 }
+
+export type ObstacleType = {
+  /** Name */
+  type: string;
+  dimensions: Dimensions;
+  /** Variable height */
+  // yPos: number;
+  spriteCoords: Coords;
+  /** Speed at which multiples are allowed */
+  multipleSpeed: number;
+  /** Minimum speed which the obstacle can make an appearance */
+  minSpeed: number;
+  /** minimum pixel space betweeen obstacles */
+  minGap: number;
+  collisionBoxes: CollisionBox[];
+};
+
+export type HorizontLineType = {
+  type: string;
+  dimensions: Dimensions;
+  spriteCoords: Coords;
+};
