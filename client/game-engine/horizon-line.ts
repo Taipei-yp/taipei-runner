@@ -9,7 +9,7 @@ export default class HorizonLine {
   canvasCtx: CanvasRenderingContext2D;
   canvasDimensions: Dimensions;
   typeConfig: HorizontLineType;
-  imageSprite: CanvasImageSource;
+  imageSprite: HTMLImageElement;
   yPosLowerSide: boolean;
   yPos: number;
   xPos: number[];
@@ -17,7 +17,7 @@ export default class HorizonLine {
   constructor(
     canvasCtx: CanvasRenderingContext2D,
     canvasDimensions: Dimensions,
-    imageSprite: CanvasImageSource,
+    imageSprite: HTMLImageElement,
     type: HorizontLineType,
     yPos = 0,
     yPosLowerSide = false,
@@ -78,11 +78,13 @@ export default class HorizonLine {
   }
 
   defaultXPos(): void {
-    this.xPos = new Array<number>(
+    const count =
       Math.ceil(
         this.canvasDimensions.width / this.typeConfig.dimensions.width,
-      ) + 1,
-    ).map((_p, i) => i * this.typeConfig.dimensions.width);
+      ) + 1;
+    for (let i = 0; i < count; i++) {
+      this.xPos.push(i * this.typeConfig.dimensions.width);
+    }
   }
 
   reset(): void {

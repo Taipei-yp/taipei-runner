@@ -1,5 +1,8 @@
 import { CollisionBox, Coords } from "./models";
 import { getTimeStamp } from "./utils";
+
+import image from "./assets/run-1.png";
+
 // #QT
 const FPS = 100;
 const IS_HIDPI = false;
@@ -12,7 +15,9 @@ const BOTTOM_PAD = 10; // Runner.config.BOTTOM_PAD
  * @param {Object} spritePos Positioning within image sprite.
  * @constructor
  */
-export default class Trex {
+export default class Hero {
+  static _imageSprite: CanvasImageSource;
+
   xPos: number;
   yPos: number;
   groundYPos: number;
@@ -39,13 +44,9 @@ export default class Trex {
   config: Record<string, number>;
   status: string;
 
-  constructor(
-    canvasCtx: CanvasRenderingContext2D,
-    imageSprite: CanvasImageSource,
-    spritePos: Coords,
-  ) {
+  constructor(canvasCtx: CanvasRenderingContext2D) {
     this.canvasCtx = canvasCtx;
-    this.spritePos = spritePos;
+    this.spritePos = { x: 0, y: 0 };
     this.xPos = 0;
     this.yPos = 0;
     // Position when on the ground.
@@ -56,9 +57,9 @@ export default class Trex {
     this.animStartTime = 0;
     this.timer = 0;
     this.msPerFrame = 1000 / FPS;
-    this.config = Trex.config;
+    this.config = Hero.config;
     // Current status.
-    this.status = Trex.status.WAITING;
+    this.status = Hero.status.WAITING;
 
     this.jumping = false;
     this.ducking = false;
@@ -72,7 +73,12 @@ export default class Trex {
     this.playingIntro = true;
     this.midair = false;
 
-    this.imageSprite = imageSprite;
+    if (!Hero._imageSprite) {
+      const d = document.createElement("img");
+      d.src = image;
+      Hero._imageSprite = d;
+    }
+    this.imageSprite = Hero._imageSprite;
 
     this.init();
   }
@@ -169,7 +175,7 @@ export default class Trex {
     this.minJumpHeight = this.groundYPos - this.config.MIN_JUMP_HEIGHT;
 
     this.draw(0, 0);
-    this.update(0, Trex.status.WAITING);
+    this.update(0, Hero.status.WAITING);
   }
 
   /**
@@ -184,7 +190,7 @@ export default class Trex {
   /**
    * Set the animation status.
    * @param {!number} deltaTime
-   * @param {Trex.status} status Optional status to switch to.
+   * @param {Hero.status} status Optional status to switch to.
    */
   update(deltaTime: number, opt_status?: string) {
     this.timer += deltaTime;
@@ -193,10 +199,10 @@ export default class Trex {
     if (opt_status) {
       this.status = opt_status;
       this.currentFrame = 0;
-      this.msPerFrame = 10; // #QT  Trex.animFrames[opt_status].msPerFrame
-      this.currentAnimFrames = []; // #QT  Trex.animFrames[opt_status].frames
+      this.msPerFrame = 10; // #QT  Hero.animFrames[opt_status].msPerFrame
+      this.currentAnimFrames = []; // #QT  Hero.animFrames[opt_status].frames
 
-      if (opt_status === Trex.status.WAITING) {
+      if (opt_status === Hero.status.WAITING) {
         this.animStartTime = getTimeStamp();
         this.setBlinkDelay();
       }
@@ -209,7 +215,7 @@ export default class Trex {
       );
     }
 
-    if (this.status === Trex.status.WAITING) {
+    if (this.status === Hero.status.WAITING) {
       this.blink(getTimeStamp());
     } else {
       this.draw(this.currentAnimFrames[this.currentFrame], 0);
@@ -240,7 +246,7 @@ export default class Trex {
     let sourceX = x;
     let sourceY = y;
     let sourceWidth =
-      this.ducking && this.status !== Trex.status.CRASHED
+      this.ducking && this.status !== Hero.status.CRASHED
         ? this.config.WIDTH_DUCK
         : this.config.WIDTH;
     let sourceHeight = this.config.HEIGHT;
@@ -257,7 +263,7 @@ export default class Trex {
     sourceY += this.spritePos.y;
 
     // Ducking.
-    if (this.ducking && this.status !== Trex.status.CRASHED) {
+    if (this.ducking && this.status !== Hero.status.CRASHED) {
       this.canvasCtx.drawImage(
         this.imageSprite,
         sourceX,
@@ -270,8 +276,8 @@ export default class Trex {
         this.config.HEIGHT,
       );
     } else {
-      // Crashed whilst ducking. Trex is standing up so needs adjustment.
-      if (this.ducking && this.status === Trex.status.CRASHED) {
+      // Crashed whilst ducking. Hero is standing up so needs adjustment.
+      if (this.ducking && this.status === Hero.status.CRASHED) {
         this.xPos++;
       }
       // Standing / running
@@ -293,7 +299,7 @@ export default class Trex {
    * Sets a random time for the blink to happen.
    */
   setBlinkDelay() {
-    this.blinkDelay = Math.ceil(Math.random() * Trex.BLINK_TIMING);
+    this.blinkDelay = Math.ceil(Math.random() * Hero.BLINK_TIMING);
   }
 
   /**
@@ -320,7 +326,7 @@ export default class Trex {
    */
   startJump(speed: number) {
     if (!this.jumping) {
-      this.update(0, Trex.status.JUMPING);
+      this.update(0, Hero.status.JUMPING);
       // Tweak the jump velocity based on the speed.
       this.jumpVelocity = this.config.INIITAL_JUMP_VELOCITY - speed / 10;
       this.jumping = true;
@@ -347,10 +353,10 @@ export default class Trex {
    * @param {number} speed // #QT speed: number
    */
   updateJump(deltaTime: number) {
-    const msPerFrame = 10; // #QT Trex.animFrames[this.status].msPerFrame;
+    const msPerFrame = 10; // #QT Hero.animFrames[this.status].msPerFrame;
     const framesElapsed = deltaTime / msPerFrame;
 
-    // Speed drop makes Trex fall faster.
+    // Speed drop makes Hero fall faster.
     if (this.speedDrop) {
       this.yPos += Math.round(
         this.jumpVelocity * this.config.SPEED_DROP_COEFFICIENT * framesElapsed,
@@ -392,11 +398,11 @@ export default class Trex {
    * @param {boolean} isDucking.
    */
   setDuck(isDucking: boolean) {
-    if (isDucking && this.status !== Trex.status.DUCKING) {
-      this.update(0, Trex.status.DUCKING);
+    if (isDucking && this.status !== Hero.status.DUCKING) {
+      this.update(0, Hero.status.DUCKING);
       this.ducking = true;
-    } else if (this.status === Trex.status.DUCKING) {
-      this.update(0, Trex.status.RUNNING);
+    } else if (this.status === Hero.status.DUCKING) {
+      this.update(0, Hero.status.RUNNING);
       this.ducking = false;
     }
   }
@@ -409,7 +415,7 @@ export default class Trex {
     this.jumpVelocity = 0;
     this.jumping = false;
     this.ducking = false;
-    this.update(0, Trex.status.RUNNING);
+    this.update(0, Hero.status.RUNNING);
     this.midair = false;
     this.speedDrop = false;
     this.jumpCount = 0;

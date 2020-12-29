@@ -18,13 +18,13 @@ const gameConfig = {
   MAX_GAP_COEFFICIENT: 1.5,
   MAX_SPEED: 13,
   MIN_JUMP_HEIGHT: 35,
-  MOBILE_SPEED_COEFFICIENT: 1.2,
   RESOURCE_TEMPLATE_ID: "audio-resources",
   SPEED: 6,
   SPEED_DROP_COEFFICIENT: 3,
   FPS: 60,
   DEFAULT_WIDTH: 600,
   DEFAULT_HEIGHT: 400,
+  FILL_COLOR: "#000239",
 };
 
 const spriteDefinition = {

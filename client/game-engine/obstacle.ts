@@ -2,7 +2,7 @@ import { getRandomNum } from "./utils";
 import { Dimensions, CollisionBox, ObstacleType } from "./models";
 import { gameConfig as config } from "./config";
 
-import image from "./images/obstacle-sprite.png";
+import image from "./assets/obstacle-sprite.png";
 /**
  * Obstacle.
  * @param canvasCtx

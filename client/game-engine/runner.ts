@@ -1,7 +1,6 @@
 import { Dimensions, CollisionBox, Coords } from "./models";
 import {
   getTimeStamp,
-  createCanvas,
   drawCollisionBoxes,
   createAdjustedCollisionBox,
   boxCompare,
@@ -9,7 +8,7 @@ import {
 import Hero from "./hero";
 import Horizon from "./horizon";
 import Obstacle from "./obstacle";
-import { gameConfig as config, spriteDefinition } from "./config";
+import { gameConfig as config } from "./config";
 // #QT window["Runner"] = Runner;
 
 /**
@@ -61,11 +60,10 @@ export default class Runner {
     BLUR: "blur",
     FOCUS: "focus",
     LOAD: "load",
-    GAMEPADCONNECTED: "gamepadconnected",
   };
 
   static _instance: Runner;
-  outerContainerEl!: HTMLElement;
+  // outerContainerEl!: HTMLElement;
   containerEl!: HTMLElement;
   dimensions!: Dimensions;
   canvas!: HTMLCanvasElement;
@@ -83,38 +81,32 @@ export default class Runner {
   activated!: boolean;
   crashed!: boolean;
   paused!: boolean;
-  resizeTimerId_!: NodeJS.Timeout;
+  resizeTimerId_!: number;
   playCount!: number;
-  audioBuffer: null;
-  // soundFx!: {};
-  audioContext!: AudioContext;
   // images!: {};
   // imagesLoaded!: number;
-  gamepadPreviousKeyDown!: boolean;
   static imageSprite: CanvasImageSource;
   config!: Record<string, string | number>;
   playingIntro!: boolean;
   horizon!: Horizon;
   spriteDef!: Record<string, Coords>;
-  touchController!: HTMLDivElement;
-  gameOverPanel!: boolean;
   drawPending!: boolean;
   raqId!: number;
 
-  constructor(outerContainerId: string) {
+  constructor(containerId: string) {
     // Singleton
 
     if (Runner._instance) {
       return Runner._instance;
     }
-    const outerContainerEl = document.querySelector(
-      outerContainerId,
-    ) as HTMLElement;
-    if (!outerContainerEl) throw new Error("no outerContainerEl");
-    this.outerContainerEl = outerContainerEl;
-    // this.detailsButton = this.outerContainerEl.querySelector('#details-button');
+    const containerEl = document.querySelector(containerId) as HTMLElement;
+    if (!containerEl) throw new Error("no outerContainerEl");
+    this.containerEl = containerEl;
 
-    // this.dimensions = Runner.defaultDimensions;
+    this.dimensions = {
+      width: config.DEFAULT_WIDTH,
+      height: config.DEFAULT_HEIGHT,
+    };
 
     this.distanceMeter = null;
     this.distanceRan = 0;
@@ -124,7 +116,7 @@ export default class Runner {
     this.time = 0;
     this.runningTime = 0;
     this.msPerFrame = 1000 / config.FPS;
-    this.currentSpeed = this.config.SPEED as number;
+    this.currentSpeed = config.SPEED;
 
     this.obstacles = [];
 
@@ -135,13 +127,6 @@ export default class Runner {
 
     this.playCount = 0;
 
-    // Sound FX.
-    this.audioBuffer = null;
-    // this.soundFx = {};
-
-    // Global web audio context for playing sounds.
-    // this.audioContext = null;
-
     // Images.
     // this.images = {};
     // this.imagesLoaded = 0;
@@ -149,95 +134,10 @@ export default class Runner {
     // if (this.isDisabled()) {
     //   this.setupDisabledRunner();
     // } else {
-    this.loadImages();
+    // this.loadImages();
     // }
-    this.gamepadPreviousKeyDown = false;
 
     Runner._instance = this;
-  }
-  /**
-   * Whether the easter egg has been disabled. CrOS enterprise enrolled devices.
-   * @return {boolean}
-   */
-  /* isDisabled(): boolean {
-    return loadTimeData && loadTimeData.valueExists("disabledEasterEgg");
-  }
-  */
-  /**
-   * For disabled instances, set up a snackbar with the disabled message.
-   */
-  /* setupDisabledRunner() {
-    this.containerEl = document.createElement("div");
-    this.containerEl.className = Runner.classes.SNACKBAR;
-    this.containerEl.textContent = loadTimeData.getValue("disabledEasterEgg");
-    this.outerContainerEl.appendChild(this.containerEl);
-
-    // Show notification when the activation key is pressed.
-    document.addEventListener(
-      Runner.events.KEYDOWN,
-      function (e) {
-        if (Runner.keycodes.JUMP[e.keyCode]) {
-          this.containerEl.classList.add(Runner.classes.SNACKBAR_SHOW);
-          document.querySelector(".icon").classList.add("icon-disabled");
-        }
-      }.bind(this),
-    );
-  } */
-  /**
-   * Setting individual settings for debugging.
-   * @param {string} setting
-   * @param {*} value
-   */
-  updateConfigSetting(setting: string, value: string | number) {
-    if (setting in this.config && value !== undefined) {
-      this.config[setting] = value;
-
-      switch (setting) {
-        case "GRAVITY":
-        case "MIN_JUMP_HEIGHT":
-        case "SPEED_DROP_COEFFICIENT":
-          Hero.config[setting] = value as number;
-          break;
-        case "INITIAL_JUMP_VELOCITY":
-          this.hero.setJumpVelocity(value as number);
-          break;
-        case "SPEED":
-          this.setSpeed(value as number);
-          break;
-        default:
-          break;
-      }
-    }
-  }
-
-  /**
-   * Cache the appropriate image sprite from the page and get the sprite sheet
-   * definition.
-   */
-  loadImages() {
-    Runner.imageSprite = document.getElementById(
-      "offline-resources-1x",
-    ) as CanvasImageSource;
-    this.spriteDef = spriteDefinition;
-    this.init();
-  }
-
-  /**
-   * Sets the game speed. Adjust the speed accordingly if on a smaller screen.
-   * @param {number} opt_speed
-   */
-  setSpeed(opt_speed?: number) {
-    const speed = opt_speed || this.currentSpeed;
-
-    // Reduce the speed on smaller mobile screens.
-    if (this.dimensions.width < config.DEFAULT_WIDTH) {
-      const mobileSpeed =
-        ((speed * this.dimensions.width) / config.DEFAULT_WIDTH) *
-        (this.config.MOBILE_SPEED_COEFFICIENT as number);
-      this.currentSpeed = mobileSpeed > speed ? speed : mobileSpeed;
-    } else if (opt_speed) {
-      this.currentSpeed = opt_speed;
-    }
   }
 
   /**
@@ -251,31 +151,28 @@ export default class Runner {
     this.adjustDimensions();
     this.setSpeed();
 
-    this.containerEl = document.createElement("div");
-    this.containerEl.className = Runner.classes.CONTAINER;
+    const canvas = this.containerEl.getElementsByTagName("canvas")[0];
+    if (!canvas) throw new Error("no canvas element");
+    this.canvas = canvas;
 
-    // Player canvas container.
-    this.canvas = createCanvas(
-      this.containerEl,
-      this.dimensions.width,
-      this.dimensions.height,
-      [Runner.classes.CANVAS], // Runner.classes.PLAYER
-    );
     const canvasCtx = this.canvas.getContext("2d");
-    if (!canvasCtx) throw new Error("No canvas");
+    if (!canvasCtx) throw new Error("No canvas context");
     this.canvasCtx = canvasCtx;
-    this.canvasCtx.fillStyle = "#f7f7f7";
+
+    this.canvas.width = this.dimensions.width;
+    this.canvas.height = this.dimensions.height;
+
+    this.canvasCtx.fillStyle = config.FILL_COLOR;
     this.canvasCtx.fill();
+
     this.updateCanvasScaling();
 
     // Horizon contains obstacles and the ground.
-    /* this.horizon = new Horizon(
-      this.canvas,
+    this.horizon = new Horizon(
+      this.canvasCtx,
       this.dimensions,
-      Runner.imageSprite,
-      this.spriteDef,
       config.GAP_COEFFICIENT,
-    ); */
+    );
 
     // Distance meter
     /* this.distanceMeter = new DistanceMeter(
@@ -285,13 +182,7 @@ export default class Runner {
     ); */
 
     // Draw hero
-    this.hero = new Hero(
-      this.canvasCtx,
-      Runner.imageSprite,
-      this.spriteDef.hero,
-    );
-
-    this.outerContainerEl.appendChild(this.containerEl);
+    this.hero = new Hero(this.canvasCtx);
 
     this.startListening();
     this.update();
@@ -303,11 +194,22 @@ export default class Runner {
   }
 
   /**
+   * Sets the game speed. Adjust the speed accordingly if on a smaller screen.
+   * @param {number} opt_speed
+   */
+  setSpeed(opt_speed?: number) {
+    this.currentSpeed = opt_speed || this.currentSpeed;
+  }
+
+  /**
    * Debounce the resize event.
    */
   debounceResize() {
     if (!this.resizeTimerId_) {
-      this.resizeTimerId_ = setInterval(this.adjustDimensions.bind(this), 250);
+      this.resizeTimerId_ = window.setInterval(
+        this.adjustDimensions.bind(this),
+        250,
+      );
     }
   }
 
@@ -315,15 +217,15 @@ export default class Runner {
    * Adjust game space dimensions on resize.
    */
   adjustDimensions() {
-    clearInterval(this.resizeTimerId_);
-    // this.resizeTimerId_ = null;
+    window.clearInterval(this.resizeTimerId_);
+    this.resizeTimerId_ = 0;
 
-    const boxStyles = window.getComputedStyle(this.outerContainerEl);
+    const boxStyles = window.getComputedStyle(this.containerEl); // --outerContainerEl
     const padding = Number(
       boxStyles.paddingLeft.substr(0, boxStyles.paddingLeft.length - 2),
     );
-
-    this.dimensions.width = this.outerContainerEl.offsetWidth - padding * 2;
+    this.dimensions.height = this.containerEl.offsetHeight;
+    this.dimensions.width = this.containerEl.offsetWidth - padding * 2;
 
     // Redraw the elements back onto the canvas.
     if (this.canvas) {
@@ -339,19 +241,13 @@ export default class Runner {
 
       // Outer container and distance meter.
       if (this.activated || this.crashed || this.paused) {
-        this.containerEl.style.width = `${this.dimensions.width}px`;
-        this.containerEl.style.height = `${this.dimensions.height}px`;
+        // this.containerEl.style.width = `${this.dimensions.width}px`;
+        // this.containerEl.style.height = `${this.dimensions.height}px`;
         // this.distanceMeter.update(0, Math.ceil(this.distanceRan));
         this.stop();
       } else {
         this.hero.draw(0, 0);
       }
-
-      // Game over panel.
-      /* if (this.crashed && this.gameOverPanel) {
-        this.gameOverPanel.updateDimensions(this.dimensions.width);
-        this.gameOverPanel.draw();
-      } */
     }
   }
 
@@ -385,10 +281,6 @@ export default class Runner {
 
       this.containerEl.style.webkitAnimation = "intro .4s ease-out 1 both";
       this.containerEl.style.width = `${this.dimensions.width}px`;
-
-      if (this.touchController) {
-        this.outerContainerEl.appendChild(this.touchController);
-      }
 
       this.activated = true;
       this.started = true;
@@ -487,10 +379,7 @@ export default class Runner {
         deltaTime,
         Math.ceil(this.distanceRan),
       );
-
-      if (playAcheivementSound) {
-        // this.playSound(this.soundFx.SCORE);
-      } */
+       */
     }
 
     if (!this.crashed) {
@@ -535,40 +424,6 @@ export default class Runner {
     // Mouse.
     document.addEventListener(Runner.events.MOUSEDOWN, this);
     document.addEventListener(Runner.events.MOUSEUP, this);
-
-    window.addEventListener(Runner.events.GAMEPADCONNECTED, this);
-
-    if (navigator.getGamepads())
-      window.setInterval(this.pollGamepads.bind(this), 10);
-  }
-
-  /**
-   * Convert Gamepad input events to keydown/up events (spacebar)
-   */
-  pollGamepads() {
-    const gamepads = navigator.getGamepads();
-    let keydown = false;
-    for (let i = 0; i < gamepads.length; i++) {
-      if (gamepads[i] !== undefined) {
-        if (gamepads[i]!.buttons.filter(e => e.pressed === true).length > 0) {
-          keydown = true;
-        }
-      }
-    }
-    if (keydown !== this.gamepadPreviousKeyDown) {
-      this.gamepadPreviousKeyDown = keydown;
-
-      const kei: KeyboardEventInit = {
-        keyCode: 32, // keys(Runner.keycodes.JUMP)[0];
-        // which: 32,
-        altKey: false,
-        ctrlKey: true,
-        shiftKey: false,
-        metaKey: false,
-      };
-      const event = new KeyboardEvent(keydown ? "keydown" : "keyup", kei);
-      document.dispatchEvent(event);
-    }
   }
 
   /**
@@ -590,18 +445,14 @@ export default class Runner {
     // if (e.target != this.detailsButton) {
     if (
       !this.crashed &&
-      (Runner.keycodes.JUMP[e.code] ||
-        e.type === Runner.events.TOUCHSTART ||
-        e.type === Runner.events.GAMEPADCONNECTED)
+      (Runner.keycodes.JUMP[e.code] || e.type === Runner.events.TOUCHSTART)
     ) {
       if (!this.activated) {
-        // this.loadSounds();
         this.activated = true;
         // errorPageController.trackEasterEgg();
       }
 
       if (!this.hero.jumping && !this.hero.ducking) {
-        // this.playSound(this.soundFx.BUTTON_PRESS);
         this.hero.startJump(this.currentSpeed);
       }
     }
@@ -698,9 +549,6 @@ export default class Runner {
    * Game over state.
    */
   gameOver() {
-    // this.playSound(this.soundFx.HIT);
-    // this.vibrate(200);
-
     this.stop();
     this.crashed = true;
     // this.distanceMeter.acheivement = false;
@@ -767,7 +615,6 @@ export default class Runner {
       // this.distanceMeter.reset(this.highestScore);
       this.horizon.reset();
       this.hero.reset();
-      // this.playSound(this.soundFx.BUTTON_PRESS);
 
       this.update();
     }
@@ -782,19 +629,6 @@ export default class Runner {
     } else if (!this.crashed) {
       this.play();
       this.hero.reset();
-    }
-  }
-
-  /**
-   * Play a sound.
-   * @param {SoundBuffer} soundBuffer
-   */
-  playSound(soundBuffer: AudioBuffer) {
-    if (soundBuffer) {
-      const sourceNode = this.audioContext.createBufferSource();
-      sourceNode.buffer = soundBuffer;
-      sourceNode.connect(this.audioContext.destination);
-      sourceNode.start(0);
     }
   }
 
@@ -835,7 +669,7 @@ export default class Runner {
 
       // Scale the context to counter the fact that we've manually scaled
       // our canvas element.
-      context.scale(ratio, ratio);
+      // context.scale(ratio, ratio);
       return true;
     }
     if (devicePixelRatio === 1) {

@@ -8,12 +8,12 @@ import {
   horizontLineTypes,
 } from "./config";
 
-import image from "./images/horizon-sprite.png";
+import image from "./assets/horizon-sprite.png";
 /**
  * Horizon background class.
  */
 export default class Horizon {
-  static _imageSprite: CanvasImageSource;
+  static _imageSprite: HTMLImageElement;
 
   canvasCtx: CanvasRenderingContext2D;
   canvasDimensions: Dimensions;
@@ -30,17 +30,19 @@ export default class Horizon {
     this.canvasCtx = canvasCtx;
     this.canvasDimensions = canvasDimensions;
     this.gapCoefficient = gapCoefficient;
+    this.obstacles = [];
+    this.obstacleHistory = [];
+    this.horizonLines = [];
 
     if (!Horizon._imageSprite) {
       const d = document.createElement("img");
       d.src = image;
+      d.onload = () => {
+        console.log("load");
+        this.init();
+      };
       Horizon._imageSprite = d;
     }
-
-    this.obstacles = [];
-    this.obstacleHistory = [];
-    this.horizonLines = [];
-    this.init();
   }
 
   init() {
