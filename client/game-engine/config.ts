@@ -2,38 +2,36 @@ import { ObstacleType, HorizontLineType, CollisionBox } from "./models";
 /** Game configuration. */
 const gameConfig = {
   ACCELERATION: 0.001,
-  BG_CLOUD_SPEED: 0.2,
-  BOTTOM_PAD: 10,
+  GROUND_POS: 200,
   CLEAR_TIME: 3000,
-  CLOUD_FREQUENCY: 0.5,
   GAMEOVER_CLEAR_TIME: 750,
   GAP_COEFFICIENT: 0.6,
-  GRAVITY: 0.6,
+  GRAVITY: 0.2,
   INITIAL_JUMP_VELOCITY: 12,
-  MAX_CLOUDS: 6,
   /** Maximum obstacle grouping count. */
   MAX_OBSTACLE_LENGTH: 3,
   MAX_OBSTACLE_DUPLICATION: 2,
   /** Coefficient for calculating the maximum gap. */
   MAX_GAP_COEFFICIENT: 1.5,
   MAX_SPEED: 13,
-  MIN_JUMP_HEIGHT: 35,
-  RESOURCE_TEMPLATE_ID: "audio-resources",
   SPEED: 6,
   SPEED_DROP_COEFFICIENT: 3,
   FPS: 60,
   DEFAULT_WIDTH: 600,
   DEFAULT_HEIGHT: 400,
   FILL_COLOR: "#000239",
+  CLASS_CRASHED: "crashed",
+  CLASS_ICON: "icon-offline",
 };
 
-const spriteDefinition = {
-  CLOUD: { x: 86, y: 2 },
-  HORIZON: { x: 2, y: 54 },
-  PTERODACTYL: { x: 134, y: 2 },
-  RESTART: { x: 2, y: 2 },
-  TEXT_SPRITE: { x: 484, y: 2 },
-  hero: { x: 677, y: 2 },
+const heroConfig = {
+  SRC_HEIGHT: 77,
+  DROP_VELOCITY: -5,
+  INIITAL_JUMP_VELOCITY: -10,
+  MAX_JUMP_HEIGHT: 80,
+  MIN_JUMP_HEIGHT: 10,
+  START_X_POS: 50,
+  HEIGHT: 130,
 };
 
 const obstacleTypes: ObstacleType[] = [
@@ -56,6 +54,7 @@ const horizontLineTypes: HorizontLineType[] = [
     type: "FLOOR",
     spriteCoords: { x: 0, y: 0 },
     dimensions: { width: 623, height: 320 },
+    groundYMargin: 123,
   },
 ];
-export { gameConfig, spriteDefinition, obstacleTypes, horizontLineTypes };
+export { gameConfig, heroConfig, obstacleTypes, horizontLineTypes };

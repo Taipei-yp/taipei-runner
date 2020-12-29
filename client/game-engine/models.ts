@@ -42,4 +42,12 @@ export type HorizontLineType = {
   type: string;
   dimensions: Dimensions;
   spriteCoords: Coords;
+  groundYMargin: number;
+};
+
+export type CoordsAndWidth = Coords & { width: number };
+
+export type FrameSetType = {
+  msPerFrame: number;
+  frames: CoordsAndWidth[];
 };

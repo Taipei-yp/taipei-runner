@@ -1,10 +1,10 @@
 import { Dimensions } from "./models";
-import { getRandomNum } from "./utils";
+// import { getRandomNum } from "./utils";
 import HorizonLine from "./horizon-line";
 import Obstacle from "./obstacle";
 import {
   gameConfig as config,
-  obstacleTypes,
+  // obstacleTypes,
   horizontLineTypes,
 } from "./config";
 
@@ -17,23 +17,23 @@ export default class Horizon {
 
   canvasCtx: CanvasRenderingContext2D;
   canvasDimensions: Dimensions;
-  gapCoefficient: number;
   horizonLines: HorizonLine[];
   obstacleHistory: string[];
   obstacles: Obstacle[];
 
+  groundPosY: number;
+
   constructor(
     canvasCtx: CanvasRenderingContext2D,
     canvasDimensions: Dimensions,
-    gapCoefficient: number,
+    groundPosY: number,
   ) {
     this.canvasCtx = canvasCtx;
     this.canvasDimensions = canvasDimensions;
-    this.gapCoefficient = gapCoefficient;
     this.obstacles = [];
     this.obstacleHistory = [];
     this.horizonLines = [];
-
+    this.groundPosY = groundPosY;
     if (!Horizon._imageSprite) {
       const d = document.createElement("img");
       d.src = image;
@@ -52,15 +52,17 @@ export default class Horizon {
         this.canvasDimensions,
         Horizon._imageSprite,
         horizontLineTypes[0],
-        0,
-        true,
+        this.groundPosY,
       ),
     );
   }
 
   update(deltaTime: number, currentSpeed: number, updateObstacles: boolean) {
     this.horizonLines.forEach(el => el.update(deltaTime, currentSpeed));
-    if (updateObstacles) {
+
+    let updateObstacless = updateObstacles;
+    updateObstacless = false;
+    if (updateObstacless) {
       this.updateObstacles(deltaTime, currentSpeed);
     }
   }
@@ -99,10 +101,11 @@ export default class Horizon {
 
   /**
    * Add a new obstacle.
-   * @param currentSpeed
+   * @param _currentSpeed
    */
-  addNewObstacle(currentSpeed: number) {
-    const obstacleTypeIndex = getRandomNum(0, obstacleTypes.length - 1);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  addNewObstacle(_currentSpeed?: number) {
+    /* const obstacleTypeIndex = getRandomNum(0, obstacleTypes.length - 1);
     const obstacleType = obstacleTypes[obstacleTypeIndex];
 
     // Check for multiples of the same type of obstacle.
@@ -118,7 +121,7 @@ export default class Horizon {
           this.canvasCtx,
           this.canvasDimensions,
           obstacleType,
-          this.gapCoefficient,
+          config.GAP_COEFFICIENT,
           currentSpeed,
         ),
       );
@@ -127,8 +130,8 @@ export default class Horizon {
 
       if (this.obstacleHistory.length > 1) {
         this.obstacleHistory.splice(config.MAX_OBSTACLE_DUPLICATION);
-      }
-    }
+      } 
+    } */
   }
 
   /**

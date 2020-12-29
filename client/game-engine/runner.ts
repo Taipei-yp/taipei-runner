@@ -8,7 +8,7 @@ import {
 import Hero from "./hero";
 import Horizon from "./horizon";
 import Obstacle from "./obstacle";
-import { gameConfig as config } from "./config";
+import { gameConfig as config, heroConfig } from "./config";
 // #QT window["Runner"] = Runner;
 
 /**
@@ -18,44 +18,19 @@ import { gameConfig as config } from "./config";
  * @export
  */
 export default class Runner {
-  /**
-   * CSS class names.
-   * @enum {string}
-   */
-  static classes = {
-    CANVAS: "runner-canvas",
-    CONTAINER: "runner-container",
-    CRASHED: "crashed",
-    ICON: "icon-offline",
-    SNACKBAR: "snackbar",
-    SNACKBAR_SHOW: "snackbar-show",
-    TOUCH_CONTROLLER: "controller",
-  };
-
-  /**
-   * Key code mapping.
-   * @enum {Object}
-   */
   static keycodes = {
-    JUMP: { "38": 1, "32": 1 } as Record<string, number>, // Up, spacebar
-    DUCK: { "40": 1 } as Record<string, number>, // Down
-    RESTART: { "13": 1 } as Record<string, number>, // Enter
+    JUMP: { ArrowUp: 1, Space: 1 } as Record<string, number>, // Up, spacebar
+    DUCK: { ArrowDown: 1 } as Record<string, number>, // Down
+    RESTART: { Enter: 1 } as Record<string, number>, // Enter
   };
 
-  /**
-   * Runner event names.
-   * @enum {string}
-   */
   static events = {
-    ANIM_END: "webkitAnimationEnd",
     CLICK: "click",
     KEYDOWN: "keydown",
     KEYUP: "keyup",
     MOUSEDOWN: "mousedown",
     MOUSEUP: "mouseup",
     RESIZE: "resize",
-    TOUCHEND: "touchend",
-    TOUCHSTART: "touchstart",
     VISIBILITY: "visibilitychange",
     BLUR: "blur",
     FOCUS: "focus",
@@ -77,17 +52,18 @@ export default class Runner {
   msPerFrame!: number;
   currentSpeed!: number;
   obstacles!: never[];
-  started!: boolean;
-  activated!: boolean;
-  crashed!: boolean;
-  paused!: boolean;
+  status!: {
+    started: boolean;
+    activated: boolean;
+    crashed: boolean;
+    paused: boolean;
+  };
   resizeTimerId_!: number;
   playCount!: number;
   // images!: {};
   // imagesLoaded!: number;
   static imageSprite: CanvasImageSource;
-  config!: Record<string, string | number>;
-  playingIntro!: boolean;
+
   horizon!: Horizon;
   spriteDef!: Record<string, Coords>;
   drawPending!: boolean;
@@ -120,11 +96,12 @@ export default class Runner {
 
     this.obstacles = [];
 
-    this.started = false;
-    this.activated = false;
-    this.crashed = false;
-    this.paused = false;
-
+    this.status = {
+      started: false,
+      activated: false,
+      crashed: false,
+      paused: false,
+    };
     this.playCount = 0;
 
     // Images.
@@ -143,11 +120,10 @@ export default class Runner {
   /**
    * Game initialiser.
    */
-  init() {
-    // Hide the static icon.
-    // document.querySelector('.' + Runner.classes.ICON).style.visibility =
-    //     'hidden';
 
+  groundPosY = () => this.dimensions.height - config.GROUND_POS;
+
+  init() {
     this.adjustDimensions();
     this.setSpeed();
 
@@ -171,7 +147,7 @@ export default class Runner {
     this.horizon = new Horizon(
       this.canvasCtx,
       this.dimensions,
-      config.GAP_COEFFICIENT,
+      this.groundPosY(),
     );
 
     // Distance meter
@@ -182,15 +158,15 @@ export default class Runner {
     ); */
 
     // Draw hero
-    this.hero = new Hero(this.canvasCtx);
+    this.hero = new Hero(this.canvasCtx, this.groundPosY());
 
     this.startListening();
     this.update();
 
-    window.addEventListener(
+    /* window.addEventListener(
       Runner.events.RESIZE,
       this.debounceResize.bind(this),
-    );
+    ); */
   }
 
   /**
@@ -239,53 +215,12 @@ export default class Runner {
       this.horizon.update(0, 0, true);
       this.hero.update(0);
 
-      // Outer container and distance meter.
-      if (this.activated || this.crashed || this.paused) {
+      if (this.status.activated || this.status.crashed || this.status.paused) {
         // this.containerEl.style.width = `${this.dimensions.width}px`;
         // this.containerEl.style.height = `${this.dimensions.height}px`;
         // this.distanceMeter.update(0, Math.ceil(this.distanceRan));
         this.stop();
-      } else {
-        this.hero.draw(0, 0);
       }
-    }
-  }
-
-  /**
-   * Play the game intro.
-   * Canvas container width expands out to the full width.
-   */
-  playIntro() {
-    if (!this.started && !this.crashed) {
-      this.playingIntro = true;
-      this.hero.playingIntro = true;
-
-      // CSS animation definition.
-      const keyframes =
-        `${`@-webkit-keyframes intro { from { width:`}${
-          this.hero.config.width
-        }px }` +
-        `to { width: ${this.dimensions.width}px }` +
-        `}`;
-
-      try {
-        document.styleSheets[0].insertRule(keyframes, 0);
-      } catch (error) {
-        this.startGame();
-      }
-
-      this.containerEl.addEventListener(
-        Runner.events.ANIM_END,
-        this.startGame.bind(this),
-      );
-
-      this.containerEl.style.webkitAnimation = "intro .4s ease-out 1 both";
-      this.containerEl.style.width = `${this.dimensions.width}px`;
-
-      this.activated = true;
-      this.started = true;
-    } else if (this.crashed) {
-      this.restart();
     }
   }
 
@@ -296,9 +231,6 @@ export default class Runner {
     document.documentElement.classList.add("playing");
 
     this.runningTime = 0;
-    this.playingIntro = false;
-    this.hero.playingIntro = false;
-    this.containerEl.style.webkitAnimation = "";
     this.playCount++;
 
     // Handle tabbing off the page. Pause the current game.
@@ -337,7 +269,7 @@ export default class Runner {
     let deltaTime = now - (this.time || now);
     this.time = now;
 
-    if (this.activated) {
+    if (this.status.activated) {
       this.clearCanvas();
 
       if (this.hero.jumping) {
@@ -345,31 +277,37 @@ export default class Runner {
       }
 
       this.runningTime += deltaTime;
-      const hasObstacles = this.runningTime > this.config.CLEAR_TIME;
+      const hasObstacles = this.runningTime > config.CLEAR_TIME;
 
       // First jump triggers the intro.
-      if (this.hero.jumpCount === 1 && !this.playingIntro) {
-        this.playIntro();
+      if (this.hero.jumpCount === 1) {
+        if (!this.status.started && !this.status.crashed) {
+          /* this.containerEl.addEventListener(
+            Runner.events.ANIM_END,
+            this.startGame.bind(this),
+          );
+          this.containerEl.style.webkitAnimation = "intro .4s ease-out 1 both";
+          this.containerEl.style.width = `${this.dimensions.width}px`;
+          */
+          this.startGame();
+          this.status.activated = true;
+          this.status.started = true;
+        } else if (this.status.crashed) {
+          this.restart();
+        }
       }
 
-      // The horizon doesn't move until the intro is over.
-      if (this.playingIntro) {
-        this.horizon.update(0, this.currentSpeed, hasObstacles);
-      } else {
-        deltaTime = !this.started ? 0 : deltaTime;
-        this.horizon.update(deltaTime, this.currentSpeed, hasObstacles);
-      }
+      deltaTime = !this.status.started ? 0 : deltaTime;
+      this.horizon.update(deltaTime, this.currentSpeed, hasObstacles);
 
       // Check for collisions.
-      const collision =
-        hasObstacles &&
-        checkForCollision(this.horizon.obstacles[0], this.hero, this.canvasCtx);
+      const collision = hasObstacles ? false : hasObstacles; // &&      checkForCollision(this.horizon.obstacles[0], this.hero, this.canvasCtx)
 
       if (!collision) {
         this.distanceRan += (this.currentSpeed * deltaTime) / this.msPerFrame;
 
-        if (this.currentSpeed < this.config.MAX_SPEED) {
-          this.currentSpeed += this.config.ACCELERATION as number;
+        if (this.currentSpeed < config.MAX_SPEED) {
+          this.currentSpeed += config.ACCELERATION;
         }
       } else {
         this.gameOver();
@@ -382,7 +320,7 @@ export default class Runner {
        */
     }
 
-    if (!this.crashed) {
+    if (!this.status.crashed) {
       this.hero.update(deltaTime);
       this.raq();
     }
@@ -396,13 +334,10 @@ export default class Runner {
     const f = (evtType: string, events: Record<string, string>): void => {
       switch (evtType) {
         case events.KEYDOWN:
-        case events.TOUCHSTART:
         case events.MOUSEDOWN:
-        case events.GAMEPADCONNECTED:
           this.onKeyDown(event);
           break;
         case events.KEYUP:
-        case events.TOUCHEND:
         case events.MOUSEUP:
           this.onKeyUp(event);
           break;
@@ -442,38 +377,26 @@ export default class Runner {
    * @param {Event} e
    */
   onKeyDown(e: KeyboardEvent) {
-    // if (e.target != this.detailsButton) {
-    if (
-      !this.crashed &&
-      (Runner.keycodes.JUMP[e.code] || e.type === Runner.events.TOUCHSTART)
-    ) {
-      if (!this.activated) {
-        this.activated = true;
-        // errorPageController.trackEasterEgg();
+    if (!this.status.crashed && Runner.keycodes.JUMP[e.code]) {
+      if (!this.status.activated) {
+        this.status.activated = true;
       }
-
-      if (!this.hero.jumping && !this.hero.ducking) {
+      if (!this.hero.jumping) {
         this.hero.startJump(this.currentSpeed);
       }
     }
-
-    if (
-      this.crashed &&
-      e.type === Runner.events.TOUCHSTART &&
-      e.currentTarget === this.containerEl
-    ) {
+    if (this.status.crashed && e.currentTarget === this.containerEl) {
       this.restart();
     }
-    // }
-
-    if (this.activated && !this.crashed && Runner.keycodes.DUCK[e.keyCode]) {
+    if (
+      this.status.activated &&
+      !this.status.crashed &&
+      Runner.keycodes.DUCK[e.code]
+    ) {
       e.preventDefault();
       if (this.hero.jumping) {
         // Speed drop, activated only when jump key is not pressed.
         this.hero.setSpeedDrop();
-      } else if (!this.hero.jumping && !this.hero.ducking) {
-        // Duck.
-        this.hero.setDuck(true);
       }
     }
   }
@@ -483,29 +406,25 @@ export default class Runner {
    * @param {Event} e
    */
   onKeyUp(e: KeyboardEvent & MouseEvent) {
-    const keyCode = String(e.code);
     const isjumpKey =
-      Runner.keycodes.JUMP[keyCode] ||
-      e.type === Runner.events.TOUCHEND ||
-      e.type === Runner.events.MOUSEDOWN;
+      Runner.keycodes.JUMP[e.code] || e.type === Runner.events.MOUSEDOWN;
 
     if (this.isRunning() && isjumpKey) {
       this.hero.endJump();
-    } else if (Runner.keycodes.DUCK[keyCode]) {
+    } else if (Runner.keycodes.DUCK[e.code]) {
       this.hero.speedDrop = false;
-      this.hero.setDuck(false);
-    } else if (this.crashed) {
+    } else if (this.status.crashed) {
       // Check that enough time has elapsed before allowing jump key to restart.
       const deltaTime = getTimeStamp() - this.time;
       if (
-        Runner.keycodes.RESTART[keyCode] ||
+        Runner.keycodes.RESTART[e.code] ||
         this.isLeftClickOnCanvas(e) ||
-        (deltaTime >= this.config.GAMEOVER_CLEAR_TIME &&
-          Runner.keycodes.JUMP[keyCode])
+        (deltaTime >= config.GAMEOVER_CLEAR_TIME &&
+          Runner.keycodes.JUMP[e.code])
       ) {
         this.restart();
       }
-    } else if (this.paused && isjumpKey) {
+    } else if (this.status.paused && isjumpKey) {
       // Reset the jump state
       this.hero.reset();
       this.play();
@@ -550,7 +469,7 @@ export default class Runner {
    */
   gameOver() {
     this.stop();
-    this.crashed = true;
+    this.status.crashed = true;
     // this.distanceMeter.acheivement = false;
 
     this.hero.update(100, Hero.status.CRASHED);
@@ -580,8 +499,8 @@ export default class Runner {
   stop() {
     document.documentElement.classList.remove("playing");
 
-    this.activated = false;
-    this.paused = true;
+    this.status.activated = false;
+    this.status.paused = true;
     cancelAnimationFrame(this.raqId);
     this.raqId = 0;
   }
@@ -589,9 +508,9 @@ export default class Runner {
   play() {
     document.documentElement.classList.add("playing");
 
-    if (!this.crashed) {
-      this.activated = true;
-      this.paused = false;
+    if (!this.status.crashed) {
+      this.status.activated = true;
+      this.status.paused = false;
       this.hero.update(0, Hero.status.RUNNING);
       this.time = getTimeStamp();
       this.update();
@@ -604,13 +523,12 @@ export default class Runner {
     if (!this.raqId) {
       this.playCount++;
       this.runningTime = 0;
-      this.activated = true;
-      this.crashed = false;
+      this.status.activated = true;
+      this.status.crashed = false;
       this.distanceRan = 0;
-      this.setSpeed(this.config.SPEED as number);
+      this.setSpeed(config.SPEED);
 
       this.time = getTimeStamp();
-      this.containerEl.classList.remove(Runner.classes.CRASHED);
       this.clearCanvas();
       // this.distanceMeter.reset(this.highestScore);
       this.horizon.reset();
@@ -626,7 +544,7 @@ export default class Runner {
   onVisibilityChange(e: Event) {
     if (document.hidden || e.type === "blur") {
       this.stop();
-    } else if (!this.crashed) {
+    } else if (!this.status.crashed) {
       this.play();
       this.hero.reset();
     }
@@ -699,10 +617,10 @@ export function checkForCollision(
   // Adjustments are made to the bounding box as there is a 1 pixel white
   // border around the t-rex and obstacles.
   const heroBox = new CollisionBox(
-    hero.xPos + 1,
-    hero.yPos + 1,
-    hero.config.width - 2,
-    hero.config.HEIGHT - 2,
+    hero.pos.x + 1,
+    hero.pos.y + 1,
+    hero.currentAnimFrames[hero.currentFrame].width - 2,
+    heroConfig.HEIGHT - 2,
   );
 
   const obstacleBox = new CollisionBox(
@@ -720,9 +638,7 @@ export function checkForCollision(
   // Simple outer bounds check.
   if (boxCompare(heroBox, obstacleBox)) {
     const { collisionBoxes } = obstacle;
-    const heroCollisionBoxes = hero.ducking
-      ? Hero.collisionBoxes.DUCKING
-      : Hero.collisionBoxes.RUNNING;
+    const heroCollisionBoxes = Hero.collisionBoxes.RUNNING;
 
     // Detailed axis aligned box check.
     for (let t = 0; t < heroCollisionBoxes.length; t++) {

@@ -1,77 +1,52 @@
-import { CollisionBox, Coords } from "./models";
-import { getTimeStamp } from "./utils";
+import { CollisionBox, FrameSetType, CoordsAndWidth, Coords } from "./models";
+import { gameConfig as config, heroConfig } from "./config";
 
-import image from "./assets/run-1.png";
-
-// #QT
-const FPS = 100;
-const IS_HIDPI = false;
-const HEIGHT = 10; // Runner.defaultDimensions.HEIGHT
-const BOTTOM_PAD = 10; // Runner.config.BOTTOM_PAD
+import image from "./assets/hero-sprite.png";
 
 /**
- * T-rex game character.
- * @param {HTMLCanvas} canvasCtx
- * @param {Object} spritePos Positioning within image sprite.
- * @constructor
+ * Hero game character.
  */
 export default class Hero {
   static _imageSprite: CanvasImageSource;
 
-  xPos: number;
-  yPos: number;
+  pos: Coords;
   groundYPos: number;
   currentFrame: number;
-  currentAnimFrames: never[];
-  blinkDelay: number;
-  animStartTime: number;
+  currentAnimFrames: CoordsAndWidth[];
   canvasCtx: CanvasRenderingContext2D;
-  spritePos: Coords;
   timer: number;
   msPerFrame: number;
   jumping: boolean;
-  ducking: boolean;
+
   jumpVelocity: number;
   reachedMinHeight: boolean;
   speedDrop: boolean;
   jumpCount: number;
-  jumpspotX: number;
   minJumpHeight: number;
-  playingIntro: boolean;
-  midair: boolean;
+  maxJumpHeight: number;
   imageSprite: CanvasImageSource;
-
-  config: Record<string, number>;
   status: string;
 
-  constructor(canvasCtx: CanvasRenderingContext2D) {
+  constructor(canvasCtx: CanvasRenderingContext2D, groundPos: number) {
     this.canvasCtx = canvasCtx;
-    this.spritePos = { x: 0, y: 0 };
-    this.xPos = 0;
-    this.yPos = 0;
-    // Position when on the ground.
-    this.groundYPos = 0;
+    this.pos = { x: 0, y: 0 };
+    this.groundYPos = groundPos - heroConfig.HEIGHT;
+
+    this.status = Hero.status.WAITING;
     this.currentFrame = 0;
     this.currentAnimFrames = [];
-    this.blinkDelay = 0;
-    this.animStartTime = 0;
     this.timer = 0;
-    this.msPerFrame = 1000 / FPS;
-    this.config = Hero.config;
-    // Current status.
-    this.status = Hero.status.WAITING;
+    this.msPerFrame = 1000 / config.FPS;
 
     this.jumping = false;
-    this.ducking = false;
     this.jumpVelocity = 0;
+
     this.reachedMinHeight = false;
     this.speedDrop = false;
     this.jumpCount = 0;
-    this.jumpspotX = 0;
-    // #QT
-    this.minJumpHeight = 10;
-    this.playingIntro = true;
-    this.midair = false;
+
+    this.minJumpHeight = this.groundYPos - heroConfig.MIN_JUMP_HEIGHT;
+    this.maxJumpHeight = this.groundYPos - heroConfig.MAX_JUMP_HEIGHT;
 
     if (!Hero._imageSprite) {
       const d = document.createElement("img");
@@ -79,36 +54,14 @@ export default class Hero {
       Hero._imageSprite = d;
     }
     this.imageSprite = Hero._imageSprite;
-
     this.init();
   }
-
-  /**
-   * T-rex player config.
-   * @enum {number}
-   */
-  static config: Record<string, number> = {
-    DROP_VELOCITY: -5,
-    GRAVITY: 0.6,
-    HEIGHT: 47,
-    HEIGHT_DUCK: 25,
-    INIITAL_JUMP_VELOCITY: -10,
-    INTRO_DURATION: 1500,
-    MAX_JUMP_HEIGHT: 30,
-    MIN_JUMP_HEIGHT: 30,
-    SPEED_DROP_COEFFICIENT: 3,
-    SPRITE_WIDTH: 262,
-    START_X_POS: 50,
-    WIDTH: 44,
-    WIDTH_DUCK: 59,
-  };
 
   /**
    * Used in collision detection.
    * @type {Array<CollisionBox>}
    */
   static collisionBoxes = {
-    DUCKING: [new CollisionBox(1, 18, 55, 25)],
     RUNNING: [
       new CollisionBox(22, 0, 17, 16),
       new CollisionBox(1, 18, 30, 9),
@@ -119,72 +72,53 @@ export default class Hero {
     ],
   };
 
-  /**
-   * Animation states.
-   * @enum {string}
-   */
   static status = {
     CRASHED: "CRASHED",
-    DUCKING: "DUCKING",
     JUMPING: "JUMPING",
     RUNNING: "RUNNING",
     WAITING: "WAITING",
   };
 
   /**
-   * Blinking coefficient.
-   * @const
-   */
-  static BLINK_TIMING = 7000;
-
-  /**
    * Animation config for different states.
-   * @enum {Object}
    */
-  static animFrames = {
+  static animFrames: Record<string, FrameSetType> = {
     WAITING: {
-      frames: [44, 0],
+      frames: [
+        { x: 0, y: 77, width: 33 },
+        { x: 33, y: 77, width: 31 },
+        { x: 64, y: 77, width: 31 },
+        { x: 95, y: 77, width: 31 },
+      ],
       msPerFrame: 1000 / 3,
     },
     RUNNING: {
-      frames: [88, 132],
+      frames: [
+        { x: 0, y: 0, width: 63 },
+        { x: 63, y: 0, width: 71 },
+        { x: 134, y: 0, width: 55 },
+        { x: 189, y: 0, width: 40 },
+        { x: 229, y: 0, width: 64 },
+        { x: 293, y: 0, width: 71 },
+        { x: 364, y: 0, width: 54 },
+        { x: 424, y: 0, width: 47 },
+      ],
       msPerFrame: 1000 / 12,
     },
     CRASHED: {
-      frames: [220],
+      frames: [{ x: 126, y: 77, width: 37 }],
       msPerFrame: 1000 / 60,
     },
     JUMPING: {
-      frames: [0],
+      frames: [{ x: 163, y: 77, width: 52 }],
       msPerFrame: 1000 / 60,
-    },
-    DUCKING: {
-      frames: [262, 321],
-      msPerFrame: 1000 / 8,
     },
   };
 
-  /**
-   * T-rex player initaliser.
-   * Sets the t-rex to blink at random intervals.
-   */
   init() {
-    this.setBlinkDelay();
-    this.groundYPos = HEIGHT - this.config.HEIGHT - BOTTOM_PAD;
-    this.yPos = this.groundYPos;
-    this.minJumpHeight = this.groundYPos - this.config.MIN_JUMP_HEIGHT;
-
-    this.draw(0, 0);
+    this.pos.y = this.groundYPos;
+    this.pos.x = heroConfig.START_X_POS;
     this.update(0, Hero.status.WAITING);
-  }
-
-  /**
-   * Setter for the jump velocity.
-   * The approriate drop velocity is also set.
-   */
-  setJumpVelocity(setting: number) {
-    this.config.INIITAL_JUMP_VELOCITY = -setting;
-    this.config.DROP_VELOCITY = -setting / 2;
   }
 
   /**
@@ -196,30 +130,16 @@ export default class Hero {
     this.timer += deltaTime;
 
     // Update the status.
-    if (opt_status) {
+    if (opt_status != null) {
       this.status = opt_status;
       this.currentFrame = 0;
-      this.msPerFrame = 10; // #QT  Hero.animFrames[opt_status].msPerFrame
-      this.currentAnimFrames = []; // #QT  Hero.animFrames[opt_status].frames
-
-      if (opt_status === Hero.status.WAITING) {
-        this.animStartTime = getTimeStamp();
-        this.setBlinkDelay();
-      }
+      this.msPerFrame = Hero.animFrames[opt_status].msPerFrame;
+      this.currentAnimFrames = Hero.animFrames[opt_status].frames;
     }
-
-    // Game intro animation, T-rex moves in from the left.
-    if (this.playingIntro && this.xPos < this.config.START_X_POS) {
-      this.xPos += Math.round(
-        (this.config.START_X_POS / this.config.INTRO_DURATION) * deltaTime,
-      );
-    }
-
     if (this.status === Hero.status.WAITING) {
-      this.blink(getTimeStamp());
-    } else {
-      this.draw(this.currentAnimFrames[this.currentFrame], 0);
+      this.clearCanvas();
     }
+    this.draw(this.currentAnimFrames[this.currentFrame]);
 
     // Update the frame position.
     if (this.timer >= this.msPerFrame) {
@@ -231,93 +151,32 @@ export default class Hero {
     }
 
     // Speed drop becomes duck if the down key is still being pressed.
-    if (this.speedDrop && this.yPos === this.groundYPos) {
+    if (this.speedDrop && this.pos.y === this.groundYPos) {
       this.speedDrop = false;
-      this.setDuck(true);
     }
   }
 
-  /**
-   * Draw the t-rex to a particular position.
-   * @param {number} x
-   * @param {number} y
-   */
-  draw(x: number, y: number) {
-    let sourceX = x;
-    let sourceY = y;
-    let sourceWidth =
-      this.ducking && this.status !== Hero.status.CRASHED
-        ? this.config.WIDTH_DUCK
-        : this.config.WIDTH;
-    let sourceHeight = this.config.HEIGHT;
-
-    if (IS_HIDPI) {
-      sourceX *= 2;
-      sourceY *= 2;
-      sourceWidth *= 2;
-      sourceHeight *= 2;
-    }
-
-    // Adjustments for sprite sheet position.
-    sourceX += this.spritePos.x;
-    sourceY += this.spritePos.y;
-
-    // Ducking.
-    if (this.ducking && this.status !== Hero.status.CRASHED) {
-      this.canvasCtx.drawImage(
-        this.imageSprite,
-        sourceX,
-        sourceY,
-        sourceWidth,
-        sourceHeight,
-        this.xPos,
-        this.yPos,
-        this.config.WIDTH_DUCK,
-        this.config.HEIGHT,
-      );
-    } else {
-      // Crashed whilst ducking. Hero is standing up so needs adjustment.
-      if (this.ducking && this.status === Hero.status.CRASHED) {
-        this.xPos++;
-      }
-      // Standing / running
-      this.canvasCtx.drawImage(
-        this.imageSprite,
-        sourceX,
-        sourceY,
-        sourceWidth,
-        sourceHeight,
-        this.xPos,
-        this.yPos,
-        this.config.WIDTH,
-        this.config.HEIGHT,
-      );
-    }
+  draw(cw: CoordsAndWidth) {
+    this.canvasCtx.drawImage(
+      this.imageSprite,
+      cw.x,
+      cw.y,
+      cw.width,
+      heroConfig.SRC_HEIGHT,
+      this.pos.x,
+      this.pos.y,
+      Math.round(heroConfig.HEIGHT / heroConfig.SRC_HEIGHT) * cw.width,
+      heroConfig.HEIGHT,
+    );
   }
 
-  /**
-   * Sets a random time for the blink to happen.
-   */
-  setBlinkDelay() {
-    this.blinkDelay = Math.ceil(Math.random() * Hero.BLINK_TIMING);
-  }
-
-  /**
-   * Make t-rex blink at random intervals.
-   * @param {number} time Current time in milliseconds.
-   */
-  blink(time: number) {
-    const deltaTime = time - this.animStartTime;
-
-    if (deltaTime >= this.blinkDelay) {
-      this.draw(this.currentAnimFrames[this.currentFrame], 0);
-
-      if (this.currentFrame === 1) {
-        // Set new random delay to blink.
-        this.setBlinkDelay();
-        this.animStartTime = time;
-      }
-    }
+  clearCanvas() {
+    this.canvasCtx.clearRect(
+      this.pos.x,
+      this.pos.y,
+      heroConfig.HEIGHT,
+      heroConfig.HEIGHT,
+    );
   }
 
   /**
@@ -328,7 +187,7 @@ export default class Hero {
     if (!this.jumping) {
       this.update(0, Hero.status.JUMPING);
       // Tweak the jump velocity based on the speed.
-      this.jumpVelocity = this.config.INIITAL_JUMP_VELOCITY - speed / 10;
+      this.jumpVelocity = heroConfig.INIITAL_JUMP_VELOCITY - speed / 10;
       this.jumping = true;
       this.reachedMinHeight = false;
       this.speedDrop = false;
@@ -339,11 +198,8 @@ export default class Hero {
    * Jump is complete, falling down.
    */
   endJump() {
-    if (
-      this.reachedMinHeight &&
-      this.jumpVelocity < this.config.DROP_VELOCITY
-    ) {
-      this.jumpVelocity = this.config.DROP_VELOCITY;
+    if (this.reachedMinHeight && this.jumpVelocity < heroConfig.DROP_VELOCITY) {
+      this.jumpVelocity = heroConfig.DROP_VELOCITY;
     }
   }
 
@@ -353,37 +209,36 @@ export default class Hero {
    * @param {number} speed // #QT speed: number
    */
   updateJump(deltaTime: number) {
-    const msPerFrame = 10; // #QT Hero.animFrames[this.status].msPerFrame;
-    const framesElapsed = deltaTime / msPerFrame;
+    const framesElapsed = deltaTime / this.msPerFrame;
 
     // Speed drop makes Hero fall faster.
     if (this.speedDrop) {
-      this.yPos += Math.round(
-        this.jumpVelocity * this.config.SPEED_DROP_COEFFICIENT * framesElapsed,
+      this.pos.y += Math.round(
+        this.jumpVelocity * config.SPEED_DROP_COEFFICIENT * framesElapsed,
       );
     } else {
-      this.yPos += Math.round(this.jumpVelocity * framesElapsed);
+      this.pos.y += Math.round(this.jumpVelocity * framesElapsed);
     }
 
-    this.jumpVelocity += this.config.GRAVITY * framesElapsed;
+    this.jumpVelocity += config.GRAVITY * framesElapsed;
 
     // Minimum height has been reached.
-    if (this.yPos < this.minJumpHeight || this.speedDrop) {
+    if (this.pos.y < this.minJumpHeight || this.speedDrop) {
       this.reachedMinHeight = true;
     }
 
     // Reached max height
-    if (this.yPos < this.config.MAX_JUMP_HEIGHT || this.speedDrop) {
+    if (this.pos.y < this.maxJumpHeight || this.speedDrop) {
       this.endJump();
     }
 
     // Back down at ground level. Jump completed.
-    if (this.yPos > this.groundYPos) {
+    if (this.pos.y > this.groundYPos) {
       this.reset();
       this.jumpCount++;
     }
     // #QT
-    this.update(deltaTime, "");
+    this.update(deltaTime);
   }
 
   /**
@@ -395,28 +250,13 @@ export default class Hero {
   }
 
   /**
-   * @param {boolean} isDucking.
-   */
-  setDuck(isDucking: boolean) {
-    if (isDucking && this.status !== Hero.status.DUCKING) {
-      this.update(0, Hero.status.DUCKING);
-      this.ducking = true;
-    } else if (this.status === Hero.status.DUCKING) {
-      this.update(0, Hero.status.RUNNING);
-      this.ducking = false;
-    }
-  }
-
-  /**
-   * Reset the t-rex to running at start of game.
+   * Reset the Hero to running at start of game.
    */
   reset() {
-    this.yPos = this.groundYPos;
+    this.pos.y = this.groundYPos;
     this.jumpVelocity = 0;
     this.jumping = false;
-    this.ducking = false;
     this.update(0, Hero.status.RUNNING);
-    this.midair = false;
     this.speedDrop = false;
     this.jumpCount = 0;
   }

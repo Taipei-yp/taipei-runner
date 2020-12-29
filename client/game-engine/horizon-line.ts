@@ -10,7 +10,6 @@ export default class HorizonLine {
   canvasDimensions: Dimensions;
   typeConfig: HorizontLineType;
   imageSprite: HTMLImageElement;
-  yPosLowerSide: boolean;
   yPos: number;
   xPos: number[];
 
@@ -20,20 +19,16 @@ export default class HorizonLine {
     imageSprite: HTMLImageElement,
     type: HorizontLineType,
     yPos = 0,
-    yPosLowerSide = false,
   ) {
     this.canvasCtx = canvasCtx;
     this.canvasDimensions = canvasDimensions;
     this.typeConfig = type;
     this.imageSprite = imageSprite;
-    this.yPosLowerSide = yPosLowerSide;
     this.yPos = yPos;
-    if (this.yPosLowerSide) {
-      this.yPos =
-        this.canvasDimensions.height -
-        this.typeConfig.dimensions.height -
-        this.yPos;
+    if (!this.yPos) {
+      this.yPos = canvasDimensions.height;
     }
+    this.yPos -= this.typeConfig.groundYMargin;
     this.xPos = [];
     this.defaultXPos();
     this.draw();
@@ -66,7 +61,10 @@ export default class HorizonLine {
       this.xPos[i] -= increment;
       if (this.xPos[i] < -this.typeConfig.dimensions.width) {
         this.xPos.shift();
-        this.xPos.push(this.xPos[this.xPos.length - 1] + increment);
+        this.xPos.push(
+          this.xPos[this.xPos.length - 1] + this.typeConfig.dimensions.width,
+        );
+        i--;
       }
     }
   }
