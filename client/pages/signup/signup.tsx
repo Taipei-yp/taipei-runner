@@ -5,7 +5,7 @@ import { Panel } from "../../components/panel";
 import { FormViewField, FormView } from "../../components/form-view";
 import { Heading } from "../../components/heading";
 import { useAuthService } from "../../services/auth";
-import { SignUpUser } from "../../types/user";
+import { SignUpUser } from "../../models/user";
 import { Text } from "../../components/text";
 import { Button } from "../../components/button";
 import { LinkView } from "../../components/link-view";
@@ -62,14 +62,16 @@ const SignUpFields: FormViewField[] = [
 
 type Props = {
   className?: string;
+  onAuth: (isAuthorized: boolean) => void;
 };
 
-const SignUp: FC<Props> = ({ className = "" }) => {
+const SignUp: FC<Props> = ({ className = "", onAuth }) => {
   const { auth, signUp, reset } = useAuthService();
   const history = useHistory();
 
   const formSubmit = (user: Record<string, unknown>) => {
     signUp((user as unknown) as SignUpUser).then(() => {
+      onAuth(true);
       history.push("/game");
     });
   };

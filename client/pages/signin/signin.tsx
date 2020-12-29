@@ -8,7 +8,7 @@ import { LinkView } from "../../components/link-view";
 import { useAuthService } from "../../services/auth";
 import { Text } from "../../components/text";
 import { Button } from "../../components/button";
-import { SignInUser } from "../../types/user";
+import { SignInUser } from "../../models/user";
 
 import "./signin.css";
 
@@ -33,14 +33,16 @@ const SignInFields: FormViewField[] = [
 
 type Props = {
   className?: string;
+  onAuth: (isAuthorized: boolean) => void;
 };
 
-const SignIn: FC<Props> = ({ className = "" }) => {
+const SignIn: FC<Props> = ({ className = "", onAuth }) => {
   const { auth, signIn, reset } = useAuthService();
   const history = useHistory();
 
   const formSubmit = (values: Record<string, unknown>) => {
     signIn((values as unknown) as SignInUser).then(() => {
+      onAuth(true);
       history.push("/game");
     });
   };

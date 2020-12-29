@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Environment } from "../../enviroment";
-import { SignInUser, SignUpUser, User } from "../../types/user";
+import { SignInUser, SignUpUser, User } from "../../models/user";
 import { api } from "../api";
 
 type Auth = {
