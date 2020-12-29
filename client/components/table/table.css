@@ -1,0 +1,22 @@
+.table {
+  width: 100%;
+  border-collapse: collapse;
+
+  thead {
+    color: var(--tpr-color-accent);
+    font-size: var(--tpr-fontsize-x);
+
+    td {
+      cursor: pointer;
+    }
+  }
+
+  tbody {
+    color: var(--tpr-color-primary);
+    font-size: var(--tpr-fontsize-l);
+  }
+
+  tr {
+    height: calc(2 * var(--tpr-fontsize-x));
+  }
+}
