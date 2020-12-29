@@ -1,9 +1,9 @@
 import React, { FC, memo } from "react";
 import block from "bem-cn";
-
-import "./error.css";
 import { Page } from "../../components/page";
 import { Text } from "../../components/text";
+import { Heading } from "../../components/heading";
+import "./error.css";
 
 const b = block("error-page");
 
@@ -18,14 +18,13 @@ const Error: FC<Props> = ({ className = "", title = "", description = "" }) => {
     <>
       <Page left={<Text text="menu" />}>
         <div className={b.mix(className)}>
-          <Text
-            isHeader
+          <Heading
             text={title}
-            size="extra3"
+            size="l"
             color="accent"
             className={b("title")}
           />
-          <Text text={description} size="extra2" className={b("description")} />
+          <Text text={description} size="xxl" className={b("description")} />
         </div>
       </Page>
     </>
