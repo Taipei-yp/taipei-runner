@@ -1,26 +1,26 @@
 import React, { FC, memo } from "react";
 import block from "bem-cn";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Panel } from "../../components/panel";
 import { FormViewField, FormView } from "../../components/form-view";
 import { Heading } from "../../components/heading";
+import { LinkView } from "../../components/link-view";
+import { useAuthService } from "../../services/auth";
+import { Text } from "../../components/text";
+import { Button } from "../../components/button";
+import { SignInUser } from "../../types/user";
 
 import "./signin.css";
-
-const OnSubmit = (values: Record<string, unknown>) => {
-  console.log(values);
-};
 
 const b = block("sign-in");
 
 const SignInFields: FormViewField[] = [
   {
-    labelText: "Email",
-    // eslint-disable-next-line no-useless-escape,max-len
-    pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    errorMessage: "Wrong format",
-    type: "email",
-    name: "email",
+    labelText: "Login",
+    pattern: /^.{3,}$/,
+    errorMessage: "The length of this field must be > 3 characters",
+    type: "text",
+    name: "login",
   },
   {
     labelText: "Password",
@@ -36,23 +36,58 @@ type Props = {
 };
 
 const SignIn: FC<Props> = ({ className = "" }) => {
-  return (
-    <div className={b.mix(className)}>
-      <Panel>
-        <Heading
-          size="medium"
-          color="accent"
-          text="Sign In"
-          className={b("heading")}
-        />
-        <FormView onSubmit={OnSubmit} fields={SignInFields} />
-        {/* TODO здесь появится LinkView компонент, который сделаем позже */}
-        <Link to="/signup" className={b("link")}>
-          No account yet?
-        </Link>
-      </Panel>
-    </div>
-  );
+  const { auth, signIn, reset } = useAuthService();
+  const history = useHistory();
+
+  const formSubmit = (values: Record<string, unknown>) => {
+    signIn((values as unknown) as SignInUser).then(() => {
+      history.push("/game");
+    });
+  };
+
+  const tryAgain = () => {
+    reset();
+  };
+
+  let content;
+  switch (auth.status) {
+    case "signing-in":
+      content = <p>Loading...</p>;
+      break;
+    case "error":
+      content = (
+        <div>
+          <Heading text="Error" size="small" color="primary" />
+          <p>
+            <Text text={auth.error} />
+          </p>
+          <Button onClick={tryAgain} viewType="secondary">
+            Try again
+          </Button>
+        </div>
+      );
+      break;
+    default:
+      content = (
+        <Panel>
+          <Heading
+            size="medium"
+            color="accent"
+            text="Sign in"
+            className={b("heading")}
+          />
+          <FormView onSubmit={formSubmit} fields={SignInFields} />
+          <LinkView
+            to="/signup"
+            label="No account yet?"
+            size="normal"
+            className={b("link")}
+          />
+        </Panel>
+      );
+  }
+
+  return <div className={b.mix(className)}>{content}</div>;
 };
 
 const WrappedSignIn = memo(SignIn);

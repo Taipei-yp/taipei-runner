@@ -1,15 +1,16 @@
 import React, { FC, memo } from "react";
 import block from "bem-cn";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Panel } from "../../components/panel";
 import { FormViewField, FormView } from "../../components/form-view";
+import { Heading } from "../../components/heading";
+import { useAuthService } from "../../services/auth";
+import { SignUpUser } from "../../types/user";
+import { Text } from "../../components/text";
+import { Button } from "../../components/button";
+import { LinkView } from "../../components/link-view";
 
 import "./signup.css";
-import { Heading } from "../../components/heading";
-
-const OnSubmit = (values: Record<string, unknown>) => {
-  console.log(values);
-};
 
 const b = block("sign-up");
 
@@ -64,24 +65,58 @@ type Props = {
 };
 
 const SignUp: FC<Props> = ({ className = "" }) => {
-  return (
-    <div className={b.mix(className)}>
-      <Panel>
-        <Heading
-          size="medium"
-          color="accent"
-          text="Sign Up"
-          className={b("heading")}
-        />
-        <FormView onSubmit={OnSubmit} fields={SignUpFields} />
-        {/* TODO здесь появится LinkView компонент, который сделаем позже */}
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-        <Link to="/signin" className={b("link")}>
-          Already have an account
-        </Link>
-      </Panel>
-    </div>
-  );
+  const { auth, signUp, reset } = useAuthService();
+  const history = useHistory();
+
+  const formSubmit = (user: Record<string, unknown>) => {
+    signUp((user as unknown) as SignUpUser).then(() => {
+      history.push("/game");
+    });
+  };
+
+  const tryAgain = () => {
+    reset();
+  };
+
+  let content;
+  switch (auth.status) {
+    case "signing-up":
+      content = <p>Loading...</p>;
+      break;
+    case "error":
+      content = (
+        <div>
+          <Heading text="Error" size="small" color="primary" />
+          <p>
+            <Text text={auth.error} />
+          </p>
+          <Button onClick={tryAgain} viewType="secondary">
+            Try again
+          </Button>
+        </div>
+      );
+      break;
+    default:
+      content = (
+        <Panel>
+          <Heading
+            size="medium"
+            color="accent"
+            text="Sign Up"
+            className={b("heading")}
+          />
+          <FormView onSubmit={formSubmit} fields={SignUpFields} />
+          <LinkView
+            to="/signin"
+            label="Already have an account"
+            size="normal"
+            className={b("link")}
+          />
+        </Panel>
+      );
+  }
+
+  return <div className={b.mix(className)}>{content}</div>;
 };
 
 const WrappedSignUp = memo(SignUp);

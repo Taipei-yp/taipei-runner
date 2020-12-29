@@ -9,4 +9,10 @@
     text-align: center;
     margin: 15px 0 43px 0;
   }
+
+  &__link {
+    display: block;
+    text-align: center;
+    margin-top: 16px;
+  }
 }
