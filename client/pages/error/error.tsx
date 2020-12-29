@@ -4,6 +4,8 @@ import { Heading } from "../../components/heading";
 import { LinkView } from "../../components/link-view";
 import { Page } from "../../components/page";
 import { Text } from "../../components/text";
+import { Heading } from "../../components/heading";
+import "./error.css";
 
 import "./error.css";
 

@@ -10,7 +10,6 @@ export type Props = {
   size?: "s" | "l" | "xl" | "xxl";
   text?: string;
   className?: string;
-  isHeader?: boolean;
 };
 
 const Text: FC<Props> = ({
@@ -18,13 +17,8 @@ const Text: FC<Props> = ({
   size = null,
   className = "",
   text = "",
-  isHeader = false,
 }) => {
-  return isHeader ? (
-    <h1 className={b({ color, size }).mix(className)}>{text}</h1>
-  ) : (
-    <span className={b({ color, size }).mix(className)}>{text}</span>
-  );
+  return <span className={b({ color, size }).mix(className)}>{text}</span>;
 };
 
 const WrappedText = memo(Text);
