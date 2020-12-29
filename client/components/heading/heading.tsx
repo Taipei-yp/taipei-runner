@@ -8,17 +8,17 @@ const b = block("heading");
 export type Props = {
   text: string;
   color?: "primary" | "accent";
-  size?: "small" | "medium" | "large";
+  size?: "s" | "l";
   className?: string;
 };
 
 const Heading: FC<Props> = ({
   text = "",
   color = "accent",
-  size = "medium",
+  size = null,
   className = "",
 }) => {
-  return <div className={b({ color, size }).mix(className)}>{text}</div>;
+  return <h1 className={b({ color, size }).mix(className)}>{text}</h1>;
 };
 
 const WrappedHeading = memo(Heading);

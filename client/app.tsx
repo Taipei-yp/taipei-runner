@@ -2,7 +2,9 @@ import React, { FC } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Forum } from "./pages/forum";
 import { SignUp } from "./pages/signup";
+import { Error } from "./pages/error";
 import { SignIn } from "./pages/signin";
+
 
 export const App: FC = () => {
   return (
@@ -19,7 +21,10 @@ export const App: FC = () => {
           <Route path="/feedback" />
           <Route path="/game" />
           <Route path="/game-over" />
-          <Route path="*" />
+          <Route
+            path="*"
+            component={() => <Error title="404" description="Not found" />}
+          />
         </Switch>
       </Router>
     </div>

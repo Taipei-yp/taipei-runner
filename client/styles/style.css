@@ -32,3 +32,9 @@ body {
   font-size: 18px;
   font-family: ArcadeClassic, sans-serif;
 }
+
+#app,
+.app {
+  width: 100%;
+  height: 100%;
+}
