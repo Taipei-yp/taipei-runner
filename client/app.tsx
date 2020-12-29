@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Forum } from "./pages/forum";
 import { SignUp } from "./pages/signup";
 import { SignIn } from "./pages/signin";
+import { Game } from "./pages/game";
 
 export const App: FC = () => {
   return (
@@ -17,7 +18,7 @@ export const App: FC = () => {
           <Route path="/forum" component={Forum} />
           <Route path="/forum/topic/:id" />
           <Route path="/feedback" />
-          <Route path="/game" />
+          <Route path="/game" component={Game} />
           <Route path="/game-over" />
           <Route path="*" />
         </Switch>
