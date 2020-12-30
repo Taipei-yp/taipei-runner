@@ -36,7 +36,13 @@ export type ObstacleType = {
   sizes: Sizes;
   /** Начальная точка в спрайте */
   pos: Coords;
+<<<<<<< HEAD
   /** Минимальная скорость с какой может появиться препятствие */
+=======
+  /** Speed at which multiples are allowed */
+  multipleSpeed: number;
+  /** Minimum speed which the obstacle can make an appearance */
+>>>>>>> 6f8d9c8... refactoring code; add some comments
   minSpeed: number;
   /** Минимальный отступ между препятствиями в пикселях */
   minGap: number;
@@ -44,15 +50,24 @@ export type ObstacleType = {
   collisionBoxes: CollisionBox[];
 };
 
+<<<<<<< HEAD
 /** Тип горизонтальной линии */
+=======
+/** Тип линии горизонта */
+>>>>>>> 6f8d9c8... refactoring code; add some comments
 export type HorizontLineType = {
   /** Название */
   type: string;
+<<<<<<< HEAD
   /** Размеры изображения в спрайте */
   sizes: Sizes;
   /** Начальная точка в спрайте */
   pos: Coords;
   /** Отступ от верхнего края изображения до земли */
+=======
+  sizes: Sizes;
+  spriteCoords: Coords;
+>>>>>>> 6f8d9c8... refactoring code; add some comments
   groundYMargin: number;
 };
 
