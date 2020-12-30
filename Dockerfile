@@ -1,15 +1,13 @@
-FROM node:14-alpine as builder
-RUN mkdir /app
+FROM node:lts-alpine as build-stage
 WORKDIR /app
-COPY ./* ./
-COPY client ./src
-COPY ./webpack ./webpack
-RUN HUSKY_SKIP_INSTALL=true npm ci --unsafe-perm
-RUN npm run build
+COPY package*.json ./
+RUN HUSKY_SKIP_INSTALL=true npm install --unsafe-perm
+COPY . .
+RUN npm run build-prod
 
-FROM nginx:1.19.4-alpine
-COPY --from=builder /app/dist /usr/share/nginx/html
+FROM nginx:stable-alpine as production-stage
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+COPY --from=build-stage /app/nginx.conf.template /etc/nginx/conf.d
 RUN rm /etc/nginx/conf.d/default.conf
-COPY ./nginx/default.conf.template /etc/nginx/conf.d/default.conf.template
-COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
-CMD envsubst '\$PORT' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'
+
+CMD /bin/sh -c "envsubst '\$PORT' < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/default.conf" && nginx -g 'daemon off;'
