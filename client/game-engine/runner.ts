@@ -1,8 +1,8 @@
-import { Dimensions, CollisionBox, Coords } from "./models";
+import { Sizes, CollisionBox, Coords } from "./models";
 import {
   getTimeStamp,
   drawCollisionBoxes,
-  createAdjustedCollisionBox,
+  createRelativeCollisionBox,
   boxCompare,
 } from "./utils";
 import Hero from "./hero";
@@ -40,7 +40,7 @@ export default class Runner {
   static _instance: Runner;
   // outerContainerEl!: HTMLElement;
   containerEl!: HTMLElement;
-  dimensions!: Dimensions;
+  dimensions!: Sizes;
   canvas!: HTMLCanvasElement;
   canvasCtx!: CanvasRenderingContext2D;
   hero!: Hero;
@@ -301,7 +301,9 @@ export default class Runner {
       this.horizon.update(deltaTime, this.currentSpeed, hasObstacles);
 
       // Check for collisions.
-      const collision = hasObstacles ? false : hasObstacles; // &&      checkForCollision(this.horizon.obstacles[0], this.hero, this.canvasCtx)
+      const collision =
+        hasObstacles &&
+        checkForCollision(this.horizon.obstacles[0], this.hero, this.canvasCtx);
 
       if (!collision) {
         this.distanceRan += (this.currentSpeed * deltaTime) / this.msPerFrame;
@@ -600,9 +602,9 @@ export default class Runner {
   }
 }
 /**
- * Check for a collision.
- * @param {!Obstacle} obstacle
- * @param {!hero} hero T-rex object.
+ * Проверка столконовения.
+ * @param {!Obstacle} obstacle Препятствие
+ * @param {!hero} hero Герой.
  * @param {HTMLCanvasContext} opt_canvasCtx Optional canvas context for drawing
  *    collision boxes.
  * @return {Array<CollisionBox>}
@@ -626,8 +628,8 @@ export function checkForCollision(
   const obstacleBox = new CollisionBox(
     obstacle.xPos + 1,
     obstacle.yPos + 1,
-    obstacle.typeConfig.dimensions.width,
-    obstacle.typeConfig.dimensions.height - 2,
+    obstacle.typeConfig.sizes.width,
+    obstacle.typeConfig.sizes.height - 2,
   );
 
   // Debug outer box
@@ -644,11 +646,11 @@ export function checkForCollision(
     for (let t = 0; t < heroCollisionBoxes.length; t++) {
       for (let i = 0; i < collisionBoxes.length; i++) {
         // Adjust the box to actual positions.
-        const adjheroBox = createAdjustedCollisionBox(
+        const adjheroBox = createRelativeCollisionBox(
           heroCollisionBoxes[t],
           heroBox,
         );
-        const adjObstacleBox = createAdjustedCollisionBox(
+        const adjObstacleBox = createRelativeCollisionBox(
           collisionBoxes[i],
           obstacleBox,
         );

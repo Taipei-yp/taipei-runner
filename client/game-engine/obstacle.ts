@@ -1,23 +1,23 @@
 import { getRandomNum } from "./utils";
-import { Dimensions, CollisionBox, ObstacleType } from "./models";
+import { Sizes, CollisionBox, ObstacleType } from "./models";
 import { gameConfig as config } from "./config";
 
 import image from "./assets/obstacle-sprite.png";
+
 /**
- * Obstacle.
- * @param canvasCtx
- * @param dimensions
- * @param type
- * @param gapCoefficient Mutipler in determining the gap.
- * @param speed
+ * Препятсвие
  */
 export default class Obstacle {
+  /** Спрайт */
   static _imageSprite: CanvasImageSource;
 
+  /** Контекст канваса */
   canvasCtx: CanvasRenderingContext2D;
-  canvasDimensions: Dimensions;
+  /** Размеры канваса */
+  canvasSizes: Sizes;
+  /** Размеры канваса */
   typeConfig: ObstacleType;
-  gapCoefficient: number;
+
   remove: boolean;
   xPos: number;
   yPos: number;
@@ -27,21 +27,18 @@ export default class Obstacle {
 
   constructor(
     canvasCtx: CanvasRenderingContext2D,
-    dimensions: Dimensions,
+    sizes: Sizes,
     type: ObstacleType,
-    gapCoefficient: number,
     speed: number,
-    // spriteImgPos: Coords,
-    // imageSprite?: CanvasImageSource,
+    groundPosY: number,
   ) {
     this.canvasCtx = canvasCtx;
-    this.canvasDimensions = dimensions;
+    this.canvasSizes = sizes;
     this.typeConfig = type;
-    this.gapCoefficient = gapCoefficient;
 
     this.remove = false;
     this.xPos = 0;
-    this.yPos = 0;
+    this.yPos = groundPosY - this.typeConfig.sizes.height;
     this.collisionBoxes = [];
     this.gap = 0;
     this.followingObstacleCreated = false;
@@ -57,27 +54,13 @@ export default class Obstacle {
 
   init(speed: number) {
     this.cloneCollisionBoxes();
-    this.xPos = this.canvasDimensions.width - this.typeConfig.dimensions.width;
+    this.xPos = this.canvasSizes.width - this.typeConfig.sizes.width;
     this.draw();
     this.gap = this.getGap(speed);
   }
 
-  draw() {
-    this.canvasCtx.drawImage(
-      Obstacle._imageSprite,
-      this.typeConfig.spriteCoords.x,
-      this.typeConfig.spriteCoords.y,
-      this.typeConfig.dimensions.width,
-      this.typeConfig.dimensions.height,
-      this.xPos,
-      this.yPos,
-      this.typeConfig.dimensions.width,
-      this.typeConfig.dimensions.height,
-    );
-  }
-
   /**
-   * Obstacle frame update.
+   * Обновление расположения препятствия
    * @param deltaTime
    * @param speed
    */
@@ -92,37 +75,48 @@ export default class Obstacle {
     }
   }
 
+  /** Отрисовка */
+  draw() {
+    this.canvasCtx.drawImage(
+      Obstacle._imageSprite,
+      this.typeConfig.pos.x,
+      this.typeConfig.pos.y,
+      this.typeConfig.sizes.width,
+      this.typeConfig.sizes.height,
+      this.xPos,
+      this.yPos,
+      this.typeConfig.sizes.width,
+      this.typeConfig.sizes.height,
+    );
+  }
+
   /**
    * Calculate a random gap size.
    * - Minimum gap gets wider as speed increses
-   * @param gapCoefficient
    * @param speed
    * @return The gap size.
    */
   getGap(speed: number) {
     const minGap = Math.round(
-      this.typeConfig.dimensions.width * speed +
-        this.typeConfig.minGap * this.gapCoefficient,
+      this.typeConfig.sizes.width * speed +
+        this.typeConfig.minGap * config.GAP_COEFFICIENT,
     );
     const maxGap = Math.round(minGap * config.MAX_GAP_COEFFICIENT);
     return getRandomNum(minGap, maxGap);
   }
 
   /**
-   * Check if obstacle is visible.
-   * @return {boolean} Whether the obstacle is in the game area.
+   * Проверка что препятствие в области видимости
    */
   isVisible(): boolean {
-    return this.xPos + this.typeConfig.dimensions.width > 0;
+    return this.xPos + this.typeConfig.sizes.width > 0;
   }
 
   /**
-   * Make a copy of the collision boxes, since these will change based on
-   * obstacle type and size.
+   * Копирование областей пересечения из типа препятствия
    */
   cloneCollisionBoxes() {
     const { collisionBoxes } = this.typeConfig;
-
     for (let i = collisionBoxes.length - 1; i >= 0; i--) {
       this.collisionBoxes[i] = new CollisionBox(
         collisionBoxes[i].x,

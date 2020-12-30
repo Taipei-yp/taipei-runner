@@ -1,14 +1,15 @@
-import { Dimensions } from "./models";
+import { Sizes } from "./models";
 // import { getRandomNum } from "./utils";
 import HorizonLine from "./horizon-line";
 import Obstacle from "./obstacle";
 import {
   gameConfig as config,
-  // obstacleTypes,
+  obstacleTypes,
   horizontLineTypes,
 } from "./config";
 
 import image from "./assets/horizon-sprite.png";
+import { getRandomNum } from "./utils";
 /**
  * Horizon background class.
  */
@@ -16,7 +17,7 @@ export default class Horizon {
   static _imageSprite: HTMLImageElement;
 
   canvasCtx: CanvasRenderingContext2D;
-  canvasDimensions: Dimensions;
+  canvasSizes: Sizes;
   horizonLines: HorizonLine[];
   obstacleHistory: string[];
   obstacles: Obstacle[];
@@ -25,11 +26,11 @@ export default class Horizon {
 
   constructor(
     canvasCtx: CanvasRenderingContext2D,
-    canvasDimensions: Dimensions,
+    canvasDimensions: Sizes,
     groundPosY: number,
   ) {
     this.canvasCtx = canvasCtx;
-    this.canvasDimensions = canvasDimensions;
+    this.canvasSizes = canvasDimensions;
     this.obstacles = [];
     this.obstacleHistory = [];
     this.horizonLines = [];
@@ -49,7 +50,7 @@ export default class Horizon {
     this.horizonLines.push(
       new HorizonLine(
         this.canvasCtx,
-        this.canvasDimensions,
+        this.canvasSizes,
         Horizon._imageSprite,
         horizontLineTypes[0],
         this.groundPosY,
@@ -60,9 +61,7 @@ export default class Horizon {
   update(deltaTime: number, currentSpeed: number, updateObstacles: boolean) {
     this.horizonLines.forEach(el => el.update(deltaTime, currentSpeed));
 
-    let updateObstacless = updateObstacles;
-    updateObstacless = false;
-    if (updateObstacless) {
+    if (updateObstacles) {
       this.updateObstacles(deltaTime, currentSpeed);
     }
   }
@@ -87,9 +86,9 @@ export default class Horizon {
         !lastObstacle.followingObstacleCreated &&
         lastObstacle.isVisible() &&
         lastObstacle.xPos +
-          lastObstacle.typeConfig.dimensions.width +
+          lastObstacle.typeConfig.sizes.width +
           lastObstacle.gap <
-          this.canvasDimensions.width
+          this.canvasSizes.width
       ) {
         this.addNewObstacle(currentSpeed);
         lastObstacle.followingObstacleCreated = true;
@@ -104,25 +103,26 @@ export default class Horizon {
    * @param _currentSpeed
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  addNewObstacle(_currentSpeed?: number) {
-    /* const obstacleTypeIndex = getRandomNum(0, obstacleTypes.length - 1);
+  addNewObstacle(currentSpeed: number) {
+    const obstacleTypeIndex = getRandomNum(0, obstacleTypes.length - 1);
     const obstacleType = obstacleTypes[obstacleTypeIndex];
 
     // Check for multiples of the same type of obstacle.
     // Also check obstacle is available at current speed.
     if (
-      this.duplicateObstacleCheck(obstacleType.type) ||
-      currentSpeed < obstacleType.minSpeed
+      obstacleTypes.length > 1 &&
+      (this.duplicateObstacleCheck(obstacleType.type) ||
+        currentSpeed < obstacleType.minSpeed)
     ) {
       this.addNewObstacle(currentSpeed);
     } else {
       this.obstacles.push(
         new Obstacle(
           this.canvasCtx,
-          this.canvasDimensions,
+          this.canvasSizes,
           obstacleType,
-          config.GAP_COEFFICIENT,
           currentSpeed,
+          this.groundPosY,
         ),
       );
 
@@ -130,8 +130,8 @@ export default class Horizon {
 
       if (this.obstacleHistory.length > 1) {
         this.obstacleHistory.splice(config.MAX_OBSTACLE_DUPLICATION);
-      } 
-    } */
+      }
+    }
   }
 
   /**

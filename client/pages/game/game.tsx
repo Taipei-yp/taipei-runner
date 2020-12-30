@@ -3,6 +3,7 @@ import block from "bem-cn";
 
 import "./game.css";
 import Runner from "../../game-engine/runner";
+import { Background } from "../../components/background";
 
 const b = block("game");
 
@@ -16,8 +17,11 @@ const Game: FC<Props> = ({ className = "" }) => {
     runner.init();
   });
   return (
-    <div className={b.mix(className)} id="runner">
-      <canvas className={b("canvas")} />
+    <div>
+      <Background shade={false} />
+      <div className={b.mix(className)} id="runner">
+        <canvas className={b("canvas")} />
+      </div>
     </div>
   );
 };

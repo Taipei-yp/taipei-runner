@@ -24,7 +24,6 @@ export default class Hero {
   jumpCount: number;
   minJumpHeight: number;
   maxJumpHeight: number;
-  imageSprite: CanvasImageSource;
   status: string;
 
   constructor(canvasCtx: CanvasRenderingContext2D, groundPos: number) {
@@ -53,7 +52,6 @@ export default class Hero {
       d.src = image;
       Hero._imageSprite = d;
     }
-    this.imageSprite = Hero._imageSprite;
     this.init();
   }
 
@@ -117,7 +115,7 @@ export default class Hero {
 
   init() {
     this.pos.y = this.groundYPos;
-    this.pos.x = heroConfig.START_X_POS;
+    this.pos.x = heroConfig.START_POS_X;
     this.update(0, Hero.status.WAITING);
   }
 
@@ -158,7 +156,7 @@ export default class Hero {
 
   draw(cw: CoordsAndWidth) {
     this.canvasCtx.drawImage(
-      this.imageSprite,
+      Hero._imageSprite,
       cw.x,
       cw.y,
       cw.width,

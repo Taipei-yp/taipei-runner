@@ -25,20 +25,23 @@ const gameConfig = {
 };
 
 const heroConfig = {
+  /** Высота кадра в стпрайте */
   SRC_HEIGHT: 77,
+  /** Высота героя в игре */
+  HEIGHT: 130,
+  /** Начальная позиция героя */
+  START_POS_X: 50,
   DROP_VELOCITY: -5,
   INIITAL_JUMP_VELOCITY: -10,
   MAX_JUMP_HEIGHT: 80,
   MIN_JUMP_HEIGHT: 10,
-  START_X_POS: 50,
-  HEIGHT: 130,
 };
 
 const obstacleTypes: ObstacleType[] = [
   {
     type: "BOX1",
-    spriteCoords: { x: 0, y: 20 },
-    dimensions: { width: 86, height: 80 },
+    pos: { x: 0, y: 20 },
+    sizes: { width: 86, height: 80 },
     multipleSpeed: 4,
     minGap: 140,
     minSpeed: 0,
@@ -53,7 +56,7 @@ const horizontLineTypes: HorizontLineType[] = [
   {
     type: "FLOOR",
     spriteCoords: { x: 0, y: 0 },
-    dimensions: { width: 623, height: 320 },
+    sizes: { width: 623, height: 320 },
     groundYMargin: 123,
   },
 ];

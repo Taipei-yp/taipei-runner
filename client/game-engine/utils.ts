@@ -1,67 +1,14 @@
 import { CollisionBox } from "./models";
 
 /**
- * Get random number.
- * @param min
- * @param max
+ * Получение случайного значения в заданных границах
  */
 export function getRandomNum(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 /**
- * Vibrate on mobile devices.
- * @param duration Duration of the vibration in milliseconds.
- */
-export function vibrate(IS_MOBILE: boolean, duration: number) {
-  if (IS_MOBILE && window.navigator.vibrate) {
-    window.navigator.vibrate(duration);
-  }
-}
-
-/**
- * Create canvas element.
- * @param container Element to append canvas to.
- * @param width
- * @param height
- * @param opt_classname
- * @return HTMLCanvasElement
- */
-export function createCanvas(
-  container: HTMLElement,
-  width: number,
-  height: number,
-  classname: string[],
-): HTMLCanvasElement {
-  const canvas = document.createElement("canvas");
-  canvas.className = classname.join(" ");
-  canvas.width = width;
-  canvas.height = height;
-  container.appendChild(canvas);
-  return canvas;
-}
-
-/**
- * Decodes the base 64 audio to ArrayBuffer used by Web Audio.
- * @param base64String
- */
-export function decodeBase64ToArrayBuffer(
-  base64String: string,
-): ArrayBufferLike {
-  const len = (base64String.length / 4) * 3;
-  const str = atob(base64String);
-  const arrayBuffer = new ArrayBuffer(len);
-  const bytes = new Uint8Array(arrayBuffer);
-
-  for (let i = 0; i < len; i++) {
-    bytes[i] = str.charCodeAt(i);
-  }
-  return bytes.buffer;
-}
-
-/**
- * Return the current timestamp.
- * @return number
+ * Получение текущего времени.
  */
 export function getTimeStamp(): number {
   if (window.performance && window.performance.now)
@@ -70,36 +17,37 @@ export function getTimeStamp(): number {
 }
 
 /**
- * Adjust the collision box.
- * @param  box The original box.
- * @param adjustment Adjustment box.
- * @return CollisionBox - The adjusted collision box object.
+ * Создание поля пересечения относительно другого
+ * @param box Поле пересечения
+ * @param relative Поле отсчета
  */
-export function createAdjustedCollisionBox(
+export function createRelativeCollisionBox(
   box: CollisionBox,
-  adjustment: CollisionBox,
+  relative: CollisionBox,
 ): CollisionBox {
   return new CollisionBox(
-    box.x + adjustment.x,
-    box.y + adjustment.y,
+    box.x + relative.x,
+    box.y + relative.y,
     box.width,
     box.height,
   );
 }
 
 /**
- * Draw the collision boxes for debug.
+ * Отрисовка областей пересечения при отладке
  */
 export function drawCollisionBoxes(
   canvasCtx: CanvasRenderingContext2D,
-  tRexBox: CollisionBox,
+  heroBox: CollisionBox,
   obstacleBox: CollisionBox,
 ) {
   canvasCtx.save();
-  // #QT canvasCtx.strokeStyle = "#f00";
-  canvasCtx.strokeRect(tRexBox.x, tRexBox.y, tRexBox.width, tRexBox.height);
+  // eslint-disable-next-line no-param-reassign
+  canvasCtx.strokeStyle = "#f00";
+  canvasCtx.strokeRect(heroBox.x, heroBox.y, heroBox.width, heroBox.height);
 
-  // #QT canvasCtx.strokeStyle = "#0f0";
+  // eslint-disable-next-line no-param-reassign
+  canvasCtx.strokeStyle = "#0f0";
   canvasCtx.strokeRect(
     obstacleBox.x,
     obstacleBox.y,
@@ -110,26 +58,19 @@ export function drawCollisionBoxes(
 }
 
 /**
- * Compare two collision boxes for a collision.
- * @param {CollisionBox} tRexBox
- * @param {CollisionBox} obstacleBox
- * @return {boolean} Whether the boxes intersected.
+ * Пересечение двух областей
+ * @param heroBox Область пересечения героя
+ * @param obstacleBox Область пересечения препятствия
+ * @return {boolean} Пересекаются да/нет
  */
 export function boxCompare(
-  tRexBox: CollisionBox,
+  heroBox: CollisionBox,
   obstacleBox: CollisionBox,
 ): boolean {
-  let crashed = false;
-
-  // Axis-Aligned Bounding Box method.Z
-  if (
-    tRexBox.x < obstacleBox.x + obstacleBox.width &&
-    tRexBox.x + tRexBox.width > obstacleBox.x &&
-    tRexBox.y < obstacleBox.y + obstacleBox.height &&
-    tRexBox.height + tRexBox.y > obstacleBox.y
-  ) {
-    crashed = true;
-  }
-
-  return crashed;
+  return (
+    heroBox.x < obstacleBox.x + obstacleBox.width &&
+    heroBox.x + heroBox.width > obstacleBox.x &&
+    heroBox.y < obstacleBox.y + obstacleBox.height &&
+    heroBox.height + heroBox.y > obstacleBox.y
+  );
 }

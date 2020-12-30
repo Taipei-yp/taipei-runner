@@ -1,13 +1,19 @@
+/** Координаты */
 export type Coords = {
   x: number;
   y: number;
 };
 
-export type Dimensions = {
+/** Размеры */
+export type Sizes = {
   width: number;
   height: number;
 };
 
+/** Координаты с шириной */
+export type CoordsAndWidth = Coords & { width: number };
+
+/** Область пересечения */
 export class CollisionBox {
   x: number;
   y: number;
@@ -22,13 +28,14 @@ export class CollisionBox {
   }
 }
 
+/** Тип препятствия */
 export type ObstacleType = {
-  /** Name */
+  /** Название */
   type: string;
-  dimensions: Dimensions;
-  /** Variable height */
-  // yPos: number;
-  spriteCoords: Coords;
+  /** Размеры в спрайте */
+  sizes: Sizes;
+  /** Начальная точка в спрайте */
+  pos: Coords;
   /** Speed at which multiples are allowed */
   multipleSpeed: number;
   /** Minimum speed which the obstacle can make an appearance */
@@ -38,15 +45,15 @@ export type ObstacleType = {
   collisionBoxes: CollisionBox[];
 };
 
+/** Тип линии горизонта */
 export type HorizontLineType = {
   type: string;
-  dimensions: Dimensions;
+  sizes: Sizes;
   spriteCoords: Coords;
   groundYMargin: number;
 };
 
-export type CoordsAndWidth = Coords & { width: number };
-
+/** Набор фреймов и время отображения фрейма */
 export type FrameSetType = {
   msPerFrame: number;
   frames: CoordsAndWidth[];
