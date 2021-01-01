@@ -27,7 +27,7 @@ const MenuItems = [
   },
   {
     to: "/forum",
-    label: "forum",
+    label: "Forum",
   },
 ];
 
@@ -42,9 +42,9 @@ const Menu: FC<Props> = ({ className = "" }) => {
           className={b("heading")}
         />
         <ul className={b("list")}>
-          {MenuItems.map(mi => (
-            <li className={b("item")} key={mi.label}>
-              <LinkView to={mi.to} label={mi.label} size="xxl" />
+          {MenuItems.map(({ label, to }) => (
+            <li className={b("item")} key={label}>
+              <LinkView to={to} label={label} size="xxl" />
             </li>
           ))}
         </ul>
