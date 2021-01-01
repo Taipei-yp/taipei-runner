@@ -1,7 +1,8 @@
 import React, { FC, memo } from "react";
 import block from "bem-cn";
-import "./link-view.css";
 import { Link } from "react-router-dom";
+
+import "./link-view.css";
 
 const b = block("link-view");
 
@@ -9,7 +10,7 @@ type Props = {
   className?: string;
   to: string;
   label: string;
-  size: "small" | "normal";
+  size?: "xl" | "xxl";
 };
 
 const LinkView: FC<Props> = ({ className, to, label, size }) => {

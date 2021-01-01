@@ -4,7 +4,7 @@ import { Forum } from "./pages/forum";
 import { SignUp } from "./pages/signup";
 import { Error } from "./pages/error";
 import { SignIn } from "./pages/signin";
-
+import { Menu } from "./pages/menu";
 
 export const App: FC = () => {
   return (
@@ -12,13 +12,13 @@ export const App: FC = () => {
       <Router>
         <Switch>
           <Route exact path="/" />
+          <Route path="/menu" component={Menu} />
           <Route path="/signin" component={SignIn} />
           <Route path="/signup" component={SignUp} />
           <Route path="/profile" />
           <Route path="/leaderboard" />
           <Route path="/forum" component={Forum} />
           <Route path="/forum/topic/:id" />
-          <Route path="/feedback" />
           <Route path="/game" />
           <Route path="/game-over" />
           <Route
