@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { Environment } from "../../enviroment";
-import { SignInUser, SignUpUser, User } from "../../models/user";
-import { api } from "../api";
+import { SignInUser, SignUpUser } from "../../models/user";
+import { authApi } from "../api";
+
+type SuccessCallback = () => void;
+type FailureCallback = (error: string) => void;
 
 type Auth = {
-  status:
+  stage:
     | "init"
     | "signing-up"
     | "signed-up"
@@ -14,50 +16,51 @@ type Auth = {
   error?: string;
 };
 
-const baseUrl = `${Environment.apiUrl}/auth`;
-const { client } = api();
+const { signUp: signUpApi, signIn: signInAPi } = authApi();
 
 const useAuthService = () => {
-  const [auth, setAuth] = useState<Auth>({ status: "init" });
+  const [auth, setAuth] = useState<Auth>({ stage: "init" });
 
-  const signUp = (user: SignUpUser) => {
-    setAuth({ status: "signing-up" });
-    return new Promise((resolve, reject) => {
-      return client
-        .post<User>(`${baseUrl}/signup`, user, { withCredentials: true })
-        .then(() => {
-          setAuth({
-            status: "signed-up",
-          });
-          resolve("signed-up");
-        })
-        .catch(error => {
-          setAuth({ status: "error", error });
-          reject(error);
+  const signUp = (
+    user: SignUpUser,
+    onSuccess: SuccessCallback,
+    onFailure: FailureCallback,
+  ) => {
+    setAuth({ stage: "signing-up" });
+    signUpApi(user)
+      .then(() => {
+        setAuth({
+          stage: "signed-up",
         });
-    });
+        onSuccess();
+      })
+      .catch(error => {
+        setAuth({ stage: "error", error });
+        onFailure(error);
+      });
   };
 
-  const signIn = (user: SignInUser) => {
-    setAuth({ status: "signing-in" });
-    return new Promise((resolve, reject) => {
-      return client
-        .post<User>(`${baseUrl}/signIn`, user, { withCredentials: true })
-        .then(() => {
-          setAuth({
-            status: "signed-in",
-          });
-          resolve("signed-in");
-        })
-        .catch(error => {
-          setAuth({ status: "error", error });
-          reject(error);
+  const signIn = (
+    user: SignInUser,
+    onSuccess: SuccessCallback,
+    onFailure: FailureCallback,
+  ) => {
+    setAuth({ stage: "signing-in" });
+    signInAPi(user)
+      .then(() => {
+        setAuth({
+          stage: "signed-in",
         });
-    });
+        onSuccess();
+      })
+      .catch(error => {
+        setAuth({ stage: "error", error });
+        onFailure(error);
+      });
   };
 
   const reset = () => {
-    setAuth({ status: "init" });
+    setAuth({ stage: "init" });
   };
 
   return {

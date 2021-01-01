@@ -1,4 +1,4 @@
-import React, { FC, memo } from "react";
+import React, { FC, memo, useCallback, useMemo } from "react";
 import block from "bem-cn";
 import { useHistory } from "react-router-dom";
 import { Panel } from "../../components/panel";
@@ -40,54 +40,60 @@ const SignIn: FC<Props> = ({ className = "", onAuth }) => {
   const { auth, signIn, reset } = useAuthService();
   const history = useHistory();
 
-  const formSubmit = (values: Record<string, unknown>) => {
-    signIn((values as unknown) as SignInUser).then(() => {
-      onAuth(true);
-      history.push("/game");
-    });
-  };
+  const formSubmit = useCallback(
+    (formValue: SignInUser) => {
+      signIn(
+        formValue,
+        () => {
+          onAuth(true);
+          history.push("/game");
+        },
+        () => {},
+      );
+    },
+    [history, signIn, onAuth],
+  );
 
-  const tryAgain = () => {
+  const tryAgain = useCallback(() => {
     reset();
-  };
+  }, [reset]);
 
-  let content;
-  switch (auth.status) {
-    case "signing-in":
-      content = <p>Loading...</p>;
-      break;
-    case "error":
-      content = (
-        <div>
-          <Heading text="Error" size="small" color="primary" />
-          <p>
-            <Text text={auth.error} />
-          </p>
-          <Button onClick={tryAgain} viewType="secondary">
-            Try again
-          </Button>
-        </div>
-      );
-      break;
-    default:
-      content = (
-        <Panel>
-          <Heading
-            size="medium"
-            color="accent"
-            text="Sign in"
-            className={b("heading")}
-          />
-          <FormView onSubmit={formSubmit} fields={SignInFields} />
-          <LinkView
-            to="/signup"
-            label="No account yet?"
-            size="normal"
-            className={b("link")}
-          />
-        </Panel>
-      );
-  }
+  const content = useMemo(() => {
+    switch (auth.stage) {
+      case "signing-in":
+        return <p>Loading...</p>;
+      case "error":
+        return (
+          <div>
+            <Heading text="Error" size="small" color="primary" />
+            <p>
+              <Text text={auth.error} />
+            </p>
+            <Button onClick={tryAgain} viewType="secondary">
+              Try again
+            </Button>
+          </div>
+        );
+      default:
+        return (
+          <Panel>
+            <Heading
+              size="medium"
+              color="accent"
+              text="Sign in"
+              className={b("heading")}
+            />
+            <FormView onSubmit={formSubmit} fields={SignInFields} />
+            <LinkView
+              to="/signup"
+              label="No account yet?"
+              size="normal"
+              className={b("link")}
+            />
+          </Panel>
+        );
+    }
+  }, [auth, formSubmit, tryAgain]);
 
   return <div className={b.mix(className)}>{content}</div>;
 };

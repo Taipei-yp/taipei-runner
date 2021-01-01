@@ -1,7 +1,8 @@
 import axios from "axios";
+import { environment } from "../../enviroment";
 
 const api = () => {
-  const client = axios.create();
+  const client = axios.create({ baseURL: environment.apiUrl, timeout: 5000 });
   client.interceptors.response.use(
     res => res,
     error => {
@@ -13,12 +14,8 @@ const api = () => {
         )
           ? error.response.data.reason
           : `Server sent status: ${error.response.status}`;
-      } else if (error.request) {
-        errorResponse = "Unknown error";
-      } else if (error.message) {
-        errorResponse = error.message;
       } else {
-        errorResponse = error.config;
+        errorResponse = "Unknown error";
       }
       return Promise.reject(errorResponse);
     },

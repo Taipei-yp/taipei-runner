@@ -1,4 +1,4 @@
-import React, { FC, memo } from "react";
+import React from "react";
 import { Field, Form } from "react-final-form";
 import block from "bem-cn";
 import { Button } from "../button";
@@ -17,7 +17,7 @@ const ValidatePattern: PatternValidation = (pattern, errorText) => value =>
 
 const b = block("form-view");
 
-type FormViewField = {
+export type FormViewField = {
   labelText: string;
   pattern: RegExp;
   errorMessage: string;
@@ -25,13 +25,17 @@ type FormViewField = {
   name: string;
 };
 
-type Props = {
-  onSubmit: (values: Record<string, unknown>) => void;
+type Props<T> = {
+  onSubmit: (formValue: T) => void;
   fields: FormViewField[];
   className?: string;
 };
 
-const FormView: FC<Props> = ({ onSubmit, fields, className = "" }) => {
+const FormView = <T extends Record<string, unknown>>({
+  onSubmit,
+  fields,
+  className = "",
+}: Props<T>) => {
   return (
     <div className={b.mix(className)}>
       <Form onSubmit={onSubmit}>
@@ -69,5 +73,5 @@ const FormView: FC<Props> = ({ onSubmit, fields, className = "" }) => {
   );
 };
 
-const WrapperFormView = memo(FormView);
-export { WrapperFormView as FormView, FormViewField };
+const WrapperFormView = FormView;
+export { WrapperFormView as FormView };
