@@ -1,0 +1,23 @@
+.forum-topic {
+  display: flex;
+
+  &__heading {
+    margin-top: 0;
+  }
+
+  &__content {
+    min-width: 300px;
+    width: 80%;
+    max-width: 780px;
+  }
+
+  &__topic-msg {
+    padding-bottom: 12px;
+    margin-bottom: 28px;
+    border-bottom: 22px solid var(--tpr-color-dark-shade);
+  }
+
+  &__reply {
+    margin-bottom: 20px;
+  }
+}

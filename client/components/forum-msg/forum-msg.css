@@ -1,0 +1,15 @@
+.forum-msg {
+  display: flex;
+  justify-content: flex-start;
+
+  &__avatar {
+    flex: 0 0;
+    margin-right: 13px;
+  }
+
+  &__header {
+    display: flex;
+    flex-flow: column;
+    margin-bottom: 8px;
+  }
+}

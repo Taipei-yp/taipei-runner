@@ -6,6 +6,7 @@ import { Error } from "./pages/error";
 import { SignIn } from "./pages/signin";
 import { PrivateRoute } from "./components/private-route";
 import { Menu } from "./pages/menu";
+import { ForumTopic } from "./pages/forum-topic";
 
 export const App: FC = () => {
   const [isAuthorized, setAuthorize] = useState(false);
@@ -29,8 +30,17 @@ export const App: FC = () => {
           <PrivateRoute auth={isAuthorized} path="/menu" component={Menu} />
           <PrivateRoute auth={isAuthorized} path="/profile" />
           <PrivateRoute auth={isAuthorized} path="/leaderboard" />
-          <PrivateRoute auth={isAuthorized} path="/forum" component={Forum} />
-          <PrivateRoute auth={isAuthorized} path="/forum/topic/:id" />
+          <PrivateRoute
+            exact
+            auth={isAuthorized}
+            path="/forum"
+            component={Forum}
+          />
+          <PrivateRoute
+            auth={isAuthorized}
+            path="/forum/topic/:id"
+            component={ForumTopic}
+          />
           <PrivateRoute auth={isAuthorized} path="/game" />
           <PrivateRoute auth={isAuthorized} path="/game-over" />
           <Route path="*" />
