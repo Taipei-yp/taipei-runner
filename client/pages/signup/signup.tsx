@@ -1,15 +1,17 @@
-import React, { FC, memo } from "react";
+import React, { FC, memo, useCallback, useMemo } from "react";
 import block from "bem-cn";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Panel } from "../../components/panel";
 import { FormViewField, FormView } from "../../components/form-view";
+import { Heading } from "../../components/heading";
+import { useAuthService } from "../../services/auth";
+import { SignUpUser } from "../../models/user";
+import { Text } from "../../components/text";
+import { Button } from "../../components/button";
+import { LinkView } from "../../components/link-view";
 
 import "./signup.css";
-import { Heading } from "../../components/heading";
-
-const OnSubmit = (values: Record<string, unknown>) => {
-  console.log(values);
-};
+import { Page } from "../../components/page";
 
 const b = block("sign-up");
 
@@ -61,26 +63,62 @@ const SignUpFields: FormViewField[] = [
 
 type Props = {
   className?: string;
+  onAuth: (isAuthorized: boolean) => void;
 };
 
-const SignUp: FC<Props> = ({ className = "" }) => {
+const SignUp: FC<Props> = ({ className = "", onAuth }) => {
+  const { auth, signUp, reset } = useAuthService();
+  const history = useHistory();
+
+  const formSubmit = useCallback(
+    (formValue: SignUpUser) => {
+      signUp(formValue, () => {
+        onAuth(true);
+        history.push("/menu");
+      });
+    },
+    [onAuth, history, signUp],
+  );
+
+  const tryAgain = useCallback(() => {
+    reset();
+  }, [reset]);
+
+  const content = useMemo(() => {
+    switch (auth.stage) {
+      case "signing-up":
+        return <p>Loading...</p>;
+      case "error":
+        return (
+          <div>
+            <Heading text="Error" color="primary" />
+            <p>
+              <Text text={auth.error} />
+            </p>
+            <Button onClick={tryAgain} viewType="secondary">
+              Try again
+            </Button>
+          </div>
+        );
+      default:
+        return (
+          <Panel>
+            <Heading color="accent" text="Sign Up" className={b("heading")} />
+            <FormView onSubmit={formSubmit} fields={SignUpFields} />
+            <LinkView
+              to="/signin"
+              label="Already have an account"
+              className={b("link")}
+            />
+          </Panel>
+        );
+    }
+  }, [auth, formSubmit, tryAgain]);
+
   return (
-    <div className={b.mix(className)}>
-      <Panel>
-        <Heading
-          size="medium"
-          color="accent"
-          text="Sign Up"
-          className={b("heading")}
-        />
-        <FormView onSubmit={OnSubmit} fields={SignUpFields} />
-        {/* TODO здесь появится LinkView компонент, который сделаем позже */}
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-        <Link to="/signin" className={b("link")}>
-          Already have an account
-        </Link>
-      </Panel>
-    </div>
+    <Page fixHeader fullHeight align="center">
+      <div className={b.mix(className)}>{content}</div>
+    </Page>
   );
 };
 

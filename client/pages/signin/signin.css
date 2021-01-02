@@ -1,12 +1,12 @@
 .sign-in {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
   &__heading {
     text-align: center;
     margin: 15px 0 43px 0;
+  }
+
+  &__link {
+    display: block;
+    text-align: center;
+    margin-top: 16px;
   }
 }

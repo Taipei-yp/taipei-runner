@@ -46,6 +46,7 @@
     ]
   },
   "dependencies": {
+    "axios": "0.21.1",
     "bem-cn": "3.0.1",
     "core-js": "3.8.1",
     "final-form": "4.20.1",
