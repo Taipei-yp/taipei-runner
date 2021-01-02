@@ -71,14 +71,10 @@ const SignUp: FC<Props> = ({ className = "", onAuth }) => {
 
   const formSubmit = useCallback(
     (formValue: SignUpUser) => {
-      signUp(
-        formValue,
-        () => {
-          onAuth(true);
-          history.push("/game");
-        },
-        () => {},
-      );
+      signUp(formValue, () => {
+        onAuth(true);
+        history.push("/game");
+      });
     },
     [onAuth, history, signUp],
   );

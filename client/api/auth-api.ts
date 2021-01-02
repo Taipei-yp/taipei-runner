@@ -1,4 +1,4 @@
-import { SignInUser, SignUpUser, User } from "../../models/user";
+import { SignInUser, SignUpUser, User } from "../models/user";
 import { api } from "./api";
 
 const path = `/auth`;

@@ -42,14 +42,10 @@ const SignIn: FC<Props> = ({ className = "", onAuth }) => {
 
   const formSubmit = useCallback(
     (formValue: SignInUser) => {
-      signIn(
-        formValue,
-        () => {
-          onAuth(true);
-          history.push("/game");
-        },
-        () => {},
-      );
+      signIn(formValue, () => {
+        onAuth(true);
+        history.push("/game");
+      });
     },
     [history, signIn, onAuth],
   );

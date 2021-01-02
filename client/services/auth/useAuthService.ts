@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { SignInUser, SignUpUser } from "../../models/user";
-import { authApi } from "../api";
+import { authApi } from "../../api";
 
 type SuccessCallback = () => void;
 type FailureCallback = (error: string) => void;
@@ -23,8 +23,8 @@ const useAuthService = () => {
 
   const signUp = (
     user: SignUpUser,
-    onSuccess: SuccessCallback,
-    onFailure: FailureCallback,
+    onSuccess: SuccessCallback = () => {},
+    onFailure: FailureCallback = () => {},
   ) => {
     setAuth({ stage: "signing-up" });
     signUpApi(user)
@@ -42,8 +42,8 @@ const useAuthService = () => {
 
   const signIn = (
     user: SignInUser,
-    onSuccess: SuccessCallback,
-    onFailure: FailureCallback,
+    onSuccess: SuccessCallback = () => {},
+    onFailure: FailureCallback = () => {},
   ) => {
     setAuth({ stage: "signing-in" });
     signInAPi(user)
