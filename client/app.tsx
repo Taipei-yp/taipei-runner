@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useCallback, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Forum } from "./pages/forum";
 import { SignUp } from "./pages/signup";

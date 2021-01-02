@@ -11,6 +11,7 @@ import { Button } from "../../components/button";
 import { LinkView } from "../../components/link-view";
 
 import "./signup.css";
+import { Page } from "../../components/page";
 
 const b = block("sign-up");
 
@@ -73,7 +74,7 @@ const SignUp: FC<Props> = ({ className = "", onAuth }) => {
     (formValue: SignUpUser) => {
       signUp(formValue, () => {
         onAuth(true);
-        history.push("/game");
+        history.push("/menu");
       });
     },
     [onAuth, history, signUp],
@@ -90,7 +91,7 @@ const SignUp: FC<Props> = ({ className = "", onAuth }) => {
       case "error":
         return (
           <div>
-            <Heading text="Error" size="small" color="primary" />
+            <Heading text="Error" color="primary" />
             <p>
               <Text text={auth.error} />
             </p>
@@ -102,17 +103,11 @@ const SignUp: FC<Props> = ({ className = "", onAuth }) => {
       default:
         return (
           <Panel>
-            <Heading
-              size="medium"
-              color="accent"
-              text="Sign Up"
-              className={b("heading")}
-            />
+            <Heading color="accent" text="Sign Up" className={b("heading")} />
             <FormView onSubmit={formSubmit} fields={SignUpFields} />
             <LinkView
               to="/signin"
               label="Already have an account"
-              size="normal"
               className={b("link")}
             />
           </Panel>
@@ -120,7 +115,11 @@ const SignUp: FC<Props> = ({ className = "", onAuth }) => {
     }
   }, [auth, formSubmit, tryAgain]);
 
-  return <div className={b.mix(className)}>{content}</div>;
+  return (
+    <Page fixHeader fullHeight align="center">
+      <div className={b.mix(className)}>{content}</div>
+    </Page>
+  );
 };
 
 const WrappedSignUp = memo(SignUp);

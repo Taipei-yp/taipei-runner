@@ -1,7 +1,7 @@
 .heading {
   font-style: normal;
   font-weight: normal;
-  font-size: var(--tpr-fontsize-xxl);
+  font-size: var(--tpr-fontsize-xl);
   line-height: var(--tpr-fontsize-xl);
   text-shadow: 0 5px 0 var(--tpr-color-dark-shade);
 
