@@ -11,6 +11,7 @@ export const App: FC = () => {
       <Router>
         <Switch>
           <Route exact path="/" />
+          <Route path="/menu" component={Menu} />
           <Route path="/signin" component={SignIn} />
           <Route path="/signup" component={SignUp} />
           <Route path="/profile" />
