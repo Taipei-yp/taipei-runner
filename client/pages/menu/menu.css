@@ -1,0 +1,19 @@
+.menu {
+  &__heading {
+    margin-top: 0;
+  }
+
+  &__list {
+    list-style-type: none;
+    padding: 0;
+    text-align: center;
+  }
+
+  &__item {
+    margin-bottom: 25px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
