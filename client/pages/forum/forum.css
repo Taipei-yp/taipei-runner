@@ -17,21 +17,13 @@
     flex-grow: 1;
   }
 
-  &__under-table {
+  &__pagination {
     display: flex;
-    position: relative;
     align-items: center;
     justify-content: center;
+  }
 
-    &__create-topic {
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-
-    &__pagination {
-      /* margin by button width */
-      margin: 0 280px;
-    }
+  &__create-topic {
+    margin-top: 12px;
   }
 }

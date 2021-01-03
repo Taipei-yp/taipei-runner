@@ -1,7 +1,8 @@
 import block from "bem-cn";
-import React, { FC, memo, useCallback, useState } from "react";
+import React, { FC, memo, useCallback } from "react";
 import { Button } from "../../components/button";
 import { Pagination } from "../../components/pagination";
+import { useDefaultPagination } from "../../components/pagination/pagination-pages";
 import { Panel } from "../../components/panel";
 import { Table } from "../../components/table";
 import { useNullableTableSort } from "../../components/table/table-sort";
@@ -38,27 +39,26 @@ const data = [
   },
 ];
 
-const pagesCount = 5;
+const pagesCount = 8;
+const visiblePagesCount = 5;
 
 const Forum: FC<Props> = ({ className }) => {
   const [sort, handleSortRequest] = useNullableTableSort();
-  const [page, setPage] = useState(1);
 
   const handleCreateTopicClick = useCallback(() => {
     alert("need to create a new topic!");
   }, []);
 
-  const handlePageClick = useCallback((newPage: number) => {
-    setPage(newPage);
-  }, []);
-
-  const handleGoToFirstPageClick = useCallback(() => {
-    setPage(1);
-  }, []);
-
-  const handleGoToLastPageClick = useCallback(() => {
-    setPage(pagesCount);
-  }, []);
+  const {
+    currentPage,
+    firstVisiblePage,
+    lastVisiblePage,
+    canGoToPrevPage,
+    canGoToNextPage,
+    goToNextPage,
+    goToPrevPage,
+    goToPage,
+  } = useDefaultPagination(pagesCount, visiblePagesCount);
 
   return (
     <div className={b.mix(className)}>
@@ -74,21 +74,20 @@ const Forum: FC<Props> = ({ className }) => {
             onHeaderClick={handleSortRequest}
           />
         </section>
-        <section className={b("under-table")}>
-          <Button
-            className={b("under-table", "create-topic")}
-            onClick={handleCreateTopicClick}
-          >
-            Create Topic
-          </Button>
+        <section className={b("pagination")}>
           <Pagination
-            className={b("under-table", "pagination")}
-            pagesCount={pagesCount}
-            currentPage={page}
-            onPageClick={handlePageClick}
-            onGoToFirstPageClick={handleGoToFirstPageClick}
-            onGoToLastPageClick={handleGoToLastPageClick}
+            firstPage={firstVisiblePage}
+            lastPage={lastVisiblePage}
+            currentPage={currentPage}
+            canGoToNextPage={canGoToNextPage}
+            canGoToPrevPage={canGoToPrevPage}
+            onPageClick={goToPage}
+            onGoToPrevPageClick={goToPrevPage}
+            onGoToNextPageClick={goToNextPage}
           />
+        </section>
+        <section className={b("create-topic")}>
+          <Button onClick={handleCreateTopicClick}>Create Topic</Button>
         </section>
       </Panel>
     </div>

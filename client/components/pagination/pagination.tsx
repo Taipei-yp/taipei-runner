@@ -1,25 +1,32 @@
 import React, { FC, memo, useCallback, MouseEvent } from "react";
 import block from "bem-cn";
 import "./pagination.css";
+import { arrayFromTo } from "../../utils/array-utils";
 
 const b = block("pagination");
 
 type Props = {
   className?: string;
-  pagesCount: number;
+  firstPage: number;
+  lastPage: number;
   currentPage: number;
+  canGoToNextPage: boolean;
+  canGoToPrevPage: boolean;
   onPageClick: (pageNumber: number) => void;
-  onGoToFirstPageClick?: () => void;
-  onGoToLastPageClick?: () => void;
+  onGoToPrevPageClick?: () => void;
+  onGoToNextPageClick?: () => void;
 };
 
 const Pagination: FC<Props> = ({
   className,
-  pagesCount,
+  firstPage,
+  lastPage,
   currentPage,
+  canGoToNextPage,
+  canGoToPrevPage,
   onPageClick,
-  onGoToFirstPageClick,
-  onGoToLastPageClick,
+  onGoToPrevPageClick,
+  onGoToNextPageClick,
 }) => {
   const handleClick = useCallback(
     (event: MouseEvent<HTMLLIElement>) => {
@@ -31,24 +38,27 @@ const Pagination: FC<Props> = ({
 
   return (
     <ul className={b.mix(className)}>
-      <li className={b("item")} onClick={onGoToFirstPageClick}>
-        {"<<"}
+      <li
+        className={b("item", { disabled: !canGoToPrevPage })}
+        onClick={onGoToPrevPageClick}
+      >
+        {"<"}
       </li>
-      {Array(pagesCount)
-        .fill("")
-        .map((_, i) => (
-          <li
-            // eslint-disable-next-line react/no-array-index-key
-            key={i}
-            className={b("item", { active: i + 1 === currentPage })}
-            data-page-number={i + 1}
-            onClick={handleClick}
-          >
-            {i + 1}
-          </li>
-        ))}
-      <li className={b("item")} onClick={onGoToLastPageClick}>
-        {">>"}
+      {arrayFromTo(firstPage, lastPage).map(page => (
+        <li
+          key={page}
+          className={b("item", { active: page === currentPage })}
+          data-page-number={page}
+          onClick={handleClick}
+        >
+          {page}
+        </li>
+      ))}
+      <li
+        className={b("item", { disabled: !canGoToNextPage })}
+        onClick={onGoToNextPageClick}
+      >
+        {">"}
       </li>
     </ul>
   );

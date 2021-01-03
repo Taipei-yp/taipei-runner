@@ -14,5 +14,10 @@
     &_active {
       color: var(--tpr-color-primary);
     }
+
+    &_disabled {
+      color: var(--tpr-color-dark-deep);
+      cursor: initial;
+    }
   }
 }
