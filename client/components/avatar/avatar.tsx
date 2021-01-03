@@ -8,10 +8,10 @@ import "./avatar.css";
 const b = block("avatar");
 
 export type Props = {
-  alt?: string;
-  src?: string;
   className?: string;
   size?: "large";
+  src?: string;
+  alt?: string;
 };
 
 const Avatar: FC<Props> = ({

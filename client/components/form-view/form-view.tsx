@@ -31,12 +31,14 @@ type Props<T> = {
   onSubmit: (formValue: T) => void;
   fields: FormViewField[];
   className?: string;
+  buttonText?: string;
 };
 
 const FormView = <T extends Record<string, unknown>>({
   onSubmit,
   fields,
   className = "",
+  buttonText = "Submit",
 }: Props<T>) => {
   return (
     <div className={b.mix(className)}>
@@ -75,7 +77,7 @@ const FormView = <T extends Record<string, unknown>>({
                 </Field>
               );
             })}
-            <Button type="submit">Submit</Button>
+            <Button type="submit">{buttonText}</Button>
           </form>
         )}
       </Form>
