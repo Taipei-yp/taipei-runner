@@ -46,7 +46,7 @@ const Forum: FC<Props> = ({ className }) => {
   const [sort, handleSortRequest] = useNullableTableSort();
 
   const handleCreateTopicClick = useCallback(() => {
-    alert("need to create a new topic!");
+    console.warn("need to create a new topic!");
   }, []);
 
   const {
