@@ -5,11 +5,12 @@ type Props = {
   auth: boolean;
   path: string;
   component?: ComponentType<RouteComponentProps<any>> | ComponentType<any>;
+  exact?: boolean;
 };
 
-const PrivateRoute: FC<Props> = ({ auth, component, path }) => {
+const PrivateRoute: FC<Props> = ({ auth, component, path, exact }) => {
   return auth ? (
-    <Route path={path} component={component} />
+    <Route exact={exact} path={path} component={component} />
   ) : (
     <Redirect to="/signin" />
   );

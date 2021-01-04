@@ -6,6 +6,7 @@ import { FormField } from "../form-field";
 import { Input } from "../input";
 
 import "./form-view.css";
+import { Textarea } from "../textarea";
 
 type PatternValidation = (
   pattern: RegExp,
@@ -23,6 +24,7 @@ export type FormViewField = {
   errorMessage: string;
   type: "text" | "password" | "email";
   name: string;
+  elementType?: "input" | "textarea";
 };
 
 type Props<T> = {
@@ -54,12 +56,20 @@ const FormView = <T extends Record<string, unknown>>({
                       labelText={field.labelText}
                       className={b("form-field")}
                     >
-                      <Input
-                        name={input.name}
-                        onChange={input.onChange}
-                        value={input.value}
-                        type={field.type}
-                      />
+                      {field.elementType === "textarea" ? (
+                        <Textarea
+                          name={input.name}
+                          onChange={input.onChange}
+                          value={input.value}
+                        />
+                      ) : (
+                        <Input
+                          name={input.name}
+                          onChange={input.onChange}
+                          value={input.value}
+                          type={field.type}
+                        />
+                      )}
                     </FormField>
                   )}
                 </Field>
