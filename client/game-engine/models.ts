@@ -36,25 +36,30 @@ export type ObstacleType = {
   sizes: Sizes;
   /** Начальная точка в спрайте */
   pos: Coords;
-  /** Speed at which multiples are allowed */
-  multipleSpeed: number;
-  /** Minimum speed which the obstacle can make an appearance */
+  /** Минимальная скорость с какой может появиться препятствие */
   minSpeed: number;
-  /** minimum pixel space betweeen obstacles */
+  /** Минимальный отступ между препятствиями в пикселях */
   minGap: number;
+  /** Области пересечений для проверки столкновений */
   collisionBoxes: CollisionBox[];
 };
 
-/** Тип линии горизонта */
+/** Тип горизонтальной линии */
 export type HorizontLineType = {
+  /** Название */
   type: string;
+  /** Размеры изображения в спрайте */
   sizes: Sizes;
-  spriteCoords: Coords;
+  /** Начальная точка в спрайте */
+  pos: Coords;
+  /** Отступ от верхнего края изображения до земли */
   groundYMargin: number;
 };
 
 /** Набор фреймов и время отображения фрейма */
 export type FrameSetType = {
+  /** Время отрисовки одного кадра */
   msPerFrame: number;
+  /** Положение и ширина изображений кадров анимации */
   frames: CoordsAndWidth[];
 };

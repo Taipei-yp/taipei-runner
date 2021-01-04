@@ -1,5 +1,10 @@
 import { CollisionBox } from "./models";
 
+/** Получение изменения X координаты */
+export function getIncrement(deltaTime: number, speed: number, fps: number) {
+  return Math.floor(speed * (fps / 1000) * deltaTime);
+}
+
 /**
  * Получение случайного значения в заданных границах
  */

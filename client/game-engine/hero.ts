@@ -1,51 +1,115 @@
 import { CollisionBox, FrameSetType, CoordsAndWidth, Coords } from "./models";
-import { gameConfig as config, heroConfig } from "./config";
+import { gameConfig as config } from "./config";
 
 import image from "./assets/hero-sprite.png";
 
+/** Состояние героя */
+export enum HeroStatus {
+  CRASHED,
+  JUMPING,
+  RUNNING,
+  WAITING,
+}
+
+/** Наборы фреймов для состояний героя */
+const heroFrames: Record<HeroStatus, FrameSetType> = {
+  [HeroStatus.WAITING]: {
+    frames: [
+      { x: 0, y: 77, width: 33 },
+      { x: 33, y: 77, width: 31 },
+      { x: 64, y: 77, width: 31 },
+      { x: 95, y: 77, width: 31 },
+    ],
+    msPerFrame: 1000 / 3,
+  },
+  [HeroStatus.RUNNING]: {
+    frames: [
+      { x: 0, y: 0, width: 63 },
+      { x: 63, y: 0, width: 71 },
+      { x: 134, y: 0, width: 55 },
+      { x: 189, y: 0, width: 40 },
+      { x: 229, y: 0, width: 64 },
+      { x: 293, y: 0, width: 71 },
+      { x: 364, y: 0, width: 54 },
+      { x: 424, y: 0, width: 47 },
+    ],
+    msPerFrame: 1000 / 12,
+  },
+  [HeroStatus.CRASHED]: {
+    frames: [{ x: 126, y: 77, width: 37 }],
+    msPerFrame: 1000 / 60,
+  },
+  [HeroStatus.JUMPING]: {
+    frames: [{ x: 163, y: 77, width: 52 }],
+    msPerFrame: 1000 / 60,
+  },
+};
+
+/** Области пересечений для состояний героя */
+export const heroCollisionBoxes = {
+  [HeroStatus.RUNNING]: [
+    new CollisionBox(22, 0, 17, 16),
+    new CollisionBox(1, 18, 30, 9),
+    new CollisionBox(10, 35, 14, 8),
+    new CollisionBox(1, 24, 29, 5),
+    new CollisionBox(5, 30, 21, 4),
+    new CollisionBox(9, 34, 15, 4),
+  ],
+};
+
 /**
- * Hero game character.
+ * Герой
  */
 export default class Hero {
+  /** Спрайт */
   static _imageSprite: CanvasImageSource;
-
-  pos: Coords;
-  groundYPos: number;
-  currentFrame: number;
-  currentAnimFrames: CoordsAndWidth[];
+  /** Контекст канваса */
   canvasCtx: CanvasRenderingContext2D;
-  timer: number;
-  msPerFrame: number;
-  jumping: boolean;
-
-  jumpVelocity: number;
-  reachedMinHeight: boolean;
-  speedDrop: boolean;
-  jumpCount: number;
+  /** Координата Y положения персонажа на земле */
+  yPosGround: number;
+  /** Минимальная высота прыжка */
   minJumpHeight: number;
+  /** Максимальная высота прыжка */
   maxJumpHeight: number;
-  status: string;
+  /** Состояние */
+  status: HeroStatus;
+  /** Позиция героя для отрисовки */
+  pos: Coords;
+  /** Номер кадра для отрисовки */
+  currentFrame: number;
+  /** Текущий набор кадров для отрисовки */
+  currentAnimFrames: CoordsAndWidth[];
+  /** Время отрисовки одного кадра */
+  msPerFrame: number;
+  /** Таймер для изменения кадров */
+  changeFrameTimer: number;
+  /** Флаг - герой в прыжке */
+  jumping: boolean;
+  /** Сокрость прыжка */
+  jumpVelocity: number;
+  /** Достигнута минимальная высота прыжка */
+  reachedMinHeight: boolean;
+  /** Падение скорости */
+  speedDrop: boolean;
+  /** Кол-во прыжков */
+  jumpCount: number;
 
   constructor(canvasCtx: CanvasRenderingContext2D, groundPos: number) {
     this.canvasCtx = canvasCtx;
+    this.yPosGround = groundPos - config.hero.HEIGHT;
+    this.minJumpHeight = this.yPosGround - config.hero.MIN_JUMP_HEIGHT;
+    this.maxJumpHeight = this.yPosGround - config.hero.MAX_JUMP_HEIGHT;
+    this.status = HeroStatus.WAITING;
     this.pos = { x: 0, y: 0 };
-    this.groundYPos = groundPos - heroConfig.HEIGHT;
-
-    this.status = Hero.status.WAITING;
     this.currentFrame = 0;
     this.currentAnimFrames = [];
-    this.timer = 0;
-    this.msPerFrame = 1000 / config.FPS;
-
+    this.msPerFrame = 1000 / config.global.FPS;
+    this.changeFrameTimer = 0;
     this.jumping = false;
     this.jumpVelocity = 0;
-
+    this.jumpCount = 0;
     this.reachedMinHeight = false;
     this.speedDrop = false;
-    this.jumpCount = 0;
-
-    this.minJumpHeight = this.groundYPos - heroConfig.MIN_JUMP_HEIGHT;
-    this.maxJumpHeight = this.groundYPos - heroConfig.MAX_JUMP_HEIGHT;
 
     if (!Hero._imageSprite) {
       const d = document.createElement("img");
@@ -55,207 +119,134 @@ export default class Hero {
     this.init();
   }
 
-  /**
-   * Used in collision detection.
-   * @type {Array<CollisionBox>}
-   */
-  static collisionBoxes = {
-    RUNNING: [
-      new CollisionBox(22, 0, 17, 16),
-      new CollisionBox(1, 18, 30, 9),
-      new CollisionBox(10, 35, 14, 8),
-      new CollisionBox(1, 24, 29, 5),
-      new CollisionBox(5, 30, 21, 4),
-      new CollisionBox(9, 34, 15, 4),
-    ],
-  };
-
-  static status = {
-    CRASHED: "CRASHED",
-    JUMPING: "JUMPING",
-    RUNNING: "RUNNING",
-    WAITING: "WAITING",
-  };
-
-  /**
-   * Animation config for different states.
-   */
-  static animFrames: Record<string, FrameSetType> = {
-    WAITING: {
-      frames: [
-        { x: 0, y: 77, width: 33 },
-        { x: 33, y: 77, width: 31 },
-        { x: 64, y: 77, width: 31 },
-        { x: 95, y: 77, width: 31 },
-      ],
-      msPerFrame: 1000 / 3,
-    },
-    RUNNING: {
-      frames: [
-        { x: 0, y: 0, width: 63 },
-        { x: 63, y: 0, width: 71 },
-        { x: 134, y: 0, width: 55 },
-        { x: 189, y: 0, width: 40 },
-        { x: 229, y: 0, width: 64 },
-        { x: 293, y: 0, width: 71 },
-        { x: 364, y: 0, width: 54 },
-        { x: 424, y: 0, width: 47 },
-      ],
-      msPerFrame: 1000 / 12,
-    },
-    CRASHED: {
-      frames: [{ x: 126, y: 77, width: 37 }],
-      msPerFrame: 1000 / 60,
-    },
-    JUMPING: {
-      frames: [{ x: 163, y: 77, width: 52 }],
-      msPerFrame: 1000 / 60,
-    },
-  };
-
+  /** Инициализация */
   init() {
-    this.pos.y = this.groundYPos;
-    this.pos.x = heroConfig.START_POS_X;
-    this.update(0, Hero.status.WAITING);
+    this.pos.y = this.yPosGround;
+    this.pos.x = config.hero.START_POS_X;
+    this.update(0, HeroStatus.WAITING);
   }
-
   /**
-   * Set the animation status.
-   * @param {!number} deltaTime
-   * @param {Hero.status} status Optional status to switch to.
+   * Обновление
    */
-  update(deltaTime: number, opt_status?: string) {
-    this.timer += deltaTime;
-
-    // Update the status.
-    if (opt_status != null) {
-      this.status = opt_status;
+  update(deltaTime: number, newStatus?: HeroStatus) {
+    this.changeFrameTimer += deltaTime;
+    if (newStatus != null) {
+      this.status = newStatus;
       this.currentFrame = 0;
-      this.msPerFrame = Hero.animFrames[opt_status].msPerFrame;
-      this.currentAnimFrames = Hero.animFrames[opt_status].frames;
+      this.msPerFrame = heroFrames[newStatus].msPerFrame;
+      this.currentAnimFrames = heroFrames[newStatus].frames;
     }
-    if (this.status === Hero.status.WAITING) {
+    if (this.status === HeroStatus.WAITING) {
       this.clearCanvas();
     }
     this.draw(this.currentAnimFrames[this.currentFrame]);
-
-    // Update the frame position.
-    if (this.timer >= this.msPerFrame) {
+    // Обновление кадра для отрисовки
+    if (this.changeFrameTimer >= this.msPerFrame) {
       this.currentFrame =
         this.currentFrame === this.currentAnimFrames.length - 1
           ? 0
           : this.currentFrame + 1;
-      this.timer = 0;
+      this.changeFrameTimer = 0;
     }
-
-    // Speed drop becomes duck if the down key is still being pressed.
-    if (this.speedDrop && this.pos.y === this.groundYPos) {
+    if (this.speedDrop && this.pos.y === this.yPosGround) {
       this.speedDrop = false;
     }
   }
-
+  /**
+   * Сброс в состояние бега
+   */
+  reset() {
+    this.pos.y = this.yPosGround;
+    // this.pos.x = config.hero.START_POS_X;
+    this.jumping = false;
+    this.jumpVelocity = 0;
+    // this.jumpCount = 0;
+    this.speedDrop = false;
+    this.update(0, HeroStatus.RUNNING);
+  }
+  /** Отрисовка */
   draw(cw: CoordsAndWidth) {
     this.canvasCtx.drawImage(
       Hero._imageSprite,
       cw.x,
       cw.y,
       cw.width,
-      heroConfig.SRC_HEIGHT,
+      config.hero.SRC_HEIGHT,
       this.pos.x,
       this.pos.y,
-      Math.round(heroConfig.HEIGHT / heroConfig.SRC_HEIGHT) * cw.width,
-      heroConfig.HEIGHT,
+      Math.round(config.hero.HEIGHT / config.hero.SRC_HEIGHT) * cw.width,
+      config.hero.HEIGHT,
     );
   }
-
+  /** Стирание области под моделью героя */
   clearCanvas() {
     this.canvasCtx.clearRect(
       this.pos.x,
       this.pos.y,
-      heroConfig.HEIGHT,
-      heroConfig.HEIGHT,
+      this.currentAnimFrames[this.currentFrame].width,
+      config.hero.HEIGHT,
     );
   }
-
   /**
-   * Initialise a jump.
-   * @param {number} speed
+   * Начало прыжка
    */
   startJump(speed: number) {
     if (!this.jumping) {
-      this.update(0, Hero.status.JUMPING);
-      // Tweak the jump velocity based on the speed.
-      this.jumpVelocity = heroConfig.INIITAL_JUMP_VELOCITY - speed / 10;
+      this.update(0, HeroStatus.JUMPING);
       this.jumping = true;
+      this.jumpVelocity = config.hero.INITIAL_JUMP_VELOCITY - speed / 10;
       this.reachedMinHeight = false;
       this.speedDrop = false;
     }
   }
-
   /**
-   * Jump is complete, falling down.
+   * Прыжек закончен, спуск вниз
    */
   endJump() {
-    if (this.reachedMinHeight && this.jumpVelocity < heroConfig.DROP_VELOCITY) {
-      this.jumpVelocity = heroConfig.DROP_VELOCITY;
+    if (
+      this.reachedMinHeight &&
+      this.jumpVelocity < config.hero.DROP_VELOCITY
+    ) {
+      this.jumpVelocity = config.hero.DROP_VELOCITY;
     }
   }
-
   /**
-   * Update frame for a jump.
-   * @param {number} deltaTime
-   * @param {number} speed // #QT speed: number
+   * Обновление кадра прыжка
    */
   updateJump(deltaTime: number) {
     const framesElapsed = deltaTime / this.msPerFrame;
 
-    // Speed drop makes Hero fall faster.
+    // Падение скорости заставляет героя падать быстрее
     if (this.speedDrop) {
       this.pos.y += Math.round(
-        this.jumpVelocity * config.SPEED_DROP_COEFFICIENT * framesElapsed,
+        this.jumpVelocity * config.hero.SPEED_DROP_COEFFICIENT * framesElapsed,
       );
     } else {
       this.pos.y += Math.round(this.jumpVelocity * framesElapsed);
     }
+    this.jumpVelocity += config.hero.GRAVITY * framesElapsed;
 
-    this.jumpVelocity += config.GRAVITY * framesElapsed;
-
-    // Minimum height has been reached.
+    // Достигнута минимальная высота прыжка
     if (this.pos.y < this.minJumpHeight || this.speedDrop) {
       this.reachedMinHeight = true;
     }
-
-    // Reached max height
+    // Достигнута максимальная высота прыжка
     if (this.pos.y < this.maxJumpHeight || this.speedDrop) {
       this.endJump();
     }
-
-    // Back down at ground level. Jump completed.
-    if (this.pos.y > this.groundYPos) {
+    // Возвражение на земплю. Прыжок завершен
+    if (this.pos.y > this.yPosGround) {
       this.reset();
       this.jumpCount++;
     }
-    // #QT
     this.update(deltaTime);
   }
 
   /**
-   * Set the speed drop. Immediately cancels the current jump.
+   * Устанавливает падение скорости. Немедленно отменяет прыжок
    */
   setSpeedDrop() {
     this.speedDrop = true;
     this.jumpVelocity = 1;
-  }
-
-  /**
-   * Reset the Hero to running at start of game.
-   */
-  reset() {
-    this.pos.y = this.groundYPos;
-    this.jumpVelocity = 0;
-    this.jumping = false;
-    this.update(0, Hero.status.RUNNING);
-    this.speedDrop = false;
-    this.jumpCount = 0;
   }
 }

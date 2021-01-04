@@ -1,69 +1,57 @@
 import { Sizes, HorizontLineType } from "./models";
 import { gameConfig as config } from "./config";
+import { getIncrement } from "./utils";
+
 /**
- * Horizon Line.
- * Consists of connecting lines.
- * @constructor
+ * Фоновая горизонтальная линия
  */
 export default class HorizonLine {
+  /** Контекст канваса */
   canvasCtx: CanvasRenderingContext2D;
-  canvasDimensions: Sizes;
+  /** Размеры канваса */
+  canvasSizes: Sizes;
+  /** Тип линии */
   typeConfig: HorizontLineType;
+  /** Спарайт */
   imageSprite: HTMLImageElement;
+  /** Вертикальная координата для отрисовки */
   yPos: number;
+  /** Горизонтальные координаты для отрисовки */
   xPos: number[];
 
   constructor(
     canvasCtx: CanvasRenderingContext2D,
-    canvasDimensions: Sizes,
+    canvasSizes: Sizes,
     imageSprite: HTMLImageElement,
     type: HorizontLineType,
     yPos = 0,
   ) {
     this.canvasCtx = canvasCtx;
-    this.canvasDimensions = canvasDimensions;
+    this.canvasSizes = canvasSizes;
     this.typeConfig = type;
     this.imageSprite = imageSprite;
     this.yPos = yPos;
     if (!this.yPos) {
-      this.yPos = canvasDimensions.height;
+      this.yPos = canvasSizes.height;
     }
     this.yPos -= this.typeConfig.groundYMargin;
     this.xPos = [];
     this.defaultXPos();
     this.draw();
   }
-
-  draw(): void {
-    this.xPos.forEach(el => {
-      this.canvasCtx.drawImage(
-        this.imageSprite,
-        this.typeConfig.spriteCoords.x,
-        this.typeConfig.spriteCoords.y,
-        this.typeConfig.sizes.width,
-        this.typeConfig.sizes.height,
-        el,
-        this.yPos,
-        this.typeConfig.sizes.width,
-        this.typeConfig.sizes.height,
-      );
-    });
-  }
-
-  update(deltaTime: number, speed: number) {
-    const increment = Math.floor(speed * (config.FPS / 1000) * deltaTime);
-    this.updateXPos(increment);
+  /** Обновление позиции */
+  update(deltaTime: number, speed: number): void {
+    this.updateXPos(getIncrement(deltaTime, speed, config.global.FPS));
     this.draw();
   }
-
+  /** Сброс в начальное положение */
   reset(): void {
     this.defaultXPos();
   }
-
   /**
-   * Update the x position of an indivdual piece of the line.
+   * Обновление горизонтальных координат на заданную величину
    */
-  updateXPos(increment: number) {
+  updateXPos(increment: number): void {
     for (let i = 0; i < this.xPos.length; i++) {
       this.xPos[i] -= increment;
       if (this.xPos[i] < -this.typeConfig.sizes.width) {
@@ -75,12 +63,28 @@ export default class HorizonLine {
       }
     }
   }
-
+  /** Установка горизонтальных координат в начальное положение  */
   defaultXPos(): void {
     const count =
-      Math.ceil(this.canvasDimensions.width / this.typeConfig.sizes.width) + 1;
+      Math.ceil(this.canvasSizes.width / this.typeConfig.sizes.width) + 1;
     for (let i = 0; i < count; i++) {
       this.xPos.push(i * this.typeConfig.sizes.width);
     }
+  }
+  /** Отрисовка */
+  draw(): void {
+    this.xPos.forEach(el => {
+      this.canvasCtx.drawImage(
+        this.imageSprite,
+        this.typeConfig.pos.x,
+        this.typeConfig.pos.y,
+        this.typeConfig.sizes.width,
+        this.typeConfig.sizes.height,
+        el,
+        this.yPos,
+        this.typeConfig.sizes.width,
+        this.typeConfig.sizes.height,
+      );
+    });
   }
 }

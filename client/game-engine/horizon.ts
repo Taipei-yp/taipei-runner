@@ -1,5 +1,5 @@
 import { Sizes } from "./models";
-// import { getRandomNum } from "./utils";
+import { getRandomNum } from "./utils";
 import HorizonLine from "./horizon-line";
 import Obstacle from "./obstacle";
 import {
@@ -9,20 +9,25 @@ import {
 } from "./config";
 
 import image from "./assets/horizon-sprite.png";
-import { getRandomNum } from "./utils";
+
 /**
- * Horizon background class.
+ * Движущийся фон, пол, препятствия
  */
 export default class Horizon {
+  /** Спрайт */
   static _imageSprite: HTMLImageElement;
-
+  /** Контекст канваса */
   canvasCtx: CanvasRenderingContext2D;
+  /** Размеры канваса */
   canvasSizes: Sizes;
-  horizonLines: HorizonLine[];
-  obstacleHistory: string[];
-  obstacles: Obstacle[];
-
+  /** Y Координата земли */
   groundPosY: number;
+  /** Фоновые линии */
+  horizonLines: HorizonLine[];
+  /** Препятствия */
+  obstacles: Obstacle[];
+  /** История препятствий */
+  obstacleHistory: string[];
 
   constructor(
     canvasCtx: CanvasRenderingContext2D,
@@ -31,10 +36,11 @@ export default class Horizon {
   ) {
     this.canvasCtx = canvasCtx;
     this.canvasSizes = canvasDimensions;
+    this.groundPosY = groundPosY;
+    this.horizonLines = [];
     this.obstacles = [];
     this.obstacleHistory = [];
-    this.horizonLines = [];
-    this.groundPosY = groundPosY;
+
     if (!Horizon._imageSprite) {
       const d = document.createElement("img");
       d.src = image;
@@ -45,7 +51,7 @@ export default class Horizon {
       Horizon._imageSprite = d;
     }
   }
-
+  /** Инициализация */
   init() {
     this.horizonLines.push(
       new HorizonLine(
@@ -57,15 +63,14 @@ export default class Horizon {
       ),
     );
   }
-
+  /** Обновление */
   update(deltaTime: number, currentSpeed: number, updateObstacles: boolean) {
     this.horizonLines.forEach(el => el.update(deltaTime, currentSpeed));
-
     if (updateObstacles) {
       this.updateObstacles(deltaTime, currentSpeed);
     }
   }
-
+  /** Обновление препятствий */
   updateObstacles(deltaTime: number, currentSpeed: number): void {
     const updatedObstacles = this.obstacles.slice(0);
 
@@ -97,21 +102,18 @@ export default class Horizon {
       this.addNewObstacle(currentSpeed);
     }
   }
-
   /**
-   * Add a new obstacle.
-   * @param _currentSpeed
+   * Добавление препятствия
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   addNewObstacle(currentSpeed: number) {
     const obstacleTypeIndex = getRandomNum(0, obstacleTypes.length - 1);
     const obstacleType = obstacleTypes[obstacleTypeIndex];
 
-    // Check for multiples of the same type of obstacle.
-    // Also check obstacle is available at current speed.
+    // Проверка кол-ва повторений одного типа препятствия и ограничения мин. скорости
     if (
       obstacleTypes.length > 1 &&
-      (this.duplicateObstacleCheck(obstacleType.type) ||
+      (this.maxRepeatObstacleCheck(obstacleType.type) ||
         currentSpeed < obstacleType.minSpeed)
     ) {
       this.addNewObstacle(currentSpeed);
@@ -125,34 +127,28 @@ export default class Horizon {
           this.groundPosY,
         ),
       );
-
       this.obstacleHistory.unshift(obstacleType.type);
-
       if (this.obstacleHistory.length > 1) {
-        this.obstacleHistory.splice(config.MAX_OBSTACLE_DUPLICATION);
+        this.obstacleHistory.splice(config.horizon.MAX_OBSTACLE_DUPLICATION);
       }
     }
   }
-
   /**
-   * Returns whether the previous two obstacles are the same as the next one.
-   * Maximum duplication is set in config value config.MAX_OBSTACLE_DUPLICATION.
-   * @return {boolean}
+   * Проверяет повтор типа перпятствия.
+   * Максимальное количество повторов одного типа задается в конфиге в поле MAX_OBSTACLE_DUPLICATION
    */
-  duplicateObstacleCheck(nextObstacleType: string) {
+  maxRepeatObstacleCheck(nextObstacleType: string): boolean {
     let duplicateCount = 0;
     for (let i = 0; i < this.obstacleHistory.length; i++) {
       duplicateCount =
         this.obstacleHistory[i] === nextObstacleType ? duplicateCount + 1 : 0;
     }
-    return duplicateCount >= config.MAX_OBSTACLE_DUPLICATION;
+    return duplicateCount >= config.horizon.MAX_OBSTACLE_DUPLICATION;
   }
-
   /**
-   * Reset the horizon layer.
-   * Remove existing obstacles and reposition the horizon line.
+   * Сброс в начальное состояние
    */
-  reset() {
+  reset(): void {
     this.obstacles = [];
     this.horizonLines.forEach(el => el.reset());
   }

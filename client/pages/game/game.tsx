@@ -1,4 +1,4 @@
-import React, { FC, memo, useEffect } from "react";
+import React, { FC, memo, useEffect, useRef } from "react";
 import block from "bem-cn";
 
 import "./game.css";
@@ -12,9 +12,9 @@ type Props = {
 };
 
 const Game: FC<Props> = ({ className = "" }) => {
+  const runnerRef = useRef(new Runner("#runner"));
   useEffect(() => {
-    const runner = new Runner("#runner");
-    runner.init();
+    runnerRef.current.init();
   });
   return (
     <div>
