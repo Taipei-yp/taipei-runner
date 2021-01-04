@@ -6,6 +6,7 @@ import { FormField } from "../form-field";
 import { Input } from "../input";
 
 import "./form-view.css";
+import { Textarea } from "../textarea";
 
 type PatternValidation = (
   pattern: RegExp,
@@ -23,18 +24,21 @@ export type FormViewField = {
   errorMessage: string;
   type: "text" | "password" | "email";
   name: string;
+  elementType?: "input" | "textarea";
 };
 
 type Props<T> = {
   onSubmit: (formValue: T) => void;
   fields: FormViewField[];
   className?: string;
+  buttonText?: string;
 };
 
 const FormView = <T extends Record<string, unknown>>({
   onSubmit,
   fields,
   className = "",
+  buttonText = "Submit",
 }: Props<T>) => {
   return (
     <div className={b.mix(className)}>
@@ -54,18 +58,26 @@ const FormView = <T extends Record<string, unknown>>({
                       labelText={field.labelText}
                       className={b("form-field")}
                     >
-                      <Input
-                        name={input.name}
-                        onChange={input.onChange}
-                        value={input.value}
-                        type={field.type}
-                      />
+                      {field.elementType === "textarea" ? (
+                        <Textarea
+                          name={input.name}
+                          onChange={input.onChange}
+                          value={input.value}
+                        />
+                      ) : (
+                        <Input
+                          name={input.name}
+                          onChange={input.onChange}
+                          value={input.value}
+                          type={field.type}
+                        />
+                      )}
                     </FormField>
                   )}
                 </Field>
               );
             })}
-            <Button type="submit">Submit</Button>
+            <Button type="submit">{buttonText}</Button>
           </form>
         )}
       </Form>

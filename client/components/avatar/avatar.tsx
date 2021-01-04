@@ -3,15 +3,15 @@ import block from "bem-cn";
 
 import defaultAvatar from "../../assets/images/default-avatar.png";
 
-import "./button.css";
+import "./avatar.css";
 
 const b = block("avatar");
 
 export type Props = {
   className?: string;
   size?: "large";
-  src: string;
-  alt: string;
+  src?: string;
+  alt?: string;
 };
 
 const Avatar: FC<Props> = ({
