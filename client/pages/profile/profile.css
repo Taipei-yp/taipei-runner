@@ -1,0 +1,39 @@
+.profile {
+  display: flex;
+
+  &__row {
+    display: flex;
+
+    &_centered {
+      justify-content: center;
+    }
+  }
+
+  &__heading {
+    text-align: center;
+    margin: 15px 0 43px 0;
+  }
+
+  &__column {
+    &:first-child {
+      margin-right: 45px;
+    }
+  }
+
+  &__avatar-field {
+    display: flex;
+    flex-flow: column;
+    margin-bottom: 20px;
+  }
+
+  &__avatar-wrapper {
+    position: relative;
+  }
+
+  &__pencil {
+    position: absolute;
+    bottom: 14px;
+    left: 7px;
+    z-index: 1;
+  }
+}
