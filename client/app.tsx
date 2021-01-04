@@ -5,6 +5,7 @@ import { SignUp } from "./pages/signup";
 import { SignIn } from "./pages/signin";
 import { PrivateRoute } from "./components/private-route";
 import { Menu } from "./pages/menu";
+import { Profile } from "./pages/profile";
 import { ForumTopic } from "./pages/forum-topic";
 
 export const App: FC = () => {
@@ -27,7 +28,11 @@ export const App: FC = () => {
             component={() => <SignUp onAuth={handleAuthorize} />}
           />
           <PrivateRoute auth={isAuthorized} path="/menu" component={Menu} />
-          <PrivateRoute auth={isAuthorized} path="/profile" />
+          <PrivateRoute
+            auth={isAuthorized}
+            path="/profile"
+            component={Profile}
+          />
           <PrivateRoute auth={isAuthorized} path="/leaderboard" />
           <PrivateRoute
             exact
