@@ -18,7 +18,7 @@ const nextSortDirection: Record<
   desc: null,
 };
 
-export function useNullableTableSort(): [TableSort, SortRequestHandler] {
+export const useNullableTableSort = (): [TableSort, SortRequestHandler] => {
   const [{ field, direction }, setSort] = useState({
     field: null,
     direction: null,
@@ -35,6 +35,6 @@ export function useNullableTableSort(): [TableSort, SortRequestHandler] {
   );
 
   return [{ field, direction }, handleSortRequest];
-}
+};
 
 // we can add other variants here, maybe

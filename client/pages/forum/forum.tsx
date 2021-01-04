@@ -1,11 +1,9 @@
 import block from "bem-cn";
 import React, { FC, memo, useCallback } from "react";
 import { Button } from "../../components/button";
-import { Pagination } from "../../components/pagination";
-import { useDefaultPagination } from "../../components/pagination/pagination-pages";
+import { Pagination, useDefaultPagination } from "../../components/pagination";
 import { Panel } from "../../components/panel";
-import { Table } from "../../components/table";
-import { useNullableTableSort } from "../../components/table/table-sort";
+import { Table, useNullableTableSort } from "../../components/table";
 import "./forum.css";
 
 const b = block("forum");

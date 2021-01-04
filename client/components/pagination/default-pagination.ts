@@ -1,10 +1,37 @@
 import { useCallback, useMemo, useState } from "react";
 
-export function useDefaultPagination(
+const canGoPrev = (currentPage: number): boolean => currentPage > 1;
+
+const canGoNext = (currentPage: number, allPagesCount: number): boolean =>
+  currentPage < allPagesCount;
+
+const getVisibleRange = (
+  allPagesCount: number,
+  currentPage: number,
+  visiblePagesCount: number,
+) => {
+  const minFirst = 1;
+  const maxLast = allPagesCount;
+
+  let first = currentPage - Math.floor(visiblePagesCount / 2);
+  let last = first + visiblePagesCount - 1;
+
+  if (first < minFirst) {
+    last += minFirst - first;
+    first = minFirst;
+  } else if (last > maxLast) {
+    first -= last - maxLast;
+    last = maxLast;
+  }
+
+  return [first, last];
+};
+
+export const useDefaultPagination = (
   allPagesCount: number,
   suggestedVisiblePagesCount = allPagesCount,
   initialPage = 1,
-) {
+) => {
   const [currentPage, setCurrentPage] = useState(initialPage);
 
   const visiblePagesCount = useMemo(() => {
@@ -48,34 +75,4 @@ export function useDefaultPagination(
     goToPrevPage,
     goToNextPage,
   };
-}
-
-function getVisibleRange(
-  allPagesCount: number,
-  currentPage: number,
-  visiblePagesCount: number,
-) {
-  const minFirst = 1;
-  const maxLast = allPagesCount;
-
-  let first = currentPage - Math.floor(visiblePagesCount / 2);
-  let last = first + visiblePagesCount - 1;
-
-  if (first < minFirst) {
-    last += minFirst - first;
-    first = minFirst;
-  } else if (last > maxLast) {
-    first -= last - maxLast;
-    last = maxLast;
-  }
-
-  return [first, last];
-}
-
-function canGoPrev(currentPage: number): boolean {
-  return currentPage > 1;
-}
-
-function canGoNext(currentPage: number, allPagesCount: number): boolean {
-  return currentPage < allPagesCount;
-}
+};
