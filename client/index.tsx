@@ -12,7 +12,7 @@ interface IBuildInfo {
   test: string;
 }
 
-function printBuildInfo(buildInfoString: string): void {
+const printBuildInfo = (buildInfoString: string): void => {
   try {
     const buildInfo = JSON.parse(buildInfoString) as IBuildInfo;
     console.info(`version: ${buildInfo.version}`);
@@ -20,7 +20,7 @@ function printBuildInfo(buildInfoString: string): void {
     console.info(`branch: "${buildInfo.branchName}"`);
     console.info(`commit: "${buildInfo.commitId}"`);
   } catch {}
-}
+};
 
 printBuildInfo((process.env.BUILD_INFO as unknown) as string);
 ReactDOM.render(<App />, document.getElementById("app"));
