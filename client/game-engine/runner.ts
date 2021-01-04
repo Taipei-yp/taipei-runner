@@ -344,7 +344,6 @@ export default class Runner {
     document.removeEventListener(browserEvents.MOUSEDOWN, this);
     document.removeEventListener(browserEvents.MOUSEUP, this);
   }
-
   /**
    * Пауза игры если вкладка не активна
    */
