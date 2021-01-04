@@ -28,14 +28,14 @@ type InnerComponent = ComponentType<{ value: unknown }>;
 
 const TextRenderer = (({ value }) => value) as InnerComponent;
 
-function Table<TData extends WithId>({
+const Table = <TData extends WithId>({
   className,
   headers,
   data,
   components = {},
   sort = { field: null, direction: null },
   onHeaderClick = () => {},
-}: Props<TData>) {
+}: Props<TData>) => {
   const allComponents = headers.reduce((acc, { field }) => {
     acc[field] = components[field] ?? TextRenderer;
     return acc;
@@ -85,7 +85,7 @@ function Table<TData extends WithId>({
       </tbody>
     </table>
   );
-}
+};
 
 const WrappedTable = memo(Table);
 export { WrappedTable as Table };
