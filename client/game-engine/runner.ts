@@ -1,3 +1,4 @@
+import GameAudio, { SoundAction } from "./audio";
 import { gameConfig as config } from "./config";
 import Hero, { heroCollisionBoxes, HeroStatus } from "./hero";
 import Horizon from "./horizon";
@@ -74,19 +75,18 @@ export default class Runner {
   /** Число игр */
   playCount!: number;
 
-  printScore!: (distanse: number) => void;
+  printScore!: (distance: number) => void;
   gameOverFunc!: (score: number) => void;
   gameRunning!: (running: boolean) => void;
 
+  gameAudio!: GameAudio;
+
   constructor(
     containerId: string,
-    printScoreFunc: (distanse: number) => void = () => {},
+    printScoreFunc: (distance: number) => void = () => {},
     gameRunning: (running: boolean) => void = () => {},
     gameOverFunc: (score: number) => void = () => {},
   ) {
-    if (Runner._instance) {
-      return Runner._instance;
-    }
     this.containerId = containerId;
     this.sizes = {
       width: config.view.DEFAULT_WIDTH,
@@ -111,7 +111,7 @@ export default class Runner {
       paused: false,
     };
     this.playCount = 0;
-    Runner._instance = this;
+    this.gameAudio = new GameAudio();
   }
 
   /** Инициализация */
@@ -120,10 +120,6 @@ export default class Runner {
     if (!containerEl) throw new Error("no outerContainerEl");
     this.containerEl = containerEl;
 
-    this.setSizes();
-
-    this.currentSpeed = config.global.START_SPEED;
-
     const canvas = this.containerEl.getElementsByTagName("canvas")[0];
     if (!canvas) throw new Error("no canvas element");
     this.canvas = canvas;
@@ -131,6 +127,11 @@ export default class Runner {
     const canvasCtx = this.canvas.getContext("2d");
     if (!canvasCtx) throw new Error("No canvas context");
     this.canvasCtx = canvasCtx;
+
+    // this.canvas.classList.add("hidden");
+    this.setSizes();
+    // this.canvas.classList.remove("hidden");
+    this.currentSpeed = config.global.START_SPEED;
 
     this.canvas.width = this.sizes.width;
     this.canvas.height = this.sizes.height;
@@ -141,6 +142,10 @@ export default class Runner {
 
     this.horizon = new Horizon(this.canvasCtx, this.sizes, this.groundPosY());
     this.hero = new Hero(this.canvasCtx, this.groundPosY());
+
+    this.gameAudio.init();
+    this.gameAudio.playBgSound();
+
     this.startListening();
     this.update();
   }
@@ -167,6 +172,7 @@ export default class Runner {
 
       // Первый прыжок старт игры или рестарт
       if (this.hero.jumpCount === 1) {
+        this.gameAudio.canPlaySound();
         if (!this.status.started && !this.status.crashed) {
           this.startGame();
           this.status.activated = true;
@@ -200,6 +206,7 @@ export default class Runner {
       this.raq();
     }
   }
+
   /**
    * Начало игры
    */
@@ -220,6 +227,7 @@ export default class Runner {
     );
     this.gameRunning(true);
   }
+
   /**
    * Конец игры
    */
@@ -228,8 +236,11 @@ export default class Runner {
     this.status.crashed = true;
     this.hero.update(100, HeroStatus.CRASHED);
     this.time = getTimeStamp();
+    this.gameAudio.stopBgSound();
+    this.gameAudio.actionSound(SoundAction.GAMEOVER);
     this.gameRunning(false);
   }
+
   /**
    * Запуск забега
    */
@@ -239,18 +250,22 @@ export default class Runner {
       this.status.paused = false;
       this.hero.update(0, HeroStatus.RUNNING);
       this.time = getTimeStamp();
+      this.gameAudio.playBgSound();
       this.update();
       this.gameRunning(true);
     }
   }
+
   /** Остановка забега */
   stop() {
     this.status.activated = false;
     this.status.paused = true;
     cancelAnimationFrame(this.reqId);
     this.reqId = 0;
+    this.gameAudio.stopBgSound();
     this.gameRunning(false);
   }
+
   /**
    * Рестарт игры
    */
@@ -268,9 +283,11 @@ export default class Runner {
       this.horizon.reset();
       this.hero.reset();
       this.update();
+      this.gameAudio.playBgSound();
       this.gameRunning(true);
     }
   }
+
   /**
    * Событие keydown.
    */
@@ -281,12 +298,14 @@ export default class Runner {
       }
       if (!this.hero.jumping) {
         this.hero.startJump(this.currentSpeed);
+        this.gameAudio.actionSound(SoundAction.JUMP);
       }
     }
     if (this.status.crashed && e.currentTarget === this.containerEl) {
       this.restart();
     }
   }
+
   /**
    * Событие keyup
    */
@@ -305,6 +324,7 @@ export default class Runner {
       this.play();
     }
   }
+
   /**
    * Обработчик событий.
    */
@@ -326,6 +346,7 @@ export default class Runner {
     };
     return f.bind(this)(e.type, browserEvents);
   }
+
   /**
    * Привязка событий
    */
@@ -335,6 +356,7 @@ export default class Runner {
     document.addEventListener(browserEvents.MOUSEDOWN, this);
     document.addEventListener(browserEvents.MOUSEUP, this);
   }
+
   /**
    * Удаление привязки событий
    */
@@ -344,17 +366,19 @@ export default class Runner {
     document.removeEventListener(browserEvents.MOUSEDOWN, this);
     document.removeEventListener(browserEvents.MOUSEUP, this);
   }
+
   /**
    * Пауза игры если вкладка не активна
    */
   onVisibilityChange(e: Event) {
     if (document.hidden || e.type === "blur") {
       this.stop();
-    } else if (!this.status.crashed) {
+    } else if (!this.status.crashed && this.status.paused) {
       this.play();
       this.hero.reset();
     }
   }
+
   /**
    * Обертка для RequestAnimationFrame.
    */
@@ -364,12 +388,14 @@ export default class Runner {
       this.reqId = requestAnimationFrame(this.update.bind(this));
     }
   }
+
   /**
    * Игра запущена
    */
   isRunning() {
     return !!this.reqId;
   }
+
   /**
    *  Установка размеров игры по размерам родительского контейнера
    */
@@ -381,22 +407,31 @@ export default class Runner {
     this.sizes.height = this.containerEl.offsetHeight;
     this.sizes.width = this.containerEl.offsetWidth - padding * 2;
   }
+
   /**
    * Установка скорости игры
    */
   setSpeed(opt_speed?: number) {
     this.currentSpeed = opt_speed || this.currentSpeed;
   }
+
   /** Очистка канваса */
   clearCanvas() {
     this.canvasCtx.clearRect(0, 0, this.sizes.width, this.sizes.height);
   }
+
   /** Y координата земли */
   groundPosY = () => this.sizes.height - config.global.GROUND_POS;
 
   setRunScore(distanse: number) {
     const score = Math.round(distanse * config.global.SCORE_COEFFICIENT);
     this.printScore(score);
+  }
+
+  close() {
+    this.endGame();
+    this.stopListening();
+    this.gameAudio.close();
   }
 }
 
