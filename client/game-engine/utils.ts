@@ -22,7 +22,8 @@ export function getTimeStamp(): number {
 }
 
 /**
- * Создание поля пересечения относительно другого
+ * Создание поля пересечения относительно другого.
+ * Если координата поля отсчета отрицательное значение отсчет идет от правого края поля отсчета
  * @param box Поле пересечения
  * @param relative Поле отсчета
  */
@@ -31,8 +32,8 @@ export function createRelativeCollisionBox(
   relative: CollisionBox,
 ): CollisionBox {
   return new CollisionBox(
-    box.x + relative.x,
-    box.y + relative.y,
+    relative.x + box.x + (box.x < 0 ? relative.width : 0),
+    relative.y + box.y + (box.y < 0 ? relative.height : 0),
     box.width,
     box.height,
   );

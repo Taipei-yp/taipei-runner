@@ -47,13 +47,11 @@ const heroFrames: Record<HeroStatus, FrameSetType> = {
 
 /** Области пересечений для состояний героя */
 export const heroCollisionBoxes = {
-  [HeroStatus.RUNNING]: [
-    new CollisionBox(22, 0, 17, 16),
-    new CollisionBox(1, 18, 30, 9),
-    new CollisionBox(10, 35, 14, 8),
-    new CollisionBox(1, 24, 29, 5),
-    new CollisionBox(5, 30, 21, 4),
-    new CollisionBox(9, 34, 15, 4),
+  [HeroStatus.RUNNING]: [new CollisionBox(-20, 0, 20, 77)],
+  [HeroStatus.JUMPING]: [
+    new CollisionBox(-25, 13, 25, 10),
+    new CollisionBox(-8, -13, 8, 13),
+    new CollisionBox(14, 36, 20, 10),
   ],
 };
 
@@ -89,8 +87,6 @@ export default class Hero {
   jumpVelocity: number;
   /** Достигнута минимальная высота прыжка */
   reachedMinHeight: boolean;
-  /** Падение скорости */
-  speedDrop: boolean;
   /** Кол-во прыжков */
   jumpCount: number;
 
@@ -109,7 +105,6 @@ export default class Hero {
     this.jumpVelocity = 0;
     this.jumpCount = 0;
     this.reachedMinHeight = false;
-    this.speedDrop = false;
 
     if (!Hero._imageSprite) {
       const d = document.createElement("img");
@@ -148,20 +143,15 @@ export default class Hero {
           : this.currentFrame + 1;
       this.changeFrameTimer = 0;
     }
-    if (this.speedDrop && this.pos.y === this.yPosGround) {
-      this.speedDrop = false;
-    }
   }
   /**
    * Сброс в состояние бега
    */
   reset() {
     this.pos.y = this.yPosGround;
-    // this.pos.x = config.hero.START_POS_X;
     this.jumping = false;
     this.jumpVelocity = 0;
     // this.jumpCount = 0;
-    this.speedDrop = false;
     this.update(0, HeroStatus.RUNNING);
   }
   /** Отрисовка */
@@ -174,7 +164,7 @@ export default class Hero {
       config.hero.SRC_HEIGHT,
       this.pos.x,
       this.pos.y,
-      Math.round(config.hero.HEIGHT / config.hero.SRC_HEIGHT) * cw.width,
+      Hero.drawWidth(cw.width),
       config.hero.HEIGHT,
     );
   }
@@ -183,7 +173,7 @@ export default class Hero {
     this.canvasCtx.clearRect(
       this.pos.x,
       this.pos.y,
-      this.currentAnimFrames[this.currentFrame].width,
+      Hero.drawWidth(this.currentAnimFrames[this.currentFrame].width),
       config.hero.HEIGHT,
     );
   }
@@ -196,7 +186,6 @@ export default class Hero {
       this.jumping = true;
       this.jumpVelocity = config.hero.INITIAL_JUMP_VELOCITY - speed / 10;
       this.reachedMinHeight = false;
-      this.speedDrop = false;
     }
   }
   /**
@@ -216,22 +205,15 @@ export default class Hero {
   updateJump(deltaTime: number) {
     const framesElapsed = deltaTime / this.msPerFrame;
 
-    // Падение скорости заставляет героя падать быстрее
-    if (this.speedDrop) {
-      this.pos.y += Math.round(
-        this.jumpVelocity * config.hero.SPEED_DROP_COEFFICIENT * framesElapsed,
-      );
-    } else {
-      this.pos.y += Math.round(this.jumpVelocity * framesElapsed);
-    }
+    this.pos.y += Math.round(this.jumpVelocity * framesElapsed);
     this.jumpVelocity += config.hero.GRAVITY * framesElapsed;
 
     // Достигнута минимальная высота прыжка
-    if (this.pos.y < this.minJumpHeight || this.speedDrop) {
+    if (this.pos.y < this.minJumpHeight) {
       this.reachedMinHeight = true;
     }
     // Достигнута максимальная высота прыжка
-    if (this.pos.y < this.maxJumpHeight || this.speedDrop) {
+    if (this.pos.y < this.maxJumpHeight) {
       this.endJump();
     }
     // Возвражение на земплю. Прыжок завершен
@@ -241,12 +223,8 @@ export default class Hero {
     }
     this.update(deltaTime);
   }
-
-  /**
-   * Устанавливает падение скорости. Немедленно отменяет прыжок
-   */
-  setSpeedDrop() {
-    this.speedDrop = true;
-    this.jumpVelocity = 1;
+  /** Ширина героя при отрисовке */
+  static drawWidth(width: number) {
+    return Math.round(config.hero.HEIGHT / config.hero.SRC_HEIGHT) * width;
   }
 }
