@@ -1,13 +1,5 @@
 import { useCallback, useState } from "react";
-
-export type TableSort = {
-  field: string | null;
-  direction: SortDirection | null;
-};
-
-export type SortDirection = "asc" | "desc";
-
-type SortRequestHandler = (field: string) => void;
+import { SortDirection, SortRequestHandler, TableSort } from "./types";
 
 const nextSortDirection: Record<
   SortDirection | "null",
