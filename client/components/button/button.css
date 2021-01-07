@@ -4,7 +4,7 @@
   box-sizing: border-box;
   border: 2px solid var(--tpr-color-dark-shade);
   border-radius: 1px;
-  font-size: 24px;
+  font-size: calc(var(--tpr-fontsize) * 1.4);
   text-align: center;
   cursor: pointer;
   font-family: inherit;

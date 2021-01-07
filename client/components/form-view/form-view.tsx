@@ -1,4 +1,4 @@
-import React, { FC, memo } from "react";
+import React from "react";
 import { Field, Form } from "react-final-form";
 import block from "bem-cn";
 import { Button } from "../button";
@@ -6,6 +6,7 @@ import { FormField } from "../form-field";
 import { Input } from "../input";
 
 import "./form-view.css";
+import { Textarea } from "../textarea";
 
 type PatternValidation = (
   pattern: RegExp,
@@ -17,21 +18,28 @@ const ValidatePattern: PatternValidation = (pattern, errorText) => value =>
 
 const b = block("form-view");
 
-type FormViewField = {
+export type FormViewField = {
   labelText: string;
   pattern: RegExp;
   errorMessage: string;
   type: "text" | "password" | "email";
   name: string;
+  elementType?: "input" | "textarea";
 };
 
-type Props = {
-  onSubmit: (values: Record<string, unknown>) => void;
+type Props<T> = {
+  onSubmit: (formValue: T) => void;
   fields: FormViewField[];
   className?: string;
+  buttonText?: string;
 };
 
-const FormView: FC<Props> = ({ onSubmit, fields, className = "" }) => {
+const FormView = <T extends Record<string, unknown>>({
+  onSubmit,
+  fields,
+  className = "",
+  buttonText = "Submit",
+}: Props<T>) => {
   return (
     <div className={b.mix(className)}>
       <Form onSubmit={onSubmit}>
@@ -50,18 +58,26 @@ const FormView: FC<Props> = ({ onSubmit, fields, className = "" }) => {
                       labelText={field.labelText}
                       className={b("form-field")}
                     >
-                      <Input
-                        name={input.name}
-                        onChange={input.onChange}
-                        value={input.value}
-                        type={field.type}
-                      />
+                      {field.elementType === "textarea" ? (
+                        <Textarea
+                          name={input.name}
+                          onChange={input.onChange}
+                          value={input.value}
+                        />
+                      ) : (
+                        <Input
+                          name={input.name}
+                          onChange={input.onChange}
+                          value={input.value}
+                          type={field.type}
+                        />
+                      )}
                     </FormField>
                   )}
                 </Field>
               );
             })}
-            <Button type="submit">Submit</Button>
+            <Button type="submit">{buttonText}</Button>
           </form>
         )}
       </Form>
@@ -69,5 +85,5 @@ const FormView: FC<Props> = ({ onSubmit, fields, className = "" }) => {
   );
 };
 
-const WrapperFormView = memo(FormView);
-export { WrapperFormView as FormView, FormViewField };
+const WrapperFormView = FormView;
+export { WrapperFormView as FormView };

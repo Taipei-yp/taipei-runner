@@ -1,7 +1,9 @@
 import block from "bem-cn";
-import React, { FC, memo } from "react";
-import { Table } from "../../components/table";
-import { useNullableTableSort } from "../../components/table/table-sort";
+import React, { FC, memo, useCallback } from "react";
+import { Button } from "../../components/button";
+import { Pagination, useDefaultPagination } from "../../components/pagination";
+import { Panel } from "../../components/panel";
+import { Table, useNullableTableSort } from "../../components/table";
 import "./forum.css";
 
 const b = block("forum");
@@ -35,21 +37,57 @@ const data = [
   },
 ];
 
+const pagesCount = 8;
+const visiblePagesCount = 5;
+
 const Forum: FC<Props> = ({ className }) => {
-  /* right now it all is just a test of the table component */
   const [sort, handleSortRequest] = useNullableTableSort();
+
+  const handleCreateTopicClick = useCallback(() => {
+    console.warn("need to create a new topic!");
+  }, []);
+
+  const {
+    currentPage,
+    firstVisiblePage,
+    lastVisiblePage,
+    canGoToPrevPage,
+    canGoToNextPage,
+    goToNextPage,
+    goToPrevPage,
+    goToPage,
+  } = useDefaultPagination(pagesCount, visiblePagesCount);
 
   return (
     <div className={b.mix(className)}>
-      <Table
-        headers={headers}
-        data={data}
-        components={{
-          topic: TestComponent,
-        }}
-        sort={sort}
-        onHeaderClick={handleSortRequest}
-      />
+      <Panel className={b("panel")}>
+        <section className={b("table")}>
+          <Table
+            headers={headers}
+            data={data}
+            components={{
+              topic: TestComponent,
+            }}
+            sort={sort}
+            onHeaderClick={handleSortRequest}
+          />
+        </section>
+        <section className={b("pagination")}>
+          <Pagination
+            firstPage={firstVisiblePage}
+            lastPage={lastVisiblePage}
+            currentPage={currentPage}
+            canGoToNextPage={canGoToNextPage}
+            canGoToPrevPage={canGoToPrevPage}
+            onPageClick={goToPage}
+            onGoToPrevPageClick={goToPrevPage}
+            onGoToNextPageClick={goToNextPage}
+          />
+        </section>
+        <section className={b("create-topic")}>
+          <Button onClick={handleCreateTopicClick}>Create Topic</Button>
+        </section>
+      </Panel>
     </div>
   );
 };

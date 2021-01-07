@@ -1,8 +1,8 @@
 .heading {
   font-style: normal;
   font-weight: normal;
-  font-size: 36px;
-  line-height: 40px;
+  font-size: var(--tpr-fontsize-xl);
+  line-height: var(--tpr-fontsize-xl);
   text-shadow: 0 5px 0 var(--tpr-color-dark-shade);
 
   &_color_primary {
@@ -13,12 +13,13 @@
     color: var(--tpr-color-accent);
   }
 
-  &_size_small {
-    font-size: 28px;
-    font-size: 30px;
+  &_size_s {
+    font-size: var(--tpr-fontsize-l);
+    line-height: var(--tpr-fontsize-l);
   }
-  &_size_large {
-    font-size: 96px;
-    line-height: 100px;
+
+  &_size_l {
+    font-size: var(--tpr-fontsize-xxxl);
+    line-height: var(--tpr-fontsize-xxxl);
   }
 }

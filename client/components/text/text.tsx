@@ -7,7 +7,7 @@ const b = block("text");
 
 export type Props = {
   color?: "primary" | "light" | "accent";
-  size?: "small" | "large";
+  size?: "s" | "l" | "xxl";
   text?: string;
   className?: string;
 };

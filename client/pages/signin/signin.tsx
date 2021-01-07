@@ -1,26 +1,27 @@
-import React, { FC, memo } from "react";
+import React, { FC, memo, useCallback, useMemo } from "react";
 import block from "bem-cn";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Panel } from "../../components/panel";
 import { FormViewField, FormView } from "../../components/form-view";
 import { Heading } from "../../components/heading";
+import { LinkView } from "../../components/link-view";
+import { useAuthService } from "../../services/auth";
+import { Text } from "../../components/text";
+import { Button } from "../../components/button";
+import { SignInUser } from "../../models/user";
 
 import "./signin.css";
-
-const OnSubmit = (values: Record<string, unknown>) => {
-  console.log(values);
-};
+import { Page } from "../../components/page";
 
 const b = block("sign-in");
 
 const SignInFields: FormViewField[] = [
   {
-    labelText: "Email",
-    // eslint-disable-next-line no-useless-escape,max-len
-    pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    errorMessage: "Wrong format",
-    type: "email",
-    name: "email",
+    labelText: "Login",
+    pattern: /^.{3,}$/,
+    errorMessage: "The length of this field must be > 3 characters",
+    type: "text",
+    name: "login",
   },
   {
     labelText: "Password",
@@ -33,25 +34,62 @@ const SignInFields: FormViewField[] = [
 
 type Props = {
   className?: string;
+  onAuth: (isAuthorized: boolean) => void;
 };
 
-const SignIn: FC<Props> = ({ className = "" }) => {
+const SignIn: FC<Props> = ({ className = "", onAuth }) => {
+  const { auth, signIn, reset } = useAuthService();
+  const history = useHistory();
+
+  const formSubmit = useCallback(
+    (formValue: SignInUser) => {
+      signIn(formValue, () => {
+        onAuth(true);
+        history.push("/menu");
+      });
+    },
+    [history, signIn, onAuth],
+  );
+
+  const tryAgain = useCallback(() => {
+    reset();
+  }, [reset]);
+
+  const content = useMemo(() => {
+    switch (auth.stage) {
+      case "signing-in":
+        return <p>Loading...</p>;
+      case "error":
+        return (
+          <div>
+            <Heading text="Error" color="primary" />
+            <p>
+              <Text text={auth.error} />
+            </p>
+            <Button onClick={tryAgain} viewType="secondary">
+              Try again
+            </Button>
+          </div>
+        );
+      default:
+        return (
+          <Panel>
+            <Heading color="accent" text="Sign in" className={b("heading")} />
+            <FormView onSubmit={formSubmit} fields={SignInFields} />
+            <LinkView
+              to="/signup"
+              label="No account yet?"
+              className={b("link")}
+            />
+          </Panel>
+        );
+    }
+  }, [auth, formSubmit, tryAgain]);
+
   return (
-    <div className={b.mix(className)}>
-      <Panel>
-        <Heading
-          size="medium"
-          color="accent"
-          text="Sign In"
-          className={b("heading")}
-        />
-        <FormView onSubmit={OnSubmit} fields={SignInFields} />
-        {/* TODO здесь появится LinkView компонент, который сделаем позже */}
-        <Link to="/signup" className={b("link")}>
-          No account yet?
-        </Link>
-      </Panel>
-    </div>
+    <Page fixHeader fullHeight align="center">
+      <div className={b.mix(className)}>{content}</div>
+    </Page>
   );
 };
 

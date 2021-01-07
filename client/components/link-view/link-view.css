@@ -1,16 +1,19 @@
 .link-view {
   color: var(--tpr-color-secondary);
   text-decoration: none;
+  font-size: var(--tpr-fontsize);
 
   &:hover {
     text-decoration: underline;
   }
 
-  &_small {
-    font-size: 18px;
+  &_size_xl {
+    font-size: var(--tpr-fontsize-xl);
+    line-height: var(--tpr-fontsize-xl);
   }
 
-  &_normal {
-    font-size: 36px;
+  &_size_xxl {
+    font-size: var(--tpr-fontsize-xxl);
+    line-height: var(--tpr-fontsize-xxl);
   }
 }

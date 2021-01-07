@@ -1,47 +1,32 @@
 import { useCallback, useState } from "react";
+import { SortDirection, SortRequestHandler, TableSort } from "./types";
 
-export type TableSort = {
-  field: string | null;
-  direction: SortDirection | null;
+const nextSortDirection: Record<
+  SortDirection | "null",
+  SortDirection | null
+> = {
+  null: "asc",
+  asc: "desc",
+  desc: null,
 };
 
-export type SortDirection = "asc" | "desc";
-
-type SortRequestHandler = (field: string) => void;
-
-export function useNullableTableSort(): [TableSort, SortRequestHandler] {
-  const [sort, setSort] = useState({
+export const useNullableTableSort = (): [TableSort, SortRequestHandler] => {
+  const [{ field, direction }, setSort] = useState({
     field: null,
     direction: null,
   } as TableSort);
 
-  const handleSortRequest = useCallback((field: string) => {
-    // updating sort: null -> asc -> desc -> null -> asc -> ...
-    setSort(({ field: prevField, direction: prevDirection }) => {
-      if (prevField) {
-        if (prevField === field && prevDirection === "asc") {
-          return {
-            field,
-            direction: "asc",
-          };
-        }
+  const handleSortRequest = useCallback(
+    (sortBy: string) => {
+      const newSortDirection =
+        nextSortDirection[String(direction) as SortDirection | "null"];
+      const newSortField = newSortDirection ? sortBy : null;
+      setSort({ field: newSortField, direction: newSortDirection });
+    },
+    [direction],
+  );
 
-        if (prevField === field && prevDirection === "desc") {
-          return {
-            field: null,
-            direction: null,
-          };
-        }
-      }
-
-      return {
-        field,
-        direction: "asc",
-      };
-    });
-  }, []);
-
-  return [sort, handleSortRequest];
-}
+  return [{ field, direction }, handleSortRequest];
+};
 
 // we can add other variants here, maybe

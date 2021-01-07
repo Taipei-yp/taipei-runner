@@ -1,0 +1,23 @@
+.pagination {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--tpr-color-secondary);
+  font-size: var(--tpr-fontsize-l);
+  user-select: none;
+
+  &__item {
+    display: inline-block;
+    margin: 0 0.4em;
+    cursor: pointer;
+
+    &_active {
+      color: var(--tpr-color-primary);
+    }
+
+    &_disabled {
+      color: var(--tpr-color-dark-deep);
+      cursor: initial;
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import React, { FC, memo } from "react";
+import React, { FC, memo, ReactNode, MouseEvent } from "react";
 import block from "bem-cn";
 
 import "./button.css";
@@ -6,11 +6,12 @@ import "./button.css";
 const b = block("button");
 
 export type Props = {
-  children: React.ReactNode;
-  onClick?: (e: React.MouseEvent) => void;
+  children: ReactNode;
+  onClick?: (e: MouseEvent) => void;
   viewType?: "primary" | "secondary";
   className?: string;
   type?: "submit" | "button" | "reset";
+  buttonText?: string;
 };
 
 const Button: FC<Props> = ({
