@@ -15,7 +15,8 @@ type Props = {
 
 const Game: FC<Props> = ({ className = "" }) => {
   const [score, setScore] = useState(0);
-  const runnerRef = useRef(new Runner("#runner", setScore));
+  const [running, setRunning] = useState(false);
+  const runnerRef = useRef(new Runner("#runner", setScore, setRunning));
   useEffect(() => {
     runnerRef.current.init();
   }, []);
@@ -26,6 +27,7 @@ const Game: FC<Props> = ({ className = "" }) => {
       fullHeight
       fullWidth
       align="bottom"
+      animateBack={running}
     >
       <div className={b.mix(className)} id="runner">
         <canvas className={b("canvas")} />

@@ -76,10 +76,12 @@ export default class Runner {
 
   printScore!: (distanse: number) => void;
   gameOverFunc!: (score: number) => void;
+  gameRunning!: (started: boolean) => void;
 
   constructor(
     containerId: string,
     printScoreFunc: (distanse: number) => void = () => {},
+    gameRunning: (started: boolean) => void = () => {},
     gameOverFunc: (score: number) => void = () => {},
   ) {
     if (Runner._instance) {
@@ -95,6 +97,7 @@ export default class Runner {
 
     this.printScore = printScoreFunc;
     this.gameOverFunc = gameOverFunc;
+    this.gameRunning = gameRunning;
 
     this.time = 0;
     this.runningTime = 0;
@@ -215,6 +218,7 @@ export default class Runner {
       browserEvents.FOCUS,
       this.onVisibilityChange.bind(this),
     );
+    this.gameRunning(true);
   }
   /**
    * Конец игры
@@ -224,6 +228,7 @@ export default class Runner {
     this.status.crashed = true;
     this.hero.update(100, HeroStatus.CRASHED);
     this.time = getTimeStamp();
+    this.gameRunning(false);
   }
   /**
    * Запуск забега
@@ -235,6 +240,7 @@ export default class Runner {
       this.hero.update(0, HeroStatus.RUNNING);
       this.time = getTimeStamp();
       this.update();
+      this.gameRunning(true);
     }
   }
   /** Остановка забега */
@@ -243,6 +249,7 @@ export default class Runner {
     this.status.paused = true;
     cancelAnimationFrame(this.reqId);
     this.reqId = 0;
+    this.gameRunning(false);
   }
   /**
    * Рестарт игры
@@ -261,6 +268,7 @@ export default class Runner {
       this.horizon.reset();
       this.hero.reset();
       this.update();
+      this.gameRunning(true);
     }
   }
   /**

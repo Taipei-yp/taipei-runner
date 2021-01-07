@@ -19,6 +19,7 @@
     flex: 0 1 50vh;
     display: flex;
     justify-content: center;
+    position: relative;
 
     &_grow {
       flex: 1 1 auto;
