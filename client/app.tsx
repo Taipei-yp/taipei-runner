@@ -4,6 +4,7 @@ import { Forum } from "./pages/forum";
 import { SignUp } from "./pages/signup";
 import { Error } from "./pages/error";
 import { SignIn } from "./pages/signin";
+import { Game } from "./pages/game";
 import { PrivateRoute } from "./components/private-route";
 import { Menu } from "./pages/menu";
 import { Profile } from "./pages/profile";
@@ -46,7 +47,7 @@ export const App: FC = () => {
             path="/forum/topic/:id"
             component={ForumTopic}
           />
-          <PrivateRoute auth={isAuthorized} path="/game" />
+          <PrivateRoute auth={isAuthorized} path="/game" component={Game} />
           <PrivateRoute auth={isAuthorized} path="/game-over" />
           <Route path="*" />
           <Route

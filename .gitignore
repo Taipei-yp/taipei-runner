@@ -13,3 +13,5 @@ logs
 npm-debug.log*
 
 .env
+
+_reference
