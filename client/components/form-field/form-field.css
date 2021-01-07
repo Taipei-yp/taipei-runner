@@ -5,7 +5,7 @@
   width: 280px;
 
   &__label {
-    font-size: 16px;
+    font-size: var(--tpr-fontsize-s);
     color: var(--tpr-color-light);
   }
 

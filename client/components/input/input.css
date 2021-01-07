@@ -3,7 +3,7 @@
   height: 28px;
   border: none;
   border-bottom: 3px solid var(--tpr-color-primary);
-  font-size: 18px;
+  font-size: var(--tpr-fontsize);
   box-sizing: border-box;
   background: inherit;
   color: inherit;
