@@ -74,12 +74,12 @@ export default class Runner {
   /** Число игр */
   playCount!: number;
 
-  distanseChange!: (distanse: number) => void;
+  printScore!: (distanse: number) => void;
   gameOverFunc!: (score: number) => void;
 
   constructor(
     containerId: string,
-    distanseChangeFunc: (distanse: number) => void = () => {},
+    printScoreFunc: (distanse: number) => void = () => {},
     gameOverFunc: (score: number) => void = () => {},
   ) {
     if (Runner._instance) {
@@ -93,7 +93,7 @@ export default class Runner {
 
     this.distanceRan = 0;
 
-    this.distanseChange = distanseChangeFunc;
+    this.printScore = printScoreFunc;
     this.gameOverFunc = gameOverFunc;
 
     this.time = 0;
@@ -190,6 +190,7 @@ export default class Runner {
       } else {
         this.endGame();
       }
+      this.setRunScore(this.distanceRan);
     }
     if (!this.status.crashed) {
       this.hero.update(deltaTime);
@@ -253,6 +254,7 @@ export default class Runner {
       this.status.activated = true;
       this.status.crashed = false;
       this.distanceRan = 0;
+      this.setRunScore(this.distanceRan);
       this.setSpeed(config.global.START_SPEED);
       this.time = getTimeStamp();
       this.clearCanvas();
@@ -384,6 +386,11 @@ export default class Runner {
   }
   /** Y координата земли */
   groundPosY = () => this.sizes.height - config.global.GROUND_POS;
+
+  setRunScore(distanse: number) {
+    const score = Math.round(distanse * config.global.SCORE_COEFFICIENT);
+    this.printScore(score);
+  }
 }
 
 /**

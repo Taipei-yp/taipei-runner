@@ -26,6 +26,11 @@
     line-height: var(--tpr-fontsize-l);
   }
 
+  &_size_xl {
+    font-size: var(--tpr-fontsize-xl);
+    line-height: var(--tpr-fontsize-xl);
+  }
+
   &_size_xxl {
     font-size: var(--tpr-fontsize-xxl);
     line-height: var(--tpr-fontsize-xxl);
