@@ -1,0 +1,7 @@
+.gameover {
+  text-align: center;
+
+  &__title.heading {
+    margin: 40px 0;
+  }
+}
