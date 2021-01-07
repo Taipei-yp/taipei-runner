@@ -1,2 +1,3 @@
 export { Table } from "./table";
-export { SortDirection, TableSort, useNullableTableSort } from "./table-sort";
+export { useNullableTableSort } from "./table-sort";
+export { SortDirection, SortRequestHandler, TableSort } from "./types";
