@@ -29,7 +29,7 @@ body {
 body {
   background-color: var(--tpr-color-dark-deep);
   color: var(--tpr-color-dark-contrast);
-  font-size: 18px;
+  font-size: var(--tpr-fontsize);
   font-family: ArcadeClassic, sans-serif;
 }
 

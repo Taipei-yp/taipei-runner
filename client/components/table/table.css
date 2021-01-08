@@ -4,7 +4,7 @@
 
   thead {
     color: var(--tpr-color-accent);
-    font-size: var(--tpr-fontsize-x);
+    font-size: var(--tpr-fontsize-xl);
 
     td {
       cursor: pointer;
@@ -17,6 +17,6 @@
   }
 
   tr {
-    height: calc(2 * var(--tpr-fontsize-x));
+    height: calc(2 * var(--tpr-fontsize-xl));
   }
 }
