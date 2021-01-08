@@ -21,7 +21,6 @@ export const App: FC = () => {
     <div className="app">
       <Router>
         <Switch>
-          <PrivateRoute auth={isAuthorized} exact path="/" component={Menu} />
           <Route
             path="/signin"
             component={() => <SignIn onAuth={handleAuthorize} />}
@@ -30,6 +29,7 @@ export const App: FC = () => {
             path="/signup"
             component={() => <SignUp onAuth={handleAuthorize} />}
           />
+          <PrivateRoute auth={isAuthorized} exact path="/" component={Menu} />
           <PrivateRoute
             auth={isAuthorized}
             path="/profile"

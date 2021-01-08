@@ -16,7 +16,7 @@ type Props = {
 };
 
 const Error: FC<Props> = ({ className = "", title = "", description = "" }) => (
-  <Page left={<LinkView to="/" label="menu" />}>
+  <Page left={<LinkView to="/" label="Menu" size="xl" />}>
     <div className={b.mix(className)}>
       <Heading text={title} size="l" color="accent" className={b("title")} />
       <Text text={description} size="xxl" className={b("description")} />
