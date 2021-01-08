@@ -47,7 +47,7 @@ export const App: FC = () => {
             path="/forum/topic/:id"
             component={ForumTopic}
           />
-          <Route path="/game" component={Game} />
+          <PrivateRoute auth={isAuthorized} path="/game" component={Game} />
           <PrivateRoute auth={isAuthorized} path="/game-over" />
           <Route path="*" />
           <Route
