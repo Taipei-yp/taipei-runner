@@ -4,6 +4,7 @@
   font-size: var(--tpr-fontsize-xl);
   line-height: var(--tpr-fontsize-xl);
   text-shadow: 0 5px 0 var(--tpr-color-dark-shade);
+  margin: 0;
 
   &_color_primary {
     color: var(--tpr-color-primary);
