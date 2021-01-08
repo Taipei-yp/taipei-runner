@@ -9,6 +9,7 @@ import { PrivateRoute } from "./components/private-route";
 import { Menu } from "./pages/menu";
 import { Profile } from "./pages/profile";
 import { ForumTopic } from "./pages/forum-topic";
+import { GameOver } from "./pages/gameover";
 
 export const App: FC = () => {
   const [isAuthorized, setAuthorize] = useState(false);
@@ -20,7 +21,7 @@ export const App: FC = () => {
     <div className="app">
       <Router>
         <Switch>
-          <Route exact path="/" />
+          <PrivateRoute auth={isAuthorized} exact path="/" component={Menu} />
           <Route
             path="/signin"
             component={() => <SignIn onAuth={handleAuthorize} />}
@@ -29,7 +30,6 @@ export const App: FC = () => {
             path="/signup"
             component={() => <SignUp onAuth={handleAuthorize} />}
           />
-          <PrivateRoute auth={isAuthorized} path="/menu" component={Menu} />
           <PrivateRoute
             auth={isAuthorized}
             path="/profile"
@@ -48,8 +48,11 @@ export const App: FC = () => {
             component={ForumTopic}
           />
           <PrivateRoute auth={isAuthorized} path="/game" component={Game} />
-          <PrivateRoute auth={isAuthorized} path="/game-over" />
-          <Route path="*" />
+          <PrivateRoute
+            auth={isAuthorized}
+            path="/game-over"
+            component={GameOver}
+          />
           <Route
             path="*"
             component={() => <Error title="404" description="Not found" />}
