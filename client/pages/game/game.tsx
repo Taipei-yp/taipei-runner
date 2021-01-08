@@ -1,11 +1,11 @@
 import React, { FC, memo, useEffect, useRef, useState } from "react";
 import block from "bem-cn";
-
-import "./game.css";
 import Runner from "../../game-engine/runner";
 import { Page } from "../../components/page";
 import { LinkView } from "../../components/link-view";
 import { ScoreCounter } from "../../components/score-counter";
+
+import "./game.css";
 
 const b = block("game");
 

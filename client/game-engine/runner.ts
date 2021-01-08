@@ -76,12 +76,12 @@ export default class Runner {
 
   printScore!: (distanse: number) => void;
   gameOverFunc!: (score: number) => void;
-  gameRunning!: (started: boolean) => void;
+  gameRunning!: (running: boolean) => void;
 
   constructor(
     containerId: string,
     printScoreFunc: (distanse: number) => void = () => {},
-    gameRunning: (started: boolean) => void = () => {},
+    gameRunning: (running: boolean) => void = () => {},
     gameOverFunc: (score: number) => void = () => {},
   ) {
     if (Runner._instance) {

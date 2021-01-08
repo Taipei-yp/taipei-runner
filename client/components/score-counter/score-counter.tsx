@@ -7,12 +7,12 @@ const b = block("score-counter");
 
 export type Props = {
   score: number;
-  maxLenght?: number;
+  maxLength?: number;
 };
 
-const ScoreCounter: FC<Props> = ({ score, maxLenght = 6 }) => {
+const ScoreCounter: FC<Props> = ({ score, maxLength = 6 }) => {
   return (
-    <div className={b()}>Score {score.toString().padStart(maxLenght, "0")}</div>
+    <div className={b()}>Score {score.toString().padStart(maxLength, "0")}</div>
   );
 };
 
