@@ -3,6 +3,7 @@ import block from "bem-cn";
 
 import "./page.css";
 import { Header } from "../header";
+import { Background } from "../background";
 
 const b = block("page");
 
@@ -15,6 +16,8 @@ export type Props = {
   fullHeight?: boolean;
   left?: ReactNode;
   right?: ReactNode;
+  animateBack?: boolean;
+  shadeBack?: boolean;
 };
 
 const Page: FC<Props> = ({
@@ -26,9 +29,12 @@ const Page: FC<Props> = ({
   align = "center",
   fullWidth = false,
   fullHeight = false,
+  animateBack = true,
+  shadeBack = false,
 }) => {
   return (
     <div className={b.mix(className)}>
+      <Background animate={animateBack} shade={shadeBack} />
       <div className={b("header", { fix: fixHeader })}>
         <Header left={left} right={right} />
       </div>
