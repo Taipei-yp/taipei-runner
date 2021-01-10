@@ -22,7 +22,7 @@ const Game: FC<Props> = ({ className = "" }) => {
   }, []);
   return (
     <Page
-      left={<LinkView to="/menu" label="Menu" size="xl" />}
+      left={<LinkView to="/" label="Menu" size="xl" />}
       right={<ScoreCounter score={score} />}
       fullHeight
       fullWidth
