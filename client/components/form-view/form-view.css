@@ -1,4 +1,18 @@
 .form-view {
+  &__form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    &_align_center {
+      align-items: center;
+    }
+
+    &_align_right {
+      align-items: flex-end;
+    }
+  }
+
   &__form-field {
     margin-bottom: 20px;
   }

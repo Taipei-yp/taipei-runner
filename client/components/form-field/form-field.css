@@ -12,4 +12,8 @@
   &__error {
     color: var(--tpr-color-primary);
   }
+
+  &_full-width {
+    width: 100%;
+  }
 }
