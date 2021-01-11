@@ -22,7 +22,6 @@
     display: flex;
     justify-content: center;
     position: relative;
-    z-index: 1000;
 
     &_grow {
       flex: 1 1 auto;
