@@ -2,13 +2,14 @@
   width: 100vw;
   height: 100vh;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 
   &__panel {
     display: flex;
     flex-direction: column;
-    width: 75%;
+    min-width: 300px;
+    max-width: 780px;
     height: 75%;
     padding: 2% 5%;
   }

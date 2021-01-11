@@ -1,6 +1,8 @@
 import block from "bem-cn";
 import React, { FC, memo, useCallback } from "react";
 import { Button } from "../../components/button";
+import { LinkView } from "../../components/link-view";
+import { Page } from "../../components/page";
 import { Pagination, useDefaultPagination } from "../../components/pagination";
 import { Panel } from "../../components/panel";
 import { Table, useNullableTableSort } from "../../components/table";
@@ -13,7 +15,7 @@ type Props = {
 };
 
 const TestComponent: FC<{ value: unknown }> = ({ value }) => {
-  return <div>{`${value}--${value}`}</div>;
+  return <LinkView to="/forum/topic/1" label={value as string} size="l" />;
 };
 
 const headers = [
@@ -59,36 +61,43 @@ const Forum: FC<Props> = ({ className }) => {
   } = useDefaultPagination(pagesCount, visiblePagesCount);
 
   return (
-    <div className={b.mix(className)}>
-      <Panel className={b("panel")}>
-        <section className={b("table")}>
-          <Table
-            headers={headers}
-            data={data}
-            components={{
-              topic: TestComponent,
-            }}
-            sort={sort}
-            onHeaderClick={handleSortRequest}
-          />
-        </section>
-        <section className={b("pagination")}>
-          <Pagination
-            firstPage={firstVisiblePage}
-            lastPage={lastVisiblePage}
-            currentPage={currentPage}
-            canGoToNextPage={canGoToNextPage}
-            canGoToPrevPage={canGoToPrevPage}
-            onPageClick={goToPage}
-            onGoToPrevPageClick={goToPrevPage}
-            onGoToNextPageClick={goToNextPage}
-          />
-        </section>
-        <section className={b("create-topic")}>
-          <Button onClick={handleCreateTopicClick}>Create Topic</Button>
-        </section>
-      </Panel>
-    </div>
+    <Page
+      fullHeight
+      fixHeader
+      align="center"
+      left={<LinkView to="/" label="Menu" size="xl" />}
+    >
+      <div className={b.mix(className)}>
+        <Panel className={b("panel")}>
+          <section className={b("table")}>
+            <Table
+              headers={headers}
+              data={data}
+              components={{
+                topic: TestComponent,
+              }}
+              sort={sort}
+              onHeaderClick={handleSortRequest}
+            />
+          </section>
+          <section className={b("pagination")}>
+            <Pagination
+              firstPage={firstVisiblePage}
+              lastPage={lastVisiblePage}
+              currentPage={currentPage}
+              canGoToNextPage={canGoToNextPage}
+              canGoToPrevPage={canGoToPrevPage}
+              onPageClick={goToPage}
+              onGoToPrevPageClick={goToPrevPage}
+              onGoToNextPageClick={goToNextPage}
+            />
+          </section>
+          <section className={b("create-topic")}>
+            <Button onClick={handleCreateTopicClick}>Create Topic</Button>
+          </section>
+        </Panel>
+      </div>
+    </Page>
   );
 };
 

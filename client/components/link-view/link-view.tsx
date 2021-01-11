@@ -10,7 +10,7 @@ type Props = {
   className?: string;
   to: string;
   label: string;
-  size?: "xl" | "xxl";
+  size?: "l" | "xl" | "xxl";
 };
 
 const LinkView: FC<Props> = ({ className, to, label, size }) => {
