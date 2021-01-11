@@ -74,7 +74,7 @@ const SignUp: FC<Props> = ({ className = "", onAuth }) => {
     (formValue: SignUpUser) => {
       signUp(formValue, () => {
         onAuth(true);
-        history.push("/menu");
+        history.push("/");
       });
     },
     [onAuth, history, signUp],

@@ -1,6 +1,7 @@
 import React, { FC, useCallback, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Forum } from "./pages/forum";
+import { Leaderboard } from "./pages/leaderboard";
 import { SignUp } from "./pages/signup";
 import { Error } from "./pages/error";
 import { SignIn } from "./pages/signin";
@@ -35,7 +36,11 @@ export const App: FC = () => {
             path="/profile"
             component={Profile}
           />
-          <PrivateRoute auth={isAuthorized} path="/leaderboard" />
+          <PrivateRoute
+            auth={isAuthorized}
+            path="/leaderboard"
+            component={Leaderboard}
+          />
           <PrivateRoute
             exact
             auth={isAuthorized}
