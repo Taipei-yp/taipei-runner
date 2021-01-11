@@ -1,4 +1,4 @@
-import { ObstacleType, HorizontLineType, CollisionBox } from "./models";
+import { CollisionBox, HorizontLineType, ObstacleType } from "./models";
 /** Настройки игры */
 const gameConfig = {
   /** Режим отладки */
@@ -81,4 +81,4 @@ const horizontLineTypes: HorizontLineType[] = [
   },
 ];
 
-export { gameConfig, obstacleTypes, horizontLineTypes };
+export { gameConfig, horizontLineTypes, obstacleTypes };

@@ -1,6 +1,7 @@
-import React, { ComponentType, memo, useCallback, MouseEvent } from "react";
 import block from "bem-cn";
-import { TableSort } from "./types";
+import React, { ComponentType, memo, MouseEvent, useCallback } from "react";
+import { TableSort } from "../../utils/ui-types";
+
 import "./table.css";
 
 const b = block("table");
@@ -24,7 +25,9 @@ type WithId = {
   [key: string]: unknown;
 };
 
-type InnerComponent = ComponentType<{ value: unknown }>;
+// TODO: research react component generic types
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type InnerComponent = ComponentType<{ value: any }>;
 
 const TextRenderer = (({ value }) => value) as InnerComponent;
 

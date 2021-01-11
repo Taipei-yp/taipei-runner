@@ -1,5 +1,5 @@
-import { Sizes, HorizontLineType } from "./models";
 import { gameConfig as config } from "./config";
+import { HorizontLineType, Sizes } from "./models";
 import { getIncrement } from "./utils";
 
 /**

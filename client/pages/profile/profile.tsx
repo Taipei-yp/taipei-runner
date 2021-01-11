@@ -1,17 +1,16 @@
-import React, { FC, memo, useCallback } from "react";
 import block from "bem-cn";
-import { Panel } from "../../components/panel";
-import { FormViewField, FormView } from "../../components/form-view";
-import { Heading } from "../../components/heading";
-import { SignUpUser } from "../../models/user";
-import { Page } from "../../components/page";
-import { LinkView } from "../../components/link-view";
-import { Button } from "../../components/button";
+import React, { FC, memo, useCallback } from "react";
 import { Avatar } from "../../components/avatar";
+import { Button } from "../../components/button";
+import { FormView, FormViewField } from "../../components/form-view";
+import { Heading } from "../../components/heading";
+import { LinkView } from "../../components/link-view";
+import { Page } from "../../components/page";
+import { Panel } from "../../components/panel";
 import { Text } from "../../components/text";
+import { SignUpUser } from "../../models/user";
 
 import pencil from "../../assets/images/pencil.png";
-
 import "./profile.css";
 
 const b = block("profile");

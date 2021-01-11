@@ -1,5 +1,5 @@
-import React, { FC, memo, useCallback } from "react";
 import block from "bem-cn";
+import React, { FC, memo, useCallback } from "react";
 import { FormView, FormViewField } from "../../components/form-view";
 import { Heading } from "../../components/heading";
 import { LinkView } from "../../components/link-view";

@@ -1,9 +1,9 @@
-import React, { FC, memo } from "react";
 import block from "bem-cn";
-import { Page } from "../../components/page";
-import { Text } from "../../components/text";
+import React, { FC, memo } from "react";
 import { Heading } from "../../components/heading";
 import { LinkView } from "../../components/link-view";
+import { Page } from "../../components/page";
+import { Text } from "../../components/text";
 import { formatScore } from "../../utils/format-score";
 
 import "./gameover.css";

@@ -1,8 +1,7 @@
-import React, { FC, memo } from "react";
 import block from "bem-cn";
+import React, { FC, memo } from "react";
 
 import defaultAvatar from "../../assets/images/default-avatar.png";
-
 import "./avatar.css";
 
 const b = block("avatar");

@@ -1,16 +1,17 @@
 import React, { FC, useCallback, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { PrivateRoute } from "./components/private-route";
+import { Error } from "./pages/error";
 import { Feedback } from "./pages/feedback";
 import { Forum } from "./pages/forum";
-import { SignUp } from "./pages/signup";
-import { Error } from "./pages/error";
-import { SignIn } from "./pages/signin";
+import { ForumTopic } from "./pages/forum-topic";
 import { Game } from "./pages/game";
-import { PrivateRoute } from "./components/private-route";
+import { GameOver } from "./pages/gameover";
+import { Leaderboard } from "./pages/leaderboard";
 import { Menu } from "./pages/menu";
 import { Profile } from "./pages/profile";
-import { ForumTopic } from "./pages/forum-topic";
-import { GameOver } from "./pages/gameover";
+import { SignIn } from "./pages/signin";
+import { SignUp } from "./pages/signup";
 
 export const App: FC = () => {
   const [isAuthorized, setAuthorize] = useState(false);
@@ -36,7 +37,11 @@ export const App: FC = () => {
             path="/profile"
             component={Profile}
           />
-          <PrivateRoute auth={isAuthorized} path="/leaderboard" />
+          <PrivateRoute
+            auth={isAuthorized}
+            path="/leaderboard"
+            component={Leaderboard}
+          />
           <PrivateRoute
             exact
             auth={isAuthorized}

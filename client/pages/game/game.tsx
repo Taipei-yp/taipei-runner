@@ -1,9 +1,9 @@
-import React, { FC, memo, useEffect, useRef, useState } from "react";
 import block from "bem-cn";
-import Runner from "../../game-engine/runner";
-import { Page } from "../../components/page";
+import React, { FC, memo, useEffect, useRef, useState } from "react";
 import { LinkView } from "../../components/link-view";
+import { Page } from "../../components/page";
 import { ScoreCounter } from "../../components/score-counter";
+import Runner from "../../game-engine/runner";
 
 import "./game.css";
 

@@ -1,5 +1,5 @@
-import { CollisionBox, FrameSetType, CoordsAndWidth, Coords } from "./models";
 import { gameConfig as config } from "./config";
+import { CollisionBox, Coords, CoordsAndWidth, FrameSetType } from "./models";
 
 import image from "./assets/hero-sprite.png";
 

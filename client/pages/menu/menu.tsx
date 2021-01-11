@@ -1,8 +1,8 @@
-import React, { FC, memo } from "react";
 import block from "bem-cn";
+import React, { FC, memo } from "react";
 import { Heading } from "../../components/heading";
-import { Page } from "../../components/page";
 import { LinkView } from "../../components/link-view";
+import { Page } from "../../components/page";
 
 import "./menu.css";
 

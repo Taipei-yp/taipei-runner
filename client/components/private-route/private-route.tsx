@@ -1,5 +1,5 @@
 import React, { ComponentType, FC, memo } from "react";
-import { Route, Redirect, RouteComponentProps } from "react-router-dom";
+import { Redirect, Route, RouteComponentProps } from "react-router-dom";
 
 type Props = {
   auth: boolean;

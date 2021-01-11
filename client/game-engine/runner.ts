@@ -1,14 +1,14 @@
-import { Sizes, CollisionBox } from "./models";
-import {
-  getTimeStamp,
-  drawCollisionBoxes,
-  createRelativeCollisionBox,
-  boxCompare,
-} from "./utils";
+import { gameConfig as config } from "./config";
 import Hero, { heroCollisionBoxes, HeroStatus } from "./hero";
 import Horizon from "./horizon";
+import { CollisionBox, Sizes } from "./models";
 import Obstacle from "./obstacle";
-import { gameConfig as config } from "./config";
+import {
+  boxCompare,
+  createRelativeCollisionBox,
+  drawCollisionBoxes,
+  getTimeStamp,
+} from "./utils";
 
 /** Браузерные события */
 const browserEvents = {

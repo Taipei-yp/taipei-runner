@@ -1,6 +1,6 @@
-import { getIncrement, getRandomNum } from "./utils";
-import { Sizes, CollisionBox, ObstacleType } from "./models";
 import { gameConfig as config } from "./config";
+import { CollisionBox, ObstacleType, Sizes } from "./models";
+import { getIncrement, getRandomNum } from "./utils";
 
 import image from "./assets/obstacle-sprite.png";
 

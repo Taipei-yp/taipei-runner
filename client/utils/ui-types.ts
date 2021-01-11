@@ -1,3 +1,8 @@
+export type UserInfo = {
+  avatar: string;
+  name: string;
+};
+
 export type TableSort = {
   field: string | null;
   direction: SortDirection | null;

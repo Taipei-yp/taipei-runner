@@ -1,7 +1,8 @@
-import React, { FC, memo, useCallback, MouseEvent } from "react";
 import block from "bem-cn";
-import "./pagination.css";
+import React, { FC, memo, MouseEvent, useCallback } from "react";
 import { arrayFromTo } from "../../utils/array-utils";
+
+import "./pagination.css";
 
 const b = block("pagination");
 
