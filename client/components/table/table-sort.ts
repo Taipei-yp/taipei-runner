@@ -1,5 +1,9 @@
 import { useCallback, useState } from "react";
-import { SortDirection, SortRequestHandler, TableSort } from "./types";
+import {
+  SortDirection,
+  SortRequestHandler,
+  TableSort,
+} from "../../utils/ui-types";
 
 const nextSortDirection: Record<
   SortDirection | "null",

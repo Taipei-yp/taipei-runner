@@ -1,6 +1,6 @@
 import block from "bem-cn";
 import React, { ComponentType, memo, MouseEvent, useCallback } from "react";
-import { TableSort } from "./types";
+import { TableSort } from "../../utils/ui-types";
 
 import "./table.css";
 
