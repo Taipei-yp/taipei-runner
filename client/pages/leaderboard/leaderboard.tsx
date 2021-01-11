@@ -21,6 +21,7 @@ const headers = [
   { title: "Score", field: "score" },
 ];
 
+// TODO: remove this mock data
 const data = [
   { id: 0, rank: 1, user: { avatar: undefined, name: "user 1" }, score: 99999 },
   { id: 1, rank: 2, user: { avatar: undefined, name: "user 2" }, score: 99992 },

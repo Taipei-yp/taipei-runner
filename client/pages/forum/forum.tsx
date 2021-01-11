@@ -25,6 +25,7 @@ const headers = [
   { title: "Replies", field: "repliesCount" },
 ];
 
+// TODO: remove this mock data
 const data = [
   {
     id: 0,
