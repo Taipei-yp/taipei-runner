@@ -10,6 +10,7 @@ type Props = {
   value: string;
   className?: string;
   name?: string;
+  fullWidth?: boolean;
 };
 
 const Textarea: FC<Props> = ({
@@ -17,10 +18,11 @@ const Textarea: FC<Props> = ({
   value = "",
   className = "",
   name = "",
+  fullWidth,
 }) => {
   return (
     <textarea
-      className={b.mix(className)}
+      className={b({ "full-width": fullWidth }).mix(className)}
       onChange={onChange}
       value={value}
       name={name}

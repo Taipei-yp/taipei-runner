@@ -29,6 +29,10 @@ const MenuItems = [
     to: "/forum",
     label: "Forum",
   },
+  {
+    to: "/feedback",
+    label: "Contact Us",
+  },
 ];
 
 const Menu: FC<Props> = ({ className = "" }) => {

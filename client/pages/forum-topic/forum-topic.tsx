@@ -102,7 +102,11 @@ const ForumTopic: FC<Props> = ({ className }) => {
             {ForumTopicData.replies.map(msg => (
               <ForumMsg className={b("reply")} msg={msg} key={msg.id} />
             ))}
-            <FormView onSubmit={formSubmit} fields={ReplyFormFields} />
+            <FormView
+              onSubmit={formSubmit}
+              fields={ReplyFormFields}
+              fullWidth
+            />
           </div>
         </Panel>
       </div>

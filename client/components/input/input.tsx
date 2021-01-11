@@ -11,6 +11,7 @@ type Props = {
   className?: string;
   name?: string;
   type?: "text" | "password" | "email";
+  fullWidth?: boolean;
 };
 
 const Input: FC<Props> = ({
@@ -19,10 +20,11 @@ const Input: FC<Props> = ({
   className = "",
   name = "",
   type = "text",
+  fullWidth,
 }) => {
   return (
     <input
-      className={b.mix(className)}
+      className={b({ "full-width": fullWidth }).mix(className)}
       onChange={onChange}
       value={value}
       name={name}

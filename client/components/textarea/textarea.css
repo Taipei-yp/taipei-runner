@@ -7,8 +7,13 @@
   background: var(--tpr-color-dark-deep);
   color: var(--tpr-color-dark-contrast);
   font-family: inherit;
+  font-size: var(--tpr-fontsize);
 
   &:focus {
     outline: var(--tpr-color-light) auto 1px;
+  }
+
+  &_full-width {
+    width: 100%;
   }
 }
