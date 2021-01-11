@@ -17,7 +17,14 @@ import { useAuthService } from "../../services/auth";
 import { SignUpUser } from "../../models/user";
 import { Text } from "../../components/text";
 import { Button } from "../../components/button";
+import { FormView, FormViewField } from "../../components/form-view";
+import { Heading } from "../../components/heading";
 import { LinkView } from "../../components/link-view";
+import { Page } from "../../components/page";
+import { Panel } from "../../components/panel";
+import { Text } from "../../components/text";
+import { SignUpUser } from "../../models/user";
+import { useAuthService } from "../../services/auth";
 
 const b = block("sign-up");
 

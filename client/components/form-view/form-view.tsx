@@ -7,7 +7,6 @@ import { Input } from "../input";
 import { Textarea } from "../textarea";
 
 import "./form-view.css";
-import { Textarea } from "../textarea";
 
 type PatternValidation = (
   pattern: RegExp,
