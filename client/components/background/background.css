@@ -13,6 +13,7 @@
   box-sizing: border-box;
   animation: slide 80s linear infinite;
   animation-play-state: paused;
+  z-index: -1000;
 
   &_shade {
     filter: brightness(0.7);

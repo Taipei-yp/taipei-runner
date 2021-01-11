@@ -90,7 +90,7 @@ const Profile: FC<Props> = ({ className = "" }) => {
 
   return (
     <Page
-      left={<LinkView to="/menu" label="Menu" size="xl" />}
+      left={<LinkView to="/" label="Menu" size="xl" />}
       right={
         <Button type="button" viewType="secondary">
           Logout

@@ -88,7 +88,7 @@ const ForumTopic: FC<Props> = ({ className }) => {
   }, []);
 
   return (
-    <Page left={<LinkView to="/menu" label="Menu" size="xl" />}>
+    <Page left={<LinkView to="/" label="Menu" size="xl" />}>
       <div className={b.mix(className)}>
         <Panel>
           <Heading

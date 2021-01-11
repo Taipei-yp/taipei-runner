@@ -6,7 +6,7 @@ import { Heading } from "../../components/heading";
 import { LinkView } from "../../components/link-view";
 import { formatScore } from "../../utils/format-score";
 
-import "./error.css";
+import "./gameover.css";
 
 const b = block("error-page");
 
@@ -18,7 +18,7 @@ type Props = {
 };
 
 const GameOver: FC<Props> = ({ className = "" }) => (
-  <Page left={<LinkView to="/menu" label="menu" />}>
+  <Page left={<LinkView to="/" label="Menu" size="xl" />}>
     <div className={b.mix(className)}>
       <Heading
         text="Game Over"
