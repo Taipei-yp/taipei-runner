@@ -32,6 +32,8 @@ type Props<T> = {
   fields: FormViewField[];
   className?: string;
   buttonText?: string;
+  fullWidth?: boolean;
+  align?: "left" | "center" | "right";
 };
 
 const FormView = <T extends Record<string, unknown>>({
@@ -39,12 +41,14 @@ const FormView = <T extends Record<string, unknown>>({
   fields,
   className = "",
   buttonText = "Submit",
+  fullWidth,
+  align = "left",
 }: Props<T>) => {
   return (
     <div className={b.mix(className)}>
       <Form onSubmit={onSubmit}>
         {({ handleSubmit }) => (
-          <form onSubmit={handleSubmit}>
+          <form className={b("form", { align })} onSubmit={handleSubmit}>
             {fields.map(field => {
               return (
                 <Field
@@ -57,12 +61,14 @@ const FormView = <T extends Record<string, unknown>>({
                       error={meta.error}
                       labelText={field.labelText}
                       className={b("form-field")}
+                      fullWidth={fullWidth}
                     >
                       {field.elementType === "textarea" ? (
                         <Textarea
                           name={input.name}
                           onChange={input.onChange}
                           value={input.value}
+                          fullWidth={fullWidth}
                         />
                       ) : (
                         <Input
@@ -70,6 +76,7 @@ const FormView = <T extends Record<string, unknown>>({
                           onChange={input.onChange}
                           value={input.value}
                           type={field.type}
+                          fullWidth={fullWidth}
                         />
                       )}
                     </FormField>

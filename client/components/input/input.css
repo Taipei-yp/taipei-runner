@@ -12,4 +12,8 @@
   &:focus {
     outline: var(--tpr-color-light) auto 1px;
   }
+
+  &_full-width {
+    width: 100%;
+  }
 }

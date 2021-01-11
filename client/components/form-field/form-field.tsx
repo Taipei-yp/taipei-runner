@@ -10,6 +10,7 @@ type Props = {
   error: undefined | string;
   children: ReactNode;
   className?: string;
+  fullWidth?: boolean;
 };
 
 const FormField: FC<Props> = ({
@@ -17,9 +18,10 @@ const FormField: FC<Props> = ({
   error,
   children,
   className = "",
+  fullWidth,
 }) => {
   return (
-    <div className={b.mix(className)}>
+    <div className={b({ "full-width": fullWidth }).mix(className)}>
       <label className={b("label")}>{labelText}</label>
       <div className={b("control")}>{children}</div>
       {error && <span className={b("error")}>{error}</span>}
