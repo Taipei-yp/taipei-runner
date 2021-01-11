@@ -17,7 +17,8 @@
     "react-hooks",
     "prettier",
     "jest",
-    "import"
+    "import",
+    "simple-import-sort"
   ],
   "extends": [
     "airbnb-typescript",
@@ -71,6 +72,18 @@
     "jest/expect-expect": "off",
     "jest/no-standalone-expect": "off",
     "import/prefer-default-export": "off",
+    "import/order": "off",
+    "sort-imports": "off",
+    "simple-import-sort/imports": ["warn", {
+      "groups": [
+        ["^@?\\w", "^", "^\\."],
+        [
+          "\\.(jpg|jpeg|png|gif)$",
+          "^\\u0000"
+        ]
+      ]
+    }],
+    "simple-import-sort/exports": "warn",
     "jsx-a11y/label-has-associated-control": "off",
     "jsx-a11y/click-events-have-key-events": "off",
     "jsx-a11y/no-noninteractive-element-interactions": "off"
