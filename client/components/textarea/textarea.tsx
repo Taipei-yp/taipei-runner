@@ -1,5 +1,5 @@
-import React, { FC, ChangeEvent, memo } from "react";
 import block from "bem-cn";
+import React, { ChangeEvent, FC, memo } from "react";
 
 import "./textarea.css";
 

@@ -12,4 +12,4 @@ type User = {
 type SignUpUser = Omit<User, "id" | "role" | "avatar">;
 type SignInUser = Pick<User, "login" | "password">;
 
-export { User, SignInUser, SignUpUser };
+export { SignInUser, SignUpUser, User };

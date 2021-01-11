@@ -1,8 +1,9 @@
-import React, { FC, memo } from "react";
 import block from "bem-cn";
+import React, { FC, memo } from "react";
 import { Avatar } from "../avatar";
 import { Text } from "../text";
 import { UserInfo } from "./types";
+
 import "./user.css";
 
 const b = block("user");

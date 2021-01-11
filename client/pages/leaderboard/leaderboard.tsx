@@ -1,11 +1,12 @@
-import React, { FC, memo } from "react";
 import block from "bem-cn";
+import React, { FC, memo } from "react";
 import { LinkView } from "../../components/link-view";
 import { Page } from "../../components/page";
 import { Pagination, useDefaultPagination } from "../../components/pagination";
 import { Panel } from "../../components/panel";
 import { Table, useNullableTableSort } from "../../components/table";
 import { User } from "../../components/user";
+
 import "./leaderboard.css";
 
 const b = block("leaderboard");

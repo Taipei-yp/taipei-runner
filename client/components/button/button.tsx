@@ -1,5 +1,5 @@
-import React, { FC, memo, ReactNode, MouseEvent } from "react";
 import block from "bem-cn";
+import React, { FC, memo, MouseEvent, ReactNode } from "react";
 
 import "./button.css";
 

@@ -1,6 +1,7 @@
-import React, { ComponentType, memo, useCallback, MouseEvent } from "react";
 import block from "bem-cn";
+import React, { ComponentType, memo, MouseEvent, useCallback } from "react";
 import { TableSort } from "./types";
+
 import "./table.css";
 
 const b = block("table");

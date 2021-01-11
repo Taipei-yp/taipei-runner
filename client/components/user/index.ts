@@ -1,2 +1,2 @@
-export { User } from "./user";
 export { UserInfo } from "./types";
+export { User } from "./user";

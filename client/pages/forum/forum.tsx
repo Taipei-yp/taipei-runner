@@ -6,6 +6,7 @@ import { Page } from "../../components/page";
 import { Pagination, useDefaultPagination } from "../../components/pagination";
 import { Panel } from "../../components/panel";
 import { Table, useNullableTableSort } from "../../components/table";
+
 import "./forum.css";
 
 const b = block("forum");

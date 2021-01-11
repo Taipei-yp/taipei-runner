@@ -1,12 +1,12 @@
-import { Sizes } from "./models";
-import { getRandomNum } from "./utils";
-import HorizonLine from "./horizon-line";
-import Obstacle from "./obstacle";
 import {
   gameConfig as config,
-  obstacleTypes,
   horizontLineTypes,
+  obstacleTypes,
 } from "./config";
+import HorizonLine from "./horizon-line";
+import { Sizes } from "./models";
+import Obstacle from "./obstacle";
+import { getRandomNum } from "./utils";
 
 import image from "./assets/horizon-sprite.png";
 

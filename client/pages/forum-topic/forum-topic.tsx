@@ -1,11 +1,11 @@
-import React, { FC, memo, useCallback } from "react";
 import block from "bem-cn";
-import { Page } from "../../components/page";
-import { Heading } from "../../components/heading";
-import { Panel } from "../../components/panel";
-import { ForumMsg } from "../../components/forum-msg";
+import React, { FC, memo, useCallback } from "react";
 import { FormView, FormViewField } from "../../components/form-view";
+import { ForumMsg } from "../../components/forum-msg";
+import { Heading } from "../../components/heading";
 import { LinkView } from "../../components/link-view";
+import { Page } from "../../components/page";
+import { Panel } from "../../components/panel";
 
 import "./forum-topic.css";
 

@@ -1,9 +1,9 @@
-import React, { FC, memo, ReactNode } from "react";
 import block from "bem-cn";
+import React, { FC, memo, ReactNode } from "react";
+import { Background } from "../background";
+import { Header } from "../header";
 
 import "./page.css";
-import { Header } from "../header";
-import { Background } from "../background";
 
 const b = block("page");
 

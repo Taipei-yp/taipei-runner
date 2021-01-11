@@ -1,12 +1,12 @@
+import block from "bem-cn";
 import React from "react";
 import { Field, Form } from "react-final-form";
-import block from "bem-cn";
 import { Button } from "../button";
 import { FormField } from "../form-field";
 import { Input } from "../input";
+import { Textarea } from "../textarea";
 
 import "./form-view.css";
-import { Textarea } from "../textarea";
 
 type PatternValidation = (
   pattern: RegExp,

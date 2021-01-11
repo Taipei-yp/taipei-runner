@@ -1,5 +1,5 @@
-import React, { FC, memo } from "react";
 import block from "bem-cn";
+import React, { FC, memo } from "react";
 import { Link } from "react-router-dom";
 
 import "./link-view.css";
