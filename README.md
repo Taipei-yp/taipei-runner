@@ -1,5 +1,5 @@
 # Taipei Runner
-Taipei Runner - пиксельный 2D раннер с преодолением препятствий. [Играть в игру](https://taipei-runner-yp.herokuapp.com/)
+Taipei Runner - пиксельный 2D раннер с преодолением препятствий. [Играть!](https://taipei-runner-dev.herokuapp.com/)
 
 _Сделано в рамках проектной работы на Яндекс.Практикуме._
 
