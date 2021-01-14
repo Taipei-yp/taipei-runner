@@ -12,6 +12,7 @@
     "sourceMap": true,
     "outDir": "./dist",
     "rootDir": "./client",
+    "baseUrl": "./",
     "strict": true,
     "noImplicitAny": true,
     "noUnusedLocals": true,

@@ -1,8 +1,8 @@
 import block from "bem-cn";
 import React, { FC, memo } from "react";
-import { Msg } from "../../models/msg";
-import { Avatar } from "../avatar";
-import { Text } from "../text";
+import { Avatar } from "client/components/avatar";
+import { Text } from "client/components/text";
+import { Msg } from "client/models/msg";
 
 import "./forum-msg.css";
 

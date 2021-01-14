@@ -1,7 +1,6 @@
+import image from "./assets/hero-sprite.png";
 import { gameConfig as config } from "./config";
 import { CollisionBox, Coords, CoordsAndWidth, FrameSetType } from "./models";
-
-import image from "./assets/hero-sprite.png";
 
 /** Состояние героя */
 export enum HeroStatus {

@@ -1,10 +1,10 @@
 import block from "bem-cn";
 import React from "react";
 import { Field, Form } from "react-final-form";
-import { Button } from "../button";
-import { FormField } from "../form-field";
-import { Input } from "../input";
-import { Textarea } from "../textarea";
+import { Button } from "client/components/button";
+import { FormField } from "client/components/form-field";
+import { Input } from "client/components/input";
+import { Textarea } from "client/components/textarea";
 
 import "./form-view.css";
 

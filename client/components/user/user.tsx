@@ -1,8 +1,8 @@
 import block from "bem-cn";
 import React, { FC, memo } from "react";
-import { UserInfo } from "../../utils/ui-types";
-import { Avatar } from "../avatar";
-import { Text } from "../text";
+import { Avatar } from "client/components/avatar";
+import { Text } from "client/components/text";
+import { UserInfo } from "client/utils/ui-types";
 
 import "./user.css";
 
