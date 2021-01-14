@@ -1,3 +1,5 @@
+// TODO: move it to models
+
 export type UserInfo = {
   avatar: string;
   name: string;

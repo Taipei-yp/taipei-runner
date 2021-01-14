@@ -1,3 +1,4 @@
+import image from "./assets/horizon-sprite.png";
 import {
   gameConfig as config,
   horizontLineTypes,

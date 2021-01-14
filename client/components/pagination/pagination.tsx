@@ -1,6 +1,6 @@
 import block from "bem-cn";
 import React, { FC, memo, MouseEvent, useCallback } from "react";
-import { arrayFromTo } from "../../utils/array-utils";
+import { arrayOfNumbersInRange } from "client/utils/array-utils";
 
 import "./pagination.css";
 
@@ -45,7 +45,7 @@ const Pagination: FC<Props> = ({
       >
         {"<"}
       </li>
-      {arrayFromTo(firstPage, lastPage).map(page => (
+      {arrayOfNumbersInRange(firstPage, lastPage).map(page => (
         <li
           key={page}
           className={b("item", { active: page === currentPage })}

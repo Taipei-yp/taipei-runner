@@ -1,15 +1,15 @@
 import block from "bem-cn";
 import React, { FC, memo, useCallback, useMemo } from "react";
 import { useHistory } from "react-router-dom";
-import { Button } from "../../components/button";
-import { FormView, FormViewField } from "../../components/form-view";
-import { Heading } from "../../components/heading";
-import { LinkView } from "../../components/link-view";
-import { Page } from "../../components/page";
-import { Panel } from "../../components/panel";
-import { Text } from "../../components/text";
-import { SignUpUser } from "../../models/user";
-import { useAuthService } from "../../services/auth";
+import { Button } from "client/components/button";
+import { FormView, FormViewField } from "client/components/form-view";
+import { Heading } from "client/components/heading";
+import { LinkView } from "client/components/link-view";
+import { Page } from "client/components/page";
+import { Panel } from "client/components/panel";
+import { Text } from "client/components/text";
+import { SignUpUser } from "client/models/user";
+import { useAuthService } from "client/services/auth";
 
 import "./signup.css";
 import { Heading } from "../../components/heading";

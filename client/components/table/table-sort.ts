@@ -3,7 +3,7 @@ import {
   SortDirection,
   SortRequestHandler,
   TableSort,
-} from "../../utils/ui-types";
+} from "client/utils/ui-types";
 
 const nextSortDirection: Record<
   SortDirection | "null",
