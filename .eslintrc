@@ -71,16 +71,14 @@
     "react/require-default-props": "off",
     "jest/expect-expect": "off",
     "jest/no-standalone-expect": "off",
+    "import/no-relative-parent-imports": "error",
     "import/prefer-default-export": "off",
     "import/order": "off",
     "sort-imports": "off",
     "simple-import-sort/imports": ["warn", {
       "groups": [
-        ["^@?\\w", "^", "^\\."],
-        [
-          "\\.(jpg|jpeg|png|gif)$",
-          "^\\u0000"
-        ]
+        ["^@?\\w", "^", "^client", "^\\."],
+        ["^\\u0000"]
       ]
     }],
     "simple-import-sort/exports": "warn",

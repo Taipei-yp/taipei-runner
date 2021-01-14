@@ -1,3 +1,4 @@
+import image from "./assets/horizon-sprite.png";
 import {
   gameConfig as config,
   horizontLineTypes,
@@ -7,8 +8,6 @@ import HorizonLine from "./horizon-line";
 import { Sizes } from "./models";
 import Obstacle from "./obstacle";
 import { getRandomNum } from "./utils";
-
-import image from "./assets/horizon-sprite.png";
 
 /**
  * Движущийся фон, пол, препятствия

@@ -1,11 +1,11 @@
 import block from "bem-cn";
 import React, { FC, memo } from "react";
-import { LinkView } from "../../components/link-view";
-import { Page } from "../../components/page";
-import { Pagination, useDefaultPagination } from "../../components/pagination";
-import { Panel } from "../../components/panel";
-import { Table, useNullableTableSort } from "../../components/table";
-import { User } from "../../components/user";
+import { LinkView } from "client/components/link-view";
+import { Page } from "client/components/page";
+import { Pagination, useDefaultPagination } from "client/components/pagination";
+import { Panel } from "client/components/panel";
+import { Table, useNullableTableSort } from "client/components/table";
+import { User } from "client/components/user";
 
 import "./leaderboard.css";
 

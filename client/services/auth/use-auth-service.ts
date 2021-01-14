@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { authApi } from "../../api";
-import { SignInUser, SignUpUser } from "../../models/user";
+import { authApi } from "client/api";
+import { SignInUser, SignUpUser } from "client/models/user";
 
 type SuccessCallback = () => void;
 type FailureCallback = (error: string) => void;

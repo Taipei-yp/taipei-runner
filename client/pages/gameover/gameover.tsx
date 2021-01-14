@@ -1,10 +1,10 @@
 import block from "bem-cn";
 import React, { FC, memo } from "react";
-import { Heading } from "../../components/heading";
-import { LinkView } from "../../components/link-view";
-import { Page } from "../../components/page";
-import { Text } from "../../components/text";
-import { formatScore } from "../../utils/format-score";
+import { Heading } from "client/components/heading";
+import { LinkView } from "client/components/link-view";
+import { Page } from "client/components/page";
+import { Text } from "client/components/text";
+import { formatScore } from "client/utils/format-score";
 
 import "./gameover.css";
 
