@@ -1,0 +1,8 @@
+.user {
+  display: flex;
+  align-items: center;
+
+  &__avatar {
+    margin-right: 18px;
+  }
+}

@@ -1,0 +1,24 @@
+.link-view {
+  color: var(--tpr-color-secondary);
+  text-decoration: none;
+  font-size: var(--tpr-fontsize);
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &_size_l {
+    font-size: var(--tpr-fontsize-l);
+    line-height: var(--tpr-fontsize-l);
+  }
+
+  &_size_xl {
+    font-size: var(--tpr-fontsize-xl);
+    line-height: var(--tpr-fontsize-xl);
+  }
+
+  &_size_xxl {
+    font-size: var(--tpr-fontsize-xxl);
+    line-height: var(--tpr-fontsize-xxl);
+  }
+}

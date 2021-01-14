@@ -1,11 +1,8 @@
-import "./index.css";
-import { hot } from "react-hot-loader/root";
-import * as React from "react";
-import * as ReactDOM from "react-dom";
+import React from "react";
+import ReactDOM from "react-dom";
+import { App } from "./app";
 
-const App: React.FC = () => {
-  return <div>App</div>;
-};
+import "./styles/style.css";
 
 interface IBuildInfo {
   buildDate: number;
@@ -15,7 +12,7 @@ interface IBuildInfo {
   test: string;
 }
 
-function printBuildInfo(buildInfoString: string): void {
+const printBuildInfo = (buildInfoString: string): void => {
   try {
     const buildInfo = JSON.parse(buildInfoString) as IBuildInfo;
     console.info(`version: ${buildInfo.version}`);
@@ -23,7 +20,7 @@ function printBuildInfo(buildInfoString: string): void {
     console.info(`branch: "${buildInfo.branchName}"`);
     console.info(`commit: "${buildInfo.commitId}"`);
   } catch {}
-}
+};
 
 printBuildInfo((process.env.BUILD_INFO as unknown) as string);
-ReactDOM.render(hot(<App />), document.getElementById("app"));
+ReactDOM.render(<App />, document.getElementById("app"));

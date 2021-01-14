@@ -1,0 +1,30 @@
+.forum {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__panel {
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+    max-width: 780px;
+    height: 75%;
+    padding: 2% 5%;
+  }
+
+  &__table {
+    flex-grow: 1;
+  }
+
+  &__pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__create-topic {
+    margin-top: 12px;
+  }
+}

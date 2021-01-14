@@ -1,0 +1,26 @@
+.heading {
+  font-style: normal;
+  font-weight: normal;
+  font-size: var(--tpr-fontsize-xl);
+  line-height: var(--tpr-fontsize-xl);
+  text-shadow: 0 5px 0 var(--tpr-color-dark-shade);
+  margin: 0;
+
+  &_color_primary {
+    color: var(--tpr-color-primary);
+  }
+
+  &_color_accent {
+    color: var(--tpr-color-accent);
+  }
+
+  &_size_s {
+    font-size: var(--tpr-fontsize-l);
+    line-height: var(--tpr-fontsize-l);
+  }
+
+  &_size_l {
+    font-size: var(--tpr-fontsize-xxxl);
+    line-height: var(--tpr-fontsize-xxxl);
+  }
+}

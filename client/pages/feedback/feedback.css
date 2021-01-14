@@ -1,0 +1,13 @@
+.feedback {
+  &__panel {
+    padding-top: 60px;
+  }
+
+  &__header {
+    margin-bottom: 30px;
+  }
+
+  &__feedback-form {
+    width: 450px;
+  }
+}

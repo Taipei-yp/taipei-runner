@@ -1,0 +1,25 @@
+.button {
+  min-width: 280px;
+  padding: 7px 30px;
+  box-sizing: border-box;
+  border: 2px solid var(--tpr-color-dark-shade);
+  border-radius: 1px;
+  font-size: calc(var(--tpr-fontsize) * 1.4);
+  text-align: center;
+  cursor: pointer;
+  font-family: inherit;
+
+  &:focus {
+    outline: var(--tpr-color-light) auto 1px;
+  }
+
+  &_view-type_primary {
+    background-color: var(--tpr-color-primary);
+    color: var(--tpr-color-primary-contrast);
+  }
+
+  &_view-type_secondary {
+    background-color: var(--tpr-color-secondary);
+    color: var(--tpr-color-secondary-contrast);
+  }
+}
