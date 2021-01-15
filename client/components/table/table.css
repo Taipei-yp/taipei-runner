@@ -19,4 +19,8 @@
   tr {
     height: calc(2 * var(--tpr-fontsize-xl));
   }
+
+  &__sort-direction {
+    font-size: 0.83em;
+  }
 }
