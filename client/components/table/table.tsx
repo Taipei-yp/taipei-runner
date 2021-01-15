@@ -62,11 +62,8 @@ const Table = <TData extends WithId>({
             <td key={header.field as string} data-field={header.field}>
               {header.title}
               {/* TODO: change visual effects of sorting */}
-              {sort.field === header.field && sort.direction === "asc" && (
-                <span>+</span>
-              )}
-              {sort.field === header.field && sort.direction === "desc" && (
-                <span>-</span>
+              {sort.field === header.field && (
+                <span>{sort.direction === "asc" ? "+" : "-"}</span>
               )}
             </td>
           ))}
