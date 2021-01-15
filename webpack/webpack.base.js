@@ -5,7 +5,7 @@ const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const WebpackBar = require("webpackbar");
 const { EnvironmentPlugin } = require("webpack");
 const CaseSensitivePathsPlugin = require("case-sensitive-paths-webpack-plugin");
-const { distDir, srcDir, getBuildInfo } = require("./utils");
+const { rootDir, distDir, srcDir, getBuildInfo } = require("./utils");
 
 module.exports = {
   entry: {
@@ -22,7 +22,7 @@ module.exports = {
     }),
     new WebpackBar(),
     new EnvironmentPlugin({
-      BUILD_INFO: "", // JSON.stringify(getBuildInfo()),
+      BUILD_INFO: JSON.stringify(getBuildInfo()),
     }),
     new CaseSensitivePathsPlugin(),
     new ForkTsCheckerWebpackPlugin({
@@ -39,7 +39,7 @@ module.exports = {
   ],
   resolve: {
     extensions: [".ts", ".tsx", ".js"],
-    modules: [srcDir(), "node_modules"],
+    modules: [rootDir(), "node_modules"],
   },
   module: {
     rules: [
