@@ -1,4 +1,8 @@
-const forumReducer = (state: unknown) => {
+const initialState = {
+  forum: {},
+};
+
+const forumReducer = (state: unknown = initialState) => {
   return state;
 };
 

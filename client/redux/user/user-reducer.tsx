@@ -1,4 +1,8 @@
-const userReducer = (state: unknown) => {
+const initialState = {
+  user: {},
+};
+
+const userReducer = (state: unknown = initialState) => {
   return state;
 };
 

@@ -1,4 +1,8 @@
-const leaderboardReducer = (state: unknown) => {
+const initialState = {
+  leaderboard: {},
+};
+
+const leaderboardReducer = (state: unknown = initialState) => {
   return state;
 };
 
