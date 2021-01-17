@@ -1,7 +1,7 @@
 .sign-in {
   &__heading {
     text-align: center;
-    margin: 15px 0 43px 0;
+    margin: 15px 0 43px;
   }
 
   &__link {
