@@ -1,9 +1,7 @@
 const initialState = {
   forum: {},
 };
-
-const forumReducer = (state: unknown = initialState) => {
+// TODO Поменять тип переменной state
+export const forumReducer = (state: unknown = initialState) => {
   return state;
 };
-
-export default forumReducer;

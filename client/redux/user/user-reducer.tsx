@@ -1,9 +1,7 @@
 const initialState = {
   user: {},
 };
-
-const userReducer = (state: unknown = initialState) => {
+// TODO Поменять тип переменной state
+export const userReducer = (state: unknown = initialState) => {
   return state;
 };
-
-export default userReducer;
