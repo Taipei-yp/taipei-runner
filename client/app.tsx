@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useState } from "react";
+import React, { FC, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { PrivateRoute } from "./components/private-route";
 import { Error } from "./pages/error";
@@ -15,9 +15,6 @@ import { SignUp } from "./pages/signup";
 
 export const App: FC = () => {
   const [isAuthorized, setAuthorize] = useState(false);
-  const handleAuthorize = useCallback((authorize: boolean) => {
-    setAuthorize(authorize);
-  }, []);
 
   return (
     <div className="app">
@@ -25,11 +22,11 @@ export const App: FC = () => {
         <Switch>
           <Route
             path="/signin"
-            component={() => <SignIn onAuth={handleAuthorize} />}
+            component={() => <SignIn onAuth={setAuthorize} />}
           />
           <Route
             path="/signup"
-            component={() => <SignUp onAuth={handleAuthorize} />}
+            component={() => <SignUp onAuth={setAuthorize} />}
           />
           <PrivateRoute auth={isAuthorized} exact path="/" component={Menu} />
           <PrivateRoute
