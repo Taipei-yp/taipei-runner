@@ -9,7 +9,7 @@ import { Page } from "client/components/page";
 import { Panel } from "client/components/panel";
 import { Text } from "client/components/text";
 import { SignUpUser } from "client/models/user";
-import { useAuthService } from "client/services/auth";
+import { AuthStages, useAuthService } from "client/services/auth";
 
 import "./signup.css";
 import { Heading } from "../../components/heading";
@@ -93,22 +93,18 @@ const SignUp: FC<Props> = ({ className = "", onAuth }) => {
     [onAuth, history, signUp],
   );
 
-  const tryAgain = useCallback(() => {
-    reset();
-  }, [reset]);
-
   const content = useMemo(() => {
     switch (auth.stage) {
-      case "signing-up":
+      case AuthStages.SIGNING_UP:
         return <p>Loading...</p>;
-      case "error":
+      case AuthStages.ERROR:
         return (
           <div>
             <Heading text="Error" color="primary" />
             <p>
               <Text text={auth.error} />
             </p>
-            <Button onClick={tryAgain} viewType="secondary">
+            <Button onClick={reset} viewType="secondary">
               Try again
             </Button>
           </div>
@@ -126,7 +122,7 @@ const SignUp: FC<Props> = ({ className = "", onAuth }) => {
           </Panel>
         );
     }
-  }, [auth, formSubmit, tryAgain]);
+  }, [auth, formSubmit, reset]);
 
   return (
     <Page fixHeader fullHeight align="center">
