@@ -1,6 +1,7 @@
 import block from "bem-cn";
 import React, { FC, memo, useCallback, useMemo } from "react";
-import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Redirect } from "react-router-dom";
 import { Button } from "client/components/button";
 import { FormView, FormViewField } from "client/components/form-view";
 import { Heading } from "client/components/heading";
@@ -9,7 +10,17 @@ import { Page } from "client/components/page";
 import { Panel } from "client/components/panel";
 import { Text } from "client/components/text";
 import { SignUpUser } from "client/models/user";
-import { AuthStages, useAuthService } from "client/services/auth";
+import { init, signUp } from "client/redux/user/actions";
+import {
+  SIGN_UP_FAILURE,
+  SIGNED_UP,
+  SIGNING_UP,
+} from "client/redux/user/types";
+import {
+  authSelector,
+  errorSelector,
+  stageSelector,
+} from "client/redux/user/user-selectors";
 
 import "./signup.css";
 
@@ -63,34 +74,50 @@ const SignUpFields: FormViewField[] = [
 
 type Props = {
   className?: string;
-  onAuth: (isAuthorized: boolean) => void;
 };
 
-const SignUp: FC<Props> = ({ className = "", onAuth }) => {
-  const { auth, signUp, reset } = useAuthService();
-  const history = useHistory();
+const SignUp: FC<Props> = ({ className = "" }) => {
+  const stage = useSelector(stageSelector);
+  const isAuthorized = useSelector(authSelector);
+  const error = useSelector(errorSelector);
+
+  const dispatch = useDispatch();
+
+  const reset = useCallback(() => {
+    dispatch(init());
+  }, [dispatch]);
 
   const formSubmit = useCallback(
     (formValue: SignUpUser) => {
-      signUp(formValue, () => {
-        onAuth(true);
-        history.push("/");
-      });
+      dispatch(signUp(formValue));
     },
-    [onAuth, history, signUp],
+    [dispatch],
   );
 
   const content = useMemo(() => {
-    switch (auth.stage) {
-      case AuthStages.SIGNING_UP:
+    switch (stage) {
+      case SIGNING_UP:
         return <p>Loading...</p>;
-      case AuthStages.ERROR:
+      case SIGN_UP_FAILURE:
         return (
           <div>
             <Heading text="Error" color="primary" />
             <p>
-              <Text text={auth.error} />
+              <Text text={error} />
             </p>
+            <Button onClick={reset} viewType="secondary">
+              Try again
+            </Button>
+          </div>
+        );
+      case SIGNED_UP:
+        if (isAuthorized) {
+          return <Redirect to="/" />;
+        }
+        return (
+          <div>
+            <Heading text="Error" color="primary" />
+            <p>Something went wrong</p>
             <Button onClick={reset} viewType="secondary">
               Try again
             </Button>
@@ -109,7 +136,7 @@ const SignUp: FC<Props> = ({ className = "", onAuth }) => {
           </Panel>
         );
     }
-  }, [auth, formSubmit, reset]);
+  }, [formSubmit, reset, isAuthorized, error, stage]);
 
   return (
     <Page fixHeader fullHeight align="center">
