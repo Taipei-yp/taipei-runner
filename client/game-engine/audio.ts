@@ -87,10 +87,12 @@ export default class GameAudio {
           const { action, audioBuffer } = result.value;
           this.createSound(action, audioBuffer);
         } else {
-          window.console.error(`load sound error - ${result.reason}`);
+          console.error(`load sound error - ${result.reason}`);
         }
       });
-      this.loaded();
+      if (results.filter(r => r.status === "fulfilled").length > 0) {
+        this.loaded();
+      }
     });
   }
 
@@ -102,10 +104,8 @@ export default class GameAudio {
   }
 
   private createSound(action: SoundAction, buffer: AudioBuffer) {
-    let duration = soundActions[action]?.duration;
-    if (duration === undefined) duration = buffer.duration;
-    let volume = soundActions[action]?.volume;
-    if (volume === undefined) volume = 1;
+    const duration = soundActions[action]?.duration || buffer.duration;
+    const volume = soundActions[action]?.volume || 1;
     const sound: SoundElement = {
       buffer,
       duration,
@@ -153,7 +153,9 @@ export default class GameAudio {
 
   actionSound(action: SoundAction) {
     const sound = this.soundElements[action];
-    if (sound) this.play(sound);
+    if (sound) {
+      this.play(sound);
+    }
   }
 
   playBgSound() {
