@@ -94,6 +94,10 @@ module.exports = {
         test: /\.(woff(2)?|eot|ttf|otf|svg|)$/,
         type: "asset",
       },
+      {
+        test: /\.(?:ogg|wav|aiff)$/i,
+        type: "asset",
+      },
     ],
   },
 };
