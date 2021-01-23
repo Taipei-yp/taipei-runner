@@ -11,7 +11,7 @@ export type Props = {
   children?: ReactNode;
   className?: string;
   fixHeader?: boolean;
-  align?: "center" | "bottom";
+  align?: "center" | "bottom" | "stretch";
   fullWidth?: boolean;
   fullHeight?: boolean;
   left?: ReactNode;

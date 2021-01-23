@@ -70,6 +70,7 @@ export default class HorizonLine {
 
   /** Установка горизонтальных координат в начальное положение  */
   defaultXPos(): void {
+    this.xPos = [];
     const count =
       Math.ceil(this.canvasSizes.width / this.typeConfig.sizes.width) + 1;
     for (let i = 0; i < count; i++) {
