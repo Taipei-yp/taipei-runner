@@ -1,3 +1,4 @@
+import GameAudio, { SoundAction } from "./audio";
 import { gameConfig as config } from "./config";
 import Hero, { heroCollisionBoxes, HeroStatus } from "./hero";
 import Horizon from "./horizon";
@@ -78,6 +79,8 @@ export default class Runner {
   gameOverFunc!: (score: number) => void;
   gameRunning!: (running: boolean) => void;
 
+  gameAudio!: GameAudio;
+
   constructor(
     containerId: string,
     printScoreFunc: (distanse: number) => void = () => {},
@@ -111,6 +114,8 @@ export default class Runner {
       paused: false,
     };
     this.playCount = 0;
+    this.gameAudio = new GameAudio();
+
     Runner._instance = this;
   }
 
@@ -120,10 +125,6 @@ export default class Runner {
     if (!containerEl) throw new Error("no outerContainerEl");
     this.containerEl = containerEl;
 
-    this.setSizes();
-
-    this.currentSpeed = config.global.START_SPEED;
-
     const canvas = this.containerEl.getElementsByTagName("canvas")[0];
     if (!canvas) throw new Error("no canvas element");
     this.canvas = canvas;
@@ -131,6 +132,11 @@ export default class Runner {
     const canvasCtx = this.canvas.getContext("2d");
     if (!canvasCtx) throw new Error("No canvas context");
     this.canvasCtx = canvasCtx;
+
+    // this.canvas.classList.add("hidden");
+    this.setSizes();
+    // this.canvas.classList.remove("hidden");
+    this.currentSpeed = config.global.START_SPEED;
 
     this.canvas.width = this.sizes.width;
     this.canvas.height = this.sizes.height;
@@ -141,6 +147,10 @@ export default class Runner {
 
     this.horizon = new Horizon(this.canvasCtx, this.sizes, this.groundPosY());
     this.hero = new Hero(this.canvasCtx, this.groundPosY());
+
+    this.gameAudio.init();
+    this.gameAudio.playBgSound();
+
     this.startListening();
     this.update();
   }
@@ -167,6 +177,7 @@ export default class Runner {
 
       // Первый прыжок старт игры или рестарт
       if (this.hero.jumpCount === 1) {
+        this.gameAudio.canPlaySound();
         if (!this.status.started && !this.status.crashed) {
           this.startGame();
           this.status.activated = true;
@@ -228,6 +239,8 @@ export default class Runner {
     this.status.crashed = true;
     this.hero.update(100, HeroStatus.CRASHED);
     this.time = getTimeStamp();
+    this.gameAudio.stopBgSound();
+    this.gameAudio.actionSound(SoundAction.GAMEOVER);
     this.gameRunning(false);
   }
   /**
@@ -239,6 +252,7 @@ export default class Runner {
       this.status.paused = false;
       this.hero.update(0, HeroStatus.RUNNING);
       this.time = getTimeStamp();
+      this.gameAudio.playBgSound();
       this.update();
       this.gameRunning(true);
     }
@@ -249,6 +263,7 @@ export default class Runner {
     this.status.paused = true;
     cancelAnimationFrame(this.reqId);
     this.reqId = 0;
+    this.gameAudio.stopBgSound();
     this.gameRunning(false);
   }
   /**
@@ -268,6 +283,7 @@ export default class Runner {
       this.horizon.reset();
       this.hero.reset();
       this.update();
+      this.gameAudio.playBgSound();
       this.gameRunning(true);
     }
   }
@@ -281,6 +297,7 @@ export default class Runner {
       }
       if (!this.hero.jumping) {
         this.hero.startJump(this.currentSpeed);
+        this.gameAudio.actionSound(SoundAction.JUMP);
       }
     }
     if (this.status.crashed && e.currentTarget === this.containerEl) {
@@ -351,7 +368,7 @@ export default class Runner {
   onVisibilityChange(e: Event) {
     if (document.hidden || e.type === "blur") {
       this.stop();
-    } else if (!this.status.crashed) {
+    } else if (!this.status.crashed && this.status.paused) {
       this.play();
       this.hero.reset();
     }

@@ -23,14 +23,14 @@ const heroFrames: Record<HeroStatus, FrameSetType> = {
   },
   [HeroStatus.RUNNING]: {
     frames: [
-      { x: 0, y: 0, width: 63 },
-      { x: 63, y: 0, width: 71 },
-      { x: 134, y: 0, width: 55 },
-      { x: 189, y: 0, width: 40 },
-      { x: 229, y: 0, width: 64 },
-      { x: 293, y: 0, width: 71 },
-      { x: 364, y: 0, width: 54 },
-      { x: 424, y: 0, width: 47 },
+      { x: 0, y: 0, width: 62 },
+      { x: 63, y: 0, width: 70 },
+      { x: 134, y: 0, width: 54 },
+      { x: 189, y: 0, width: 39 },
+      { x: 229, y: 0, width: 63 },
+      { x: 293, y: 0, width: 70 },
+      { x: 364, y: 0, width: 53 },
+      { x: 424, y: 0, width: 46 },
     ],
     msPerFrame: 1000 / 12,
   },
@@ -133,6 +133,10 @@ export default class Hero {
     if (this.status === HeroStatus.WAITING) {
       this.clearCanvas();
     }
+    // Изменяем положение по оси х что бы отрисовка происходила относительно правого края
+    this.pos.x =
+      config.hero.START_POS_X -
+      Hero.drawWidth(this.currentAnimFrames[this.currentFrame].width);
     this.draw(this.currentAnimFrames[this.currentFrame]);
     // Обновление кадра для отрисовки
     if (this.changeFrameTimer >= this.msPerFrame) {

@@ -26,7 +26,7 @@ const Game: FC<Props> = ({ className = "" }) => {
       right={<ScoreCounter score={score} />}
       fullHeight
       fullWidth
-      align="bottom"
+      align="stretch"
       animateBack={running}
     >
       <div className={b.mix(className)} id="runner">

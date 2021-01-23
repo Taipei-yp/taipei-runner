@@ -2,7 +2,7 @@ import { CollisionBox, HorizontLineType, ObstacleType } from "./models";
 /** Настройки игры */
 const gameConfig = {
   /** Режим отладки */
-  IS_DEBUG: true,
+  IS_DEBUG: false,
   global: {
     /** Кадров в секунду */
     FPS: 60,
@@ -23,7 +23,7 @@ const gameConfig = {
     /** Ширина по уполчанию */
     DEFAULT_WIDTH: 600,
     /** Высота по уполчанию */
-    DEFAULT_HEIGHT: 400,
+    DEFAULT_HEIGHT: 200,
     /** Цвет фона */
     FILL_COLOR: "#000239",
   },
@@ -43,7 +43,7 @@ const gameConfig = {
     /** Высота героя в игре */
     HEIGHT: 130,
     /** Начальная позиция героя */
-    START_POS_X: 50,
+    START_POS_X: 200,
     /** Минимальная высота прыжка */
     MIN_JUMP_HEIGHT: 10,
     /** Максимальная высота прыжка */
@@ -54,6 +54,9 @@ const gameConfig = {
     INITIAL_JUMP_VELOCITY: -10,
     DROP_VELOCITY: -5,
     SPEED_DROP_COEFFICIENT: 3,
+  },
+  audio: {
+    bgVolume: 0.1,
   },
 };
 /** Препятствия */
