@@ -104,7 +104,10 @@ export default class GameAudio {
   }
 
   private createSound(action: SoundAction, buffer: AudioBuffer) {
-    const duration = soundActions[action]?.duration || buffer.duration;
+    let duration = soundActions[action]?.duration;
+    if (duration === undefined) {
+      duration = buffer.duration;
+    }
     const volume = soundActions[action]?.volume || 1;
     const sound: SoundElement = {
       buffer,
