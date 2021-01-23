@@ -24,3 +24,17 @@ const printBuildInfo = (buildInfoString: string): void => {
 
 printBuildInfo((process.env.BUILD_INFO as unknown) as string);
 ReactDOM.render(<App />, document.getElementById("app"));
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker
+    .register("./sw.js")
+    .then(registration => {
+      console.log(
+        "ServiceWorker registration successful with scope: ",
+        registration.scope,
+      );
+    })
+    .catch((error: string) => {
+      console.log("ServiceWorker registration failed: ", error);
+    });
+}

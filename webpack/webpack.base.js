@@ -10,6 +10,7 @@ const { rootDir, distDir, srcDir, getBuildInfo } = require("./utils");
 module.exports = {
   entry: {
     main: srcDir("/index.tsx"),
+    sw: srcDir("/sw.ts"),
   },
   output: {
     path: distDir(),
