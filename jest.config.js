@@ -16,4 +16,5 @@ module.exports = {
       isolatedModules: true,
     },
   },
+  snapshotResolver: "<rootDir>/jest.snapshotResolver.config.js"
 };

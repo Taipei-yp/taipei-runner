@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Component Text render 1`] = `
+exports[`Component Text correct render 1`] = `
 <span
   className={
     Object {
