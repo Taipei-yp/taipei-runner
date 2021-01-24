@@ -2,7 +2,7 @@ import React from "react";
 import TestRenderer, { act } from "react-test-renderer";
 import { Textarea } from ".";
 
-describe("Component Text", () => {
+describe("Component Textarea", () => {
   let onChangeCall = false;
   const changeFunc = () => {
     onChangeCall = true;
