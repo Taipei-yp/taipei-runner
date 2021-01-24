@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component Text render 1`] = `
+<span
+  className={
+    Object {
+      "has": [Function],
+      "is": [Function],
+      "mix": [Function],
+      "split": [Function],
+      "state": [Function],
+      "toString": [Function],
+    }
+  }
+>
+  test
+</span>
+`;
