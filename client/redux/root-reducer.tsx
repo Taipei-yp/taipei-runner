@@ -1,14 +1,17 @@
 import { combineReducers } from "redux";
+import { authReducer, AuthState } from "./auth/auth-reducer";
 import { forumReducer } from "./forum/forum-reducer";
 import { leaderboardReducer } from "./leaderboard/leaderboard-reducer";
-import { userReducer, UserState } from "./user/user-reducer";
+import { profileReducer, ProfileState } from "./profile/profile-reducer";
 
 export type RootState = {
-  user: UserState;
+  auth: AuthState;
+  profile: ProfileState;
 };
 
 export const rootReducer = combineReducers({
-  user: userReducer,
+  auth: authReducer,
+  profile: profileReducer,
   forum: forumReducer,
   leaderboard: leaderboardReducer,
 });

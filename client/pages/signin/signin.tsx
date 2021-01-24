@@ -10,17 +10,9 @@ import { Page } from "client/components/page";
 import { Panel } from "client/components/panel";
 import { Text } from "client/components/text";
 import { SignInUser } from "client/models/user";
-import { init, signIn } from "client/redux/user/actions";
-import {
-  SIGN_IN_FAILURE,
-  SIGNED_IN,
-  SIGNING_IN,
-} from "client/redux/user/types";
-import {
-  authSelector,
-  errorSelector,
-  stageSelector,
-} from "client/redux/user/user-selectors";
+import { init, signIn } from "client/redux/auth/auth-actions";
+import { authSelector } from "client/redux/auth/auth-selectors";
+import { AuthStages } from "client/redux/auth/auth-stages";
 
 import "./signin.css";
 
@@ -48,9 +40,7 @@ type Props = {
 };
 
 const SignIn: FC<Props> = ({ className = "" }) => {
-  const stage = useSelector(stageSelector);
-  const isAuthorized = useSelector(authSelector);
-  const error = useSelector(errorSelector);
+  const { stage, isAuthorized, error } = useSelector(authSelector);
 
   const dispatch = useDispatch();
 
@@ -67,9 +57,9 @@ const SignIn: FC<Props> = ({ className = "" }) => {
 
   const content = useMemo(() => {
     switch (stage) {
-      case SIGNING_IN:
+      case AuthStages.SIGNING_IN:
         return <p>Loading...</p>;
-      case SIGN_IN_FAILURE:
+      case AuthStages.SIGN_IN_FAILURE:
         return (
           <div>
             <Heading text="Error" color="primary" />
@@ -81,7 +71,7 @@ const SignIn: FC<Props> = ({ className = "" }) => {
             </Button>
           </div>
         );
-      case SIGNED_IN:
+      case AuthStages.SIGNED_IN:
         if (isAuthorized) {
           return <Redirect to="/" />;
         }

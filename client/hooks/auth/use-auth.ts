@@ -1,8 +1,8 @@
 import { useSelector } from "react-redux";
-import { authSelector } from "client/redux/user/user-selectors";
+import { authStatusSelector } from "client/redux/auth/auth-selectors";
 
 const useAuth = () => {
-  const isAuthorized = useSelector(authSelector);
+  const isAuthorized = useSelector(authStatusSelector);
 
   return {
     isAuthorized,

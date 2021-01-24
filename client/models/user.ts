@@ -7,9 +7,10 @@ type User = {
   password: string;
   phone: string;
   display_name: string;
-  avatar?: string;
+  avatar?: string | null;
 };
-type SignUpUser = Omit<User, "id" | "role" | "avatar">;
+type SignUpUser = Omit<User, "id" | "avatar" | "display_name">;
 type SignInUser = Pick<User, "login" | "password">;
+type UserProfile = Omit<User, "id" | "password" | "avatar">;
 
-export { SignInUser, SignUpUser, User };
+export { SignInUser, SignUpUser, User, UserProfile };
