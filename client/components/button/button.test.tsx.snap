@@ -12,7 +12,7 @@ exports[`Component Button correct render 1`] = `
       "toString": [Function],
     }
   }
-  onClick={[Function]}
+  onClick={[MockFunction]}
   type="submit"
 >
   test button
