@@ -13,14 +13,19 @@ import {
   SIGNING_UP,
 } from "./types";
 
+type AuthStatus = "NO_AUTH" | "AUTH";
+
 export type AuthState = {
-  status: `NO_AUTH` | `AUTH`;
+  status: AuthStatus;
   stage: AuthStages;
   error?: string;
 };
 
+const AUTH_LS_KEY = "taipei-auth";
+const savedAuthStatus = localStorage.getItem(AUTH_LS_KEY) as AuthStatus | null;
+
 const initialState: AuthState = {
-  status: "NO_AUTH",
+  status: savedAuthStatus || "NO_AUTH",
   stage: AuthStages.INIT,
 };
 
@@ -42,6 +47,7 @@ export const authReducer = (
       };
 
     case SIGNED_UP:
+      localStorage.setItem(AUTH_LS_KEY, "AUTH");
       return {
         ...state,
         stage: AuthStages.SIGNED_UP,
@@ -62,6 +68,7 @@ export const authReducer = (
       };
 
     case SIGNED_IN:
+      localStorage.setItem(AUTH_LS_KEY, "AUTH");
       return {
         ...state,
         stage: AuthStages.SIGNED_IN,
@@ -82,6 +89,7 @@ export const authReducer = (
       };
 
     case LOGGED_OUT:
+      localStorage.setItem(AUTH_LS_KEY, "NO_AUTH");
       return {
         ...state,
         stage: AuthStages.LOGGED_OUT,
