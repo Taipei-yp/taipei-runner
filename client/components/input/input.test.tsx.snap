@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component Input correct render 1`] = `
+<input
+  className={
+    Object {
+      "has": [Function],
+      "is": [Function],
+      "mix": [Function],
+      "split": [Function],
+      "state": [Function],
+      "toString": [Function],
+    }
+  }
+  name="testname"
+  onChange={[MockFunction]}
+  type="text"
+  value="testvalue"
+/>
+`;
