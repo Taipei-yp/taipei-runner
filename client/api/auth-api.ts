@@ -13,9 +13,14 @@ const authApi = () => {
     return client.post<User>(`${path}/signIn`, user, { withCredentials: true });
   };
 
+  const logout = () => {
+    return client.post(`${path}/logout`, {}, { withCredentials: true });
+  };
+
   return {
     signUp,
     signIn,
+    logout,
   };
 };
 

@@ -9,7 +9,7 @@ const b = block("avatar");
 export type Props = {
   className?: string;
   size?: "large";
-  src?: string;
+  src?: string | null;
   alt?: string;
 };
 
@@ -21,7 +21,7 @@ const Avatar: FC<Props> = ({
 }) => {
   return (
     <div className={b({ size }).mix(className)}>
-      <img src={src} className={b("image")} alt={alt} />
+      <img src={src || defaultAvatar} className={b("image")} alt={alt} />
     </div>
   );
 };

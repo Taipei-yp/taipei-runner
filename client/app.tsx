@@ -1,6 +1,7 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { PrivateRoute } from "./components/private-route";
+import { useAuth } from "./hooks/auth";
 import { Error } from "./pages/error";
 import { Feedback } from "./pages/feedback";
 import { Forum } from "./pages/forum";
@@ -14,20 +15,14 @@ import { SignIn } from "./pages/signin";
 import { SignUp } from "./pages/signup";
 
 export const App: FC = () => {
-  const [isAuthorized, setAuthorize] = useState(false);
+  const { isAuthorized } = useAuth();
 
   return (
     <div className="app">
       <Router>
         <Switch>
-          <Route
-            path="/signin"
-            component={() => <SignIn onAuth={setAuthorize} />}
-          />
-          <Route
-            path="/signup"
-            component={() => <SignUp onAuth={setAuthorize} />}
-          />
+          <Route path="/signin" component={SignIn} />
+          <Route path="/signup" component={SignUp} />
           <PrivateRoute auth={isAuthorized} exact path="/" component={Menu} />
           <PrivateRoute
             auth={isAuthorized}

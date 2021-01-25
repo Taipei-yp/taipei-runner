@@ -1,10 +1,17 @@
 import { applyMiddleware, compose, createStore } from "redux";
 import thunk from "redux-thunk";
-// import {makeApi} from "../api/api";
+import { authApi, profileApi } from "client/api";
 import { rootReducer } from "./root-reducer";
 
-// TODO заменить нужными данными
-const api = () => {}; // makeApi();
+export type Api = {
+  authApi: typeof authApi;
+  profileApi: typeof profileApi;
+};
+
+const api: Api = {
+  authApi,
+  profileApi,
+};
 
 export const store = createStore(
   rootReducer,
