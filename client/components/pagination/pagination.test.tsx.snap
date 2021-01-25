@@ -1,0 +1,125 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component Pagination renders all elements 1`] = `
+<ul
+  className={
+    Object {
+      "has": [Function],
+      "is": [Function],
+      "mix": [Function],
+      "split": [Function],
+      "state": [Function],
+      "toString": [Function],
+    }
+  }
+>
+  <li
+    className={
+      Object {
+        "has": [Function],
+        "is": [Function],
+        "mix": [Function],
+        "split": [Function],
+        "state": [Function],
+        "toString": [Function],
+      }
+    }
+  >
+    &lt;
+  </li>
+  <li
+    className={
+      Object {
+        "has": [Function],
+        "is": [Function],
+        "mix": [Function],
+        "split": [Function],
+        "state": [Function],
+        "toString": [Function],
+      }
+    }
+    data-page-number={1}
+    onClick={[Function]}
+  >
+    1
+  </li>
+  <li
+    className={
+      Object {
+        "has": [Function],
+        "is": [Function],
+        "mix": [Function],
+        "split": [Function],
+        "state": [Function],
+        "toString": [Function],
+      }
+    }
+    data-page-number={2}
+    onClick={[Function]}
+  >
+    2
+  </li>
+  <li
+    className={
+      Object {
+        "has": [Function],
+        "is": [Function],
+        "mix": [Function],
+        "split": [Function],
+        "state": [Function],
+        "toString": [Function],
+      }
+    }
+    data-page-number={3}
+    onClick={[Function]}
+  >
+    3
+  </li>
+  <li
+    className={
+      Object {
+        "has": [Function],
+        "is": [Function],
+        "mix": [Function],
+        "split": [Function],
+        "state": [Function],
+        "toString": [Function],
+      }
+    }
+    data-page-number={4}
+    onClick={[Function]}
+  >
+    4
+  </li>
+  <li
+    className={
+      Object {
+        "has": [Function],
+        "is": [Function],
+        "mix": [Function],
+        "split": [Function],
+        "state": [Function],
+        "toString": [Function],
+      }
+    }
+    data-page-number={5}
+    onClick={[Function]}
+  >
+    5
+  </li>
+  <li
+    className={
+      Object {
+        "has": [Function],
+        "is": [Function],
+        "mix": [Function],
+        "split": [Function],
+        "state": [Function],
+        "toString": [Function],
+      }
+    }
+  >
+    &gt;
+  </li>
+</ul>
+`;
