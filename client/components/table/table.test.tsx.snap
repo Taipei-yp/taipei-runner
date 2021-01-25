@@ -1,0 +1,81 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component Table renders empty table for empty data 1`] = `
+<table
+  className={
+    Object {
+      "has": [Function],
+      "is": [Function],
+      "mix": [Function],
+      "split": [Function],
+      "state": [Function],
+      "toString": [Function],
+    }
+  }
+>
+  <thead>
+    <tr
+      onClick={[Function]}
+    />
+  </thead>
+  <tbody />
+</table>
+`;
+
+exports[`Component Table renders table by data and headers 1`] = `
+<table
+  className={
+    Object {
+      "has": [Function],
+      "is": [Function],
+      "mix": [Function],
+      "split": [Function],
+      "state": [Function],
+      "toString": [Function],
+    }
+  }
+>
+  <thead>
+    <tr
+      onClick={[Function]}
+    >
+      <td
+        data-field="firstField"
+      >
+        FIRST-FIELD
+      </td>
+      <td
+        data-field="secondField"
+      >
+        SECOND-FIELD
+      </td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        1
+      </td>
+      <td>
+        1
+      </td>
+    </tr>
+    <tr>
+      <td>
+        2
+      </td>
+      <td>
+        2
+      </td>
+    </tr>
+    <tr>
+      <td>
+        3
+      </td>
+      <td>
+        3
+      </td>
+    </tr>
+  </tbody>
+</table>
+`;
