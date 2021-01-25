@@ -24,7 +24,11 @@ exports[`Component Header correct render with childs 1`] = `
         "toString": [Function],
       }
     }
-  />
+  >
+    <div>
+      leftChild
+    </div>
+  </div>
   <div
     className={
       Object {
@@ -36,7 +40,11 @@ exports[`Component Header correct render with childs 1`] = `
         "toString": [Function],
       }
     }
-  />
+  >
+    <div>
+      rightChild
+    </div>
+  </div>
 </div>
 `;
 
