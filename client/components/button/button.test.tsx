@@ -18,9 +18,11 @@ describe("Component Button", () => {
   it("correct render", () => {
     expect(button.toJSON()).toMatchSnapshot();
   });
+
   it("correct props", () => {
     expect(button.root.props.className).toBe("testclass");
   });
+
   it("onclick work", () => {
     act(button.root.props.onClick);
     expect(onClick).toBeCalledTimes(1);
