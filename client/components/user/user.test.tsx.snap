@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component User correct render 1`] = `
+<div
+  className="user"
+>
+  <div
+    className={
+      Object {
+        "has": [Function],
+        "is": [Function],
+        "mix": [Function],
+        "split": [Function],
+        "state": [Function],
+        "toString": [Function],
+      }
+    }
+  >
+    <img
+      alt=""
+      className={
+        Object {
+          "has": [Function],
+          "is": [Function],
+          "mix": [Function],
+          "split": [Function],
+          "state": [Function],
+          "toString": [Function],
+        }
+      }
+      src="/testsrc"
+    />
+  </div>
+  <span
+    className={
+      Object {
+        "has": [Function],
+        "is": [Function],
+        "mix": [Function],
+        "split": [Function],
+        "state": [Function],
+        "toString": [Function],
+      }
+    }
+  >
+    testname
+  </span>
+</div>
+`;

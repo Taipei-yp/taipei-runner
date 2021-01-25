@@ -1,3 +1,4 @@
 *.config.js
 *.css
 _reference.js
+/config
