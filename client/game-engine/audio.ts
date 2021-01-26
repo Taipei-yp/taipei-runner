@@ -167,10 +167,15 @@ export default class GameAudio {
       this.play(this.bgSoundElement, true);
     }
   }
+
   stopBgSound() {
     this.bgSoundPlay = false;
     if (this.bgSoundElement) {
       this.stop(this.bgSoundElement);
     }
+  }
+
+  close() {
+    this.audioContext.close();
   }
 }

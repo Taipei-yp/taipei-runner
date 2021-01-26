@@ -14,7 +14,7 @@ import { getRandomNum } from "./utils";
  */
 export default class Horizon {
   /** Спрайт */
-  static _imageSprite: HTMLImageElement;
+  imageSprite: HTMLImageElement;
   /** Контекст канваса */
   canvasCtx: CanvasRenderingContext2D;
   /** Размеры канваса */
@@ -40,15 +40,13 @@ export default class Horizon {
     this.obstacles = [];
     this.obstacleHistory = [];
 
-    if (!Horizon._imageSprite) {
-      const d = document.createElement("img");
-      d.src = image;
-      d.onload = () => {
-        console.log("load");
-        this.init();
-      };
-      Horizon._imageSprite = d;
-    }
+    const d = document.createElement("img");
+    d.src = image;
+    d.onload = () => {
+      console.log("load");
+      this.init();
+    };
+    this.imageSprite = d;
   }
   /** Инициализация */
   init() {
@@ -56,7 +54,7 @@ export default class Horizon {
       new HorizonLine(
         this.canvasCtx,
         this.canvasSizes,
-        Horizon._imageSprite,
+        this.imageSprite,
         horizontLineTypes[0],
         this.groundPosY,
       ),
