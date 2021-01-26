@@ -75,7 +75,7 @@ export default class Runner {
   /** Число игр */
   playCount!: number;
 
-  printScore!: (distanse: number) => void;
+  printScore!: (distance: number) => void;
   gameOverFunc!: (score: number) => void;
   gameRunning!: (running: boolean) => void;
 
@@ -83,13 +83,10 @@ export default class Runner {
 
   constructor(
     containerId: string,
-    printScoreFunc: (distanse: number) => void = () => {},
+    printScoreFunc: (distance: number) => void = () => {},
     gameRunning: (running: boolean) => void = () => {},
     gameOverFunc: (score: number) => void = () => {},
   ) {
-    if (Runner._instance) {
-      return Runner._instance;
-    }
     this.containerId = containerId;
     this.sizes = {
       width: config.view.DEFAULT_WIDTH,
@@ -115,8 +112,6 @@ export default class Runner {
     };
     this.playCount = 0;
     this.gameAudio = new GameAudio();
-
-    Runner._instance = this;
   }
 
   /** Инициализация */
@@ -211,6 +206,7 @@ export default class Runner {
       this.raq();
     }
   }
+
   /**
    * Начало игры
    */
@@ -231,6 +227,7 @@ export default class Runner {
     );
     this.gameRunning(true);
   }
+
   /**
    * Конец игры
    */
@@ -243,6 +240,7 @@ export default class Runner {
     this.gameAudio.actionSound(SoundAction.GAMEOVER);
     this.gameRunning(false);
   }
+
   /**
    * Запуск забега
    */
@@ -257,6 +255,7 @@ export default class Runner {
       this.gameRunning(true);
     }
   }
+
   /** Остановка забега */
   stop() {
     this.status.activated = false;
@@ -266,6 +265,7 @@ export default class Runner {
     this.gameAudio.stopBgSound();
     this.gameRunning(false);
   }
+
   /**
    * Рестарт игры
    */
@@ -287,6 +287,7 @@ export default class Runner {
       this.gameRunning(true);
     }
   }
+
   /**
    * Событие keydown.
    */
@@ -304,6 +305,7 @@ export default class Runner {
       this.restart();
     }
   }
+
   /**
    * Событие keyup
    */
@@ -322,6 +324,7 @@ export default class Runner {
       this.play();
     }
   }
+
   /**
    * Обработчик событий.
    */
@@ -343,6 +346,7 @@ export default class Runner {
     };
     return f.bind(this)(e.type, browserEvents);
   }
+
   /**
    * Привязка событий
    */
@@ -352,6 +356,7 @@ export default class Runner {
     document.addEventListener(browserEvents.MOUSEDOWN, this);
     document.addEventListener(browserEvents.MOUSEUP, this);
   }
+
   /**
    * Удаление привязки событий
    */
@@ -373,6 +378,7 @@ export default class Runner {
       this.hero.reset();
     }
   }
+
   /**
    * Обертка для RequestAnimationFrame.
    */
@@ -382,12 +388,14 @@ export default class Runner {
       this.reqId = requestAnimationFrame(this.update.bind(this));
     }
   }
+
   /**
    * Игра запущена
    */
   isRunning() {
     return !!this.reqId;
   }
+
   /**
    *  Установка размеров игры по размерам родительского контейнера
    */
@@ -399,22 +407,31 @@ export default class Runner {
     this.sizes.height = this.containerEl.offsetHeight;
     this.sizes.width = this.containerEl.offsetWidth - padding * 2;
   }
+
   /**
    * Установка скорости игры
    */
   setSpeed(opt_speed?: number) {
     this.currentSpeed = opt_speed || this.currentSpeed;
   }
+
   /** Очистка канваса */
   clearCanvas() {
     this.canvasCtx.clearRect(0, 0, this.sizes.width, this.sizes.height);
   }
+
   /** Y координата земли */
   groundPosY = () => this.sizes.height - config.global.GROUND_POS;
 
   setRunScore(distanse: number) {
     const score = Math.round(distanse * config.global.SCORE_COEFFICIENT);
     this.printScore(score);
+  }
+
+  close() {
+    this.endGame();
+    this.stopListening();
+    this.gameAudio.close();
   }
 }
 
