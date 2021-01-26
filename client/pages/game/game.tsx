@@ -18,7 +18,10 @@ const Game: FC<Props> = ({ className = "" }) => {
   const [running, setRunning] = useState(false);
   const runnerRef = useRef(new Runner("#runner", setScore, setRunning));
   useEffect(() => {
-    runnerRef.current.init();
+    const runner = runnerRef.current;
+    runner.init();
+
+    return () => runner.close();
   }, []);
   return (
     <Page
