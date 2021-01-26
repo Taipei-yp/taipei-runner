@@ -43,7 +43,7 @@ const Feedback: FC<Props> = ({ className }) => {
       fullHeight
       fixHeader
       align="center"
-      left={<LinkView to="/menu" label="Menu" size="xl" />}
+      left={<LinkView to="/" label="Menu" size="xl" />}
     >
       <div className={b.mix(className)}>
         <Panel className={b("panel")}>
