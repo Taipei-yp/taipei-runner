@@ -1,5 +1,5 @@
 import React from "react";
-import TestRenderer, { act } from "react-test-renderer";
+import TestRenderer from "react-test-renderer";
 import { FormField } from ".";
 
 describe("Component FormField", () => {
