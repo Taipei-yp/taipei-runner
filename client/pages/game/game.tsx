@@ -1,5 +1,5 @@
 import block from "bem-cn";
-import React, { FC, memo, useEffect, useRef, useState } from "react";
+import React, { FC, memo, useEffect, useState } from "react";
 import { LinkView } from "client/components/link-view";
 import { Page } from "client/components/page";
 import { ScoreCounter } from "client/components/score-counter";
@@ -16,9 +16,9 @@ type Props = {
 const Game: FC<Props> = ({ className = "" }) => {
   const [score, setScore] = useState(0);
   const [running, setRunning] = useState(false);
-  const runnerRef = useRef(new Runner("#runner", setScore, setRunning));
+
   useEffect(() => {
-    const runner = runnerRef.current;
+    const runner = new Runner("#runner", setScore, setRunning);
     runner.init();
 
     return () => runner.close();

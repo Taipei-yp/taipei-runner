@@ -61,10 +61,10 @@ export default class GameAudio {
 
   init() {
     this.loadAllSounds();
-    this.audioContext.addEventListener("statechange", () => {
-      this.canPlay = true;
-      this.playBgSound();
-    });
+    this.audioContext.addEventListener(
+      "statechange",
+      this.onStateChangeAudioContext.bind(this),
+    );
   }
 
   canPlaySound() {
@@ -124,6 +124,7 @@ export default class GameAudio {
 
   loaded() {
     this.soundsLoaded = true;
+    this._playBgSound();
   }
 
   private play(sound: SoundElement, loop = false) {
@@ -163,9 +164,7 @@ export default class GameAudio {
 
   playBgSound() {
     this.bgSoundPlay = true;
-    if (this.bgSoundElement && this.canPlay) {
-      this.play(this.bgSoundElement, true);
-    }
+    this._playBgSound();
   }
 
   stopBgSound() {
@@ -177,5 +176,22 @@ export default class GameAudio {
 
   close() {
     this.audioContext.close();
+    this.audioContext.removeEventListener(
+      "statechange",
+      this.onStateChangeAudioContext,
+    );
+  }
+
+  private onStateChangeAudioContext() {
+    if (this.audioContext.state === "running") {
+      this.canPlay = true;
+      this._playBgSound();
+    }
+  }
+
+  private _playBgSound() {
+    if (this.bgSoundElement && this.canPlay && this.bgSoundPlay) {
+      this.play(this.bgSoundElement, true);
+    }
   }
 }
