@@ -1,0 +1,138 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component ForumMsg correct render 1`] = `
+<div
+  className={
+    Object {
+      "has": [Function],
+      "is": [Function],
+      "mix": [Function],
+      "split": [Function],
+      "state": [Function],
+      "toString": [Function],
+    }
+  }
+>
+  <div
+    className={
+      Object {
+        "has": [Function],
+        "is": [Function],
+        "mix": [Function],
+        "split": [Function],
+        "state": [Function],
+        "toString": [Function],
+      }
+    }
+  >
+    <div
+      className={
+        Object {
+          "has": [Function],
+          "is": [Function],
+          "mix": [Function],
+          "split": [Function],
+          "state": [Function],
+          "toString": [Function],
+        }
+      }
+    >
+      <img
+        alt="test name test name avatar"
+        className={
+          Object {
+            "has": [Function],
+            "is": [Function],
+            "mix": [Function],
+            "split": [Function],
+            "state": [Function],
+            "toString": [Function],
+          }
+        }
+        src="test-file-stub"
+      />
+    </div>
+  </div>
+  <div
+    className={
+      Object {
+        "has": [Function],
+        "is": [Function],
+        "mix": [Function],
+        "split": [Function],
+        "state": [Function],
+        "toString": [Function],
+      }
+    }
+  >
+    <div
+      className={
+        Object {
+          "has": [Function],
+          "is": [Function],
+          "mix": [Function],
+          "split": [Function],
+          "state": [Function],
+          "toString": [Function],
+        }
+      }
+    >
+      <span
+        className={
+          Object {
+            "has": [Function],
+            "is": [Function],
+            "mix": [Function],
+            "split": [Function],
+            "state": [Function],
+            "toString": [Function],
+          }
+        }
+      >
+        test name test name
+      </span>
+      <span
+        className={
+          Object {
+            "has": [Function],
+            "is": [Function],
+            "mix": [Function],
+            "split": [Function],
+            "state": [Function],
+            "toString": [Function],
+          }
+        }
+      >
+        12.12.2020
+      </span>
+    </div>
+    <div
+      className={
+        Object {
+          "has": [Function],
+          "is": [Function],
+          "mix": [Function],
+          "split": [Function],
+          "state": [Function],
+          "toString": [Function],
+        }
+      }
+    >
+      <span
+        className={
+          Object {
+            "has": [Function],
+            "is": [Function],
+            "mix": [Function],
+            "split": [Function],
+            "state": [Function],
+            "toString": [Function],
+          }
+        }
+      >
+        test text
+      </span>
+    </div>
+  </div>
+</div>
+`;

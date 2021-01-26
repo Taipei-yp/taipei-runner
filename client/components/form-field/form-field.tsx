@@ -7,7 +7,7 @@ const b = block("form-field");
 
 type Props = {
   labelText: string;
-  error: undefined | string;
+  error?: undefined | string;
   children: ReactNode;
   className?: string;
   fullWidth?: boolean;
