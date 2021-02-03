@@ -1,7 +1,7 @@
 import block from "bem-cn";
 import React, { FC, memo } from "react";
+import defaultAvatar from "client/assets/images/default-avatar.png";
 
-import defaultAvatar from "../../assets/images/default-avatar.png";
 import "./avatar.css";
 
 const b = block("avatar");
@@ -9,7 +9,7 @@ const b = block("avatar");
 export type Props = {
   className?: string;
   size?: "large";
-  src?: string;
+  src?: string | null;
   alt?: string;
 };
 
@@ -21,7 +21,7 @@ const Avatar: FC<Props> = ({
 }) => {
   return (
     <div className={b({ size }).mix(className)}>
-      <img src={src} className={b("image")} alt={alt} />
+      <img src={src || defaultAvatar} className={b("image")} alt={alt} />
     </div>
   );
 };

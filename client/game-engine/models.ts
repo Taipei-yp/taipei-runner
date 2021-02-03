@@ -43,7 +43,6 @@ export type ObstacleType = {
   /** Области пересечений для проверки столкновений */
   collisionBoxes: CollisionBox[];
 };
-
 /** Тип горизонтальной линии */
 export type HorizontLineType = {
   /** Название */

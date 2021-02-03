@@ -11,7 +11,6 @@ export type Props = {
   viewType?: "primary" | "secondary";
   className?: string;
   type?: "submit" | "button" | "reset";
-  buttonText?: string;
 };
 
 const Button: FC<Props> = ({

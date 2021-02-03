@@ -1,9 +1,9 @@
 import block from "bem-cn";
-import React, { FC, memo, useEffect, useRef, useState } from "react";
-import { LinkView } from "../../components/link-view";
-import { Page } from "../../components/page";
-import { ScoreCounter } from "../../components/score-counter";
-import Runner from "../../game-engine/runner";
+import React, { FC, memo, useEffect, useState } from "react";
+import { LinkView } from "client/components/link-view";
+import { Page } from "client/components/page";
+import { ScoreCounter } from "client/components/score-counter";
+import Runner from "client/game-engine/runner";
 
 import "./game.css";
 
@@ -16,9 +16,12 @@ type Props = {
 const Game: FC<Props> = ({ className = "" }) => {
   const [score, setScore] = useState(0);
   const [running, setRunning] = useState(false);
-  const runnerRef = useRef(new Runner("#runner", setScore, setRunning));
+
   useEffect(() => {
-    runnerRef.current.init();
+    const runner = new Runner("#runner", setScore, setRunning);
+    runner.init();
+
+    return () => runner.close();
   }, []);
   return (
     <Page
@@ -26,7 +29,7 @@ const Game: FC<Props> = ({ className = "" }) => {
       right={<ScoreCounter score={score} />}
       fullHeight
       fullWidth
-      align="bottom"
+      align="stretch"
       animateBack={running}
     >
       <div className={b.mix(className)} id="runner">

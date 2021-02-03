@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component ScoreCounter correct render 1`] = `
+<span
+  className="score-counter"
+>
+  Score 
+  001000
+</span>
+`;

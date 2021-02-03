@@ -1,6 +1,6 @@
 import block from "bem-cn";
 import React, { ComponentType, memo, MouseEvent, useCallback } from "react";
-import { TableSort } from "../../utils/ui-types";
+import { TableSort } from "client/utils/ui-types";
 
 import "./table.css";
 
@@ -61,12 +61,10 @@ const Table = <TData extends WithId>({
           {headers.map(header => (
             <td key={header.field as string} data-field={header.field}>
               {header.title}
-              {/* TODO: change visual effects of sorting */}
-              {sort.field === header.field && sort.direction === "asc" && (
-                <span>+</span>
-              )}
-              {sort.field === header.field && sort.direction === "desc" && (
-                <span>-</span>
+              {sort.field === header.field && (
+                <span className={b("sort-direction")}>
+                  {sort.direction === "asc" ? "▼" : "▲"}
+                </span>
               )}
             </td>
           ))}

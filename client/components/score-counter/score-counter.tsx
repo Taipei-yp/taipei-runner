@@ -1,6 +1,6 @@
 import block from "bem-cn";
 import React, { FC, memo } from "react";
-import { formatScore } from "../../utils/format-score";
+import { formatScore } from "client/utils/format-score";
 
 import "./score-counter.css";
 

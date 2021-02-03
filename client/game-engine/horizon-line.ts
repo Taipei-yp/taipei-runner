@@ -8,6 +8,7 @@ import { getIncrement } from "./utils";
 export default class HorizonLine {
   /** Контекст канваса */
   canvasCtx: CanvasRenderingContext2D;
+
   /** Размеры канваса */
   canvasSizes: Sizes;
   /** Тип линии */
@@ -39,6 +40,7 @@ export default class HorizonLine {
     this.defaultXPos();
     this.draw();
   }
+
   /** Обновление позиции */
   update(deltaTime: number, speed: number): void {
     this.updateXPos(getIncrement(deltaTime, speed, config.global.FPS));
@@ -47,7 +49,9 @@ export default class HorizonLine {
   /** Сброс в начальное положение */
   reset(): void {
     this.defaultXPos();
+    this.draw();
   }
+
   /**
    * Обновление горизонтальных координат на заданную величину
    */
@@ -63,14 +67,17 @@ export default class HorizonLine {
       }
     }
   }
+
   /** Установка горизонтальных координат в начальное положение  */
   defaultXPos(): void {
+    this.xPos = [];
     const count =
       Math.ceil(this.canvasSizes.width / this.typeConfig.sizes.width) + 1;
     for (let i = 0; i < count; i++) {
       this.xPos.push(i * this.typeConfig.sizes.width);
     }
   }
+
   /** Отрисовка */
   draw(): void {
     this.xPos.forEach(el => {

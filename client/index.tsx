@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
 import { App } from "./app";
+import { store } from "./redux/store";
 
 import "./styles/style.css";
 
@@ -23,4 +25,23 @@ const printBuildInfo = (buildInfoString: string): void => {
 };
 
 printBuildInfo((process.env.BUILD_INFO as unknown) as string);
-ReactDOM.render(<App />, document.getElementById("app"));
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById("app"),
+);
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker
+    .register("./sw.js")
+    .then(registration => {
+      console.log(
+        "ServiceWorker registration successful with scope: ",
+        registration.scope,
+      );
+    })
+    .catch((error: string) => {
+      console.log("ServiceWorker registration failed: ", error);
+    });
+}

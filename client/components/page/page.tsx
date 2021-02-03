@@ -1,7 +1,7 @@
 import block from "bem-cn";
 import React, { FC, memo, ReactNode } from "react";
-import { Background } from "../background";
-import { Header } from "../header";
+import { Background } from "client/components/background";
+import { Header } from "client/components/header";
 
 import "./page.css";
 
@@ -11,7 +11,7 @@ export type Props = {
   children?: ReactNode;
   className?: string;
   fixHeader?: boolean;
-  align?: "center" | "bottom";
+  align?: "center" | "bottom" | "stretch";
   fullWidth?: boolean;
   fullHeight?: boolean;
   left?: ReactNode;

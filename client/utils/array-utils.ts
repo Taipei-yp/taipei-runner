@@ -1,6 +1,6 @@
-export const arrayFromTo = (min: number, max: number): number[] => {
+export const arrayOfNumbersInRange = (from: number, to: number): number[] => {
   const result = [];
-  for (let i = min; i <= max; ++i) {
+  for (let i = from; i <= to; ++i) {
     result.push(i);
   }
   return result;
