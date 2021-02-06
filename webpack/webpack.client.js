@@ -1,4 +1,3 @@
-const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const ForkTsCheckerNotifierWebpackPlugin = require("fork-ts-checker-notifier-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
@@ -20,6 +19,7 @@ const config = {
   },
   output: {
     path: distDir(),
+    publicPath: "/",
     filename: pathData =>
       IS_DEV
         ? "[name].js"
@@ -36,10 +36,10 @@ const config = {
     new CaseSensitivePathsPlugin(),
     new ForkTsCheckerWebpackPlugin({
       typescript: {
-        // syntactic: true,
-        // semantic: true,
-        // declaration: true,
-        // global: true,
+        syntactic: true,
+        semantic: true,
+        declaration: true,
+        global: true,
       },
     }),
     new ForkTsCheckerNotifierWebpackPlugin({

@@ -9,14 +9,14 @@ const config = {
   name: "server",
   target: "node",
   node: { __dirname: false },
-  entry: rootDir("./server"),
+  entry: rootDir("./server/server.tsx"),
   module: {
     rules: [fileLoader.server, cssLoader.server, tjsLoader.server],
   },
   output: {
-    filename: "[name].js",
-    libraryTarget: "commonjs2",
+    filename: "server.js",
     path: distDir(),
+    libraryTarget: "commonjs2",
     publicPath: "/",
   },
   resolve: {

@@ -5,12 +5,10 @@ import webpackHotMiddleware from "webpack-hot-middleware";
 import configs from "../webpack/webpack.config";
 import serverRenderMiddleware from "./server-render-middleware";
 
-import "babel-polyfill";
-
 const app = express();
 
 if (process.env.NODE_ENV === "development") {
-  const compiler = webpack(configs[0]);
+  const compiler = webpack({});
   app.use(webpackHotMiddleware(compiler));
   app.use(
     webpackDevMiddleware(compiler, {

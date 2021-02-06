@@ -19,9 +19,9 @@
   "homepage": "https://github.com/Taipei-yp/taipei-runner#readme",
   "main": "client/index.tsx",
   "scripts": {
-    "start": "cross-env NODE_ENV=development npm-run-all --print-label --parallel start:*",
-    "start:webpack": "webpack --mode=development --config webpack/webpack.config.js",
+    "start": "cross-env NODE_ENV=production npm-run-all --print-label --parallel start:*",
     "start:server": "nodemon index.js --watch dist/server.js",
+    "start:webpack": "webpack --mode=development --config webpack/webpack.config.js",
     "build": "run-s build-prod",
     "build-dev": "cross-env NODE_ENV=development webpack --config webpack/webpack.dev.js",
     "build-prod": "cross-env NODE_ENV=production webpack --config webpack/webpack.prod.js",
