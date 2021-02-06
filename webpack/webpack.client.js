@@ -26,6 +26,7 @@ const config = {
         : pathData.chunk.name === "sw"
         ? "sw.js"
         : "js/[name].[contenthash].js",
+    assetModuleFilename: "assets/[contenthash][ext][query]",
   },
   plugins: [
     new CleanWebpackPlugin(),
