@@ -1,19 +1,19 @@
-import { CleanWebpackPlugin } from "clean-webpack-plugin";
-import ForkTsCheckerNotifierWebpackPlugin from "fork-ts-checker-notifier-webpack-plugin";
-import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
-import WebpackBar from "webpackbar";
-import { EnvironmentPlugin, Configuration } from "webpack";
-import CaseSensitivePathsPlugin from "case-sensitive-paths-webpack-plugin";
-import MiniCssExtractPlugin from "mini-css-extract-plugin";
-import CssMinimizerPlugin from "css-minimizer-webpack-plugin";
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const ForkTsCheckerNotifierWebpackPlugin = require("fork-ts-checker-notifier-webpack-plugin");
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+const WebpackBar = require("webpackbar");
+const { EnvironmentPlugin } = require("webpack");
+const CaseSensitivePathsPlugin = require("case-sensitive-paths-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const { rootDir, distDir, srcDir, getBuildInfo, IS_DEV } = require("./utils");
 
-import { rootDir, distDir, srcDir, getBuildInfo, IS_DEV } from "./utils";
+const fileLoader = require("./loaders/file");
+const cssLoader = require("./loaders/css");
+const tjsLoader = require("./loaders/tjs");
 
-import fileLoader from "./loaders/file";
-import cssLoader from "./loaders/css";
-import tjsLoader from "./loaders/tjs";
-
-const config: Configuration = {
+const config = {
   entry: {
     main: srcDir("/index.tsx"),
     sw: srcDir("/sw.ts"),
@@ -68,4 +68,4 @@ const config: Configuration = {
   },
 };
 
-export default config;
+module.exports = config;

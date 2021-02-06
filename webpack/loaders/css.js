@@ -1,7 +1,7 @@
-import MiniCssExtractPlugin from "mini-css-extract-plugin";
-import { IS_DEV } from "../utils";
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const { IS_DEV } = require("../utils");
 
-export default {
+module.exports = {
   client: {
     test: /\.css$/,
     use: [

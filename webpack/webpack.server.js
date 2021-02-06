@@ -1,12 +1,11 @@
-import { Configuration } from "webpack";
-import nodeExternals from "webpack-node-externals";
-import { rootDir, distDir, IS_DEV } from "./utils";
+const nodeExternals = require("webpack-node-externals");
+const { rootDir, distDir, IS_DEV } = require("./utils");
 
-import fileLoader from "./loaders/file";
-import cssLoader from "./loaders/css";
-import tjsLoader from "./loaders/tjs";
+const fileLoader = require("./loaders/file");
+const cssLoader = require("./loaders/css");
+const tjsLoader = require("./loaders/tjs");
 
-const config: Configuration = {
+const config = {
   name: "server",
   target: "node",
   node: { __dirname: false },
@@ -35,5 +34,4 @@ const config: Configuration = {
 
   optimization: { nodeEnv: false },
 };
-
-export default config;
+module.exports = config;

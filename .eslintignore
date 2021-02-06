@@ -1,4 +1,5 @@
 *.config.js
+*.config.ts
 *.css
 _reference.js
 /index.js

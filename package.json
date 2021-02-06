@@ -20,9 +20,8 @@
   "main": "client/index.tsx",
   "scripts": {
     "start": "cross-env NODE_ENV=development npm-run-all --print-label --parallel start:*",
-    "start1": "cross-env NODE_ENV=development webpack serve --config webpack/webpack.dev.js",
-    "start:webpack": "webpack --mode=development --watch",
-    "start:server": "nodemon server/server.js --watch dist/server.js",
+    "start:webpack": "webpack --mode=development --config webpack/webpack.config.js",
+    "start:server": "nodemon index.js --watch dist/server.js",
     "build": "run-s build-prod",
     "build-dev": "cross-env NODE_ENV=development webpack --config webpack/webpack.dev.js",
     "build-prod": "cross-env NODE_ENV=production webpack --config webpack/webpack.prod.js",
