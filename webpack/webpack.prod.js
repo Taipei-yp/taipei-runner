@@ -10,8 +10,7 @@ module.exports = merge(baseConfig, {
   output: {
     path: distDir(),
     publicPath: "/",
-    filename: pathData =>
-      pathData.chunk.name === "sw" ? "sw.js" : "js/[name].[contenthash].js",
+    filename: pathData => pathData.chunk.name === "sw" ? "sw.js" : "js/[name].[contenthash].js",
     assetModuleFilename: "assets/[contenthash][ext][query]",
   },
   plugins: [

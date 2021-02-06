@@ -19,6 +19,8 @@
   ],
   "rules": {
     "import/no-extraneous-dependencies": "off",
-    "@typescript-eslint/no-use-before-define": ["error", { "functions": false }]
+    "import/no-unresolved":"off",
+    "prettier/prettier": ["error",{"endOfLine":"auto"}]
+    
   }
 }

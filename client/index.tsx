@@ -25,7 +25,7 @@ const printBuildInfo = (buildInfoString: string): void => {
 };
 
 printBuildInfo((process.env.BUILD_INFO as unknown) as string);
-ReactDOM.render(
+ReactDOM.hydrate(
   <Provider store={store}>
     <App />
   </Provider>,
