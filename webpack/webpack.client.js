@@ -29,7 +29,9 @@ const config = {
     assetModuleFilename: "assets/[contenthash][ext][query]",
   },
   plugins: [
-    new CleanWebpackPlugin(),
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: ["**/*", "!server*"],
+    }),
     new WebpackBar({}),
     new EnvironmentPlugin({
       BUILD_INFO: JSON.stringify(getBuildInfo()),
@@ -68,5 +70,4 @@ const config = {
     maxAssetSize: 512000,
   },
 };
-
 module.exports = config;

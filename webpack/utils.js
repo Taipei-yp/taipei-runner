@@ -50,9 +50,9 @@ function getBuildInfo() {
 }
 
 module.exports = {
+  IS_DEV,
   rootDir,
   srcDir,
   distDir,
   getBuildInfo,
-  IS_DEV,
 };

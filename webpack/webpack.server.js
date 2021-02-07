@@ -1,3 +1,4 @@
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const nodeExternals = require("webpack-node-externals");
 const { rootDir, distDir, IS_DEV } = require("./utils");
 
@@ -9,16 +10,22 @@ const config = {
   name: "server",
   target: "node",
   node: { __dirname: false },
-  entry: rootDir("./server/server.tsx"),
+  entry: {
+    server: rootDir("./server/server.tsx"),
+  },
   module: {
     rules: [fileLoader.server, cssLoader.server, tjsLoader.server],
   },
   output: {
     filename: "server.js",
     path: distDir(),
-    libraryTarget: "commonjs2",
     publicPath: "/",
   },
+  plugins: [
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: ["server*"],
+    }),
+  ],
   resolve: {
     extensions: [".ts", ".tsx", ".js"],
     modules: [rootDir(), "node_modules"],
