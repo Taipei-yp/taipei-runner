@@ -1,6 +1,6 @@
+import { Request, Response } from "express";
 import React from "react";
 import { renderToString } from "react-dom/server";
-import { Request, Response } from "express";
 import { App } from "../client/app";
 
 export default (req: Request, res: Response) => {

@@ -1,23 +1,22 @@
-const path = require("path");
-const childProcess = require("child_process");
+import childProcess from "child_process";
+import path from "path";
+import pkg from "../package.json";
 
-const IS_DEV = process.env.NODE_ENV !== "production";
+export const IS_DEV = process.env.NODE_ENV !== "production";
 
-function rootDir(extraPath = "") {
+export function rootDir(extraPath = "") {
   return path.resolve(__dirname, "../", extraPath);
 }
 
-function srcDir(extraPath = "") {
+export function srcDir(extraPath = "") {
   return rootDir(`./client${extraPath}`);
 }
 
-function distDir(extraPath = "") {
+export function distDir(extraPath = "") {
   return rootDir(`./dist${extraPath}`);
 }
 
 function getAppVersion() {
-  // eslint-disable-next-line global-require
-  const pkg = require("../package.json");
   return pkg.version;
 }
 
@@ -36,7 +35,7 @@ function getBuildDate() {
   return Date.now();
 }
 
-function getBuildInfo() {
+export function getBuildInfo() {
   const appVersion = getAppVersion();
   const branchName = getBranchName();
   const commitId = getCommitId();
@@ -49,10 +48,13 @@ function getBuildInfo() {
   };
 }
 
-module.exports = {
-  IS_DEV,
-  rootDir,
-  srcDir,
-  distDir,
-  getBuildInfo,
-};
+export function clientJsFileName(isDev: boolean, pathDataChunkName?: string) {
+  let name = "[name].js";
+  if (!isDev && pathDataChunkName !== undefined) {
+    if (pathDataChunkName === "sw") {
+      name =
+        pathDataChunkName === "sw" ? "sw.js" : "js/[name].[contenthash].js";
+    }
+  }
+  return name;
+}

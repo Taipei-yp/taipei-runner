@@ -1,12 +1,12 @@
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const nodeExternals = require("webpack-node-externals");
-const { rootDir, distDir, IS_DEV } = require("./utils");
+import { CleanWebpackPlugin } from "clean-webpack-plugin";
+import { Configuration } from "webpack";
+import nodeExternals from "webpack-node-externals";
+import cssLoader from "./loaders/css";
+import fileLoader from "./loaders/file";
+import tjsLoader from "./loaders/tjs";
+import { distDir, IS_DEV, rootDir } from "./utils";
 
-const fileLoader = require("./loaders/file");
-const cssLoader = require("./loaders/css");
-const tjsLoader = require("./loaders/tjs");
-
-const config = {
+const config: Configuration = {
   name: "server",
   target: "node",
   node: { __dirname: false },
@@ -41,4 +41,4 @@ const config = {
 
   optimization: { nodeEnv: false },
 };
-module.exports = config;
+export default config;

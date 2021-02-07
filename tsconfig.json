@@ -1,7 +1,7 @@
 {
   "include": [
     "./client",
-    "./global.d.ts"
+    "./server"
   ],
   "exclude": [
     "node_modules"
@@ -11,7 +11,7 @@
     "module": "ESNext",
     "sourceMap": true,
     "outDir": "./dist",
-    "rootDir": "./client",
+    "rootDir": ".",
     "baseUrl": "./",
     "strict": true,
     "noImplicitAny": true,

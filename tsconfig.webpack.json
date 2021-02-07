@@ -1,0 +1,12 @@
+{
+    "include": [
+        "./webpack"
+    ],
+    "compilerOptions": {
+        "rootDir": ".",
+        "module": "commonjs",
+        "target": "es5",
+        "resolveJsonModule": true,
+        "esModuleInterop": true
+    }
+}

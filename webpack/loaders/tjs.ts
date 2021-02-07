@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   client: {
     test: /\.[jt]sx?$/,
     exclude: /node_modules/,
