@@ -87,6 +87,7 @@
     "@types/react-test-renderer": "17.0.0",
     "@types/webpack-dev-middleware": "4.1.0",
     "@types/webpack-hot-middleware": "2.25.3",
+    "@types/webpack-node-externals": "2.5.0",
     "@typescript-eslint/eslint-plugin": "4.9.1",
     "@typescript-eslint/parser": "4.9.1",
     "autoprefixer": "10.1.0",

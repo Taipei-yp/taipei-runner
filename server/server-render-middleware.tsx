@@ -3,7 +3,7 @@ import React from "react";
 import { renderToString } from "react-dom/server";
 import { App } from "../client/app";
 
-export default (req: Request, res: Response) => {
+export default (_req: Request, res: Response) => {
   const jsx = <App />;
   const reactHtml = renderToString(jsx);
 
