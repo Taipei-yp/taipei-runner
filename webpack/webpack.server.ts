@@ -19,7 +19,8 @@ const config: Configuration = {
   output: {
     filename: "server.js",
     path: distDir(),
-    publicPath: "/",
+    libraryTarget: "commonjs-module",
+    publicPath: "/server",
   },
   plugins: [
     new CleanWebpackPlugin({

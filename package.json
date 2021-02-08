@@ -17,10 +17,10 @@
     "url": "https://github.com/Taipei-yp/taipei-runner/issues"
   },
   "homepage": "https://github.com/Taipei-yp/taipei-runner#readme",
-  "main": "client/index.tsx",
+  "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production TS_NODE_PROJECT=tsconfig.webpack.json npm-run-all --print-label --parallel start:*",
-    "start:server": "nodemon index.js --watch dist/server.js",
+    "start": "cross-env NODE_ENV=development  TS_NODE_PROJECT=tsconfig.webpack.json npm-run-all --print-label --parallel start:*",
+    "start:server": "nodemon index.js --watch /dist/server.js",
     "start:webpack": "webpack --mode=development --config webpack/webpack.config.ts",
     "build": "run-s build-prod",
     "build-dev": "cross-env NODE_ENV=development webpack --config webpack/webpack.dev.js",
@@ -146,6 +146,7 @@
     "ts-loader": "8.0.12",
     "ts-node": "9.1.1",
     "tsconfig-paths": "3.9.0",
+    "tsconfig-paths-webpack-plugin": "3.3.0",
     "typescript": "4.1.3",
     "webpack": "5.10.1",
     "webpack-cli": "4.2.0",
