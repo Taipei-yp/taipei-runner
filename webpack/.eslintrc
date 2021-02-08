@@ -1,24 +1,9 @@
 {
-  "root": true,
-  "env": {
-    "node": true,
-    "es2017": true
-  },
   "parserOptions": {
-    "ecmaVersion": 2019
+    "project": "./tsconfig.webpack.json",
   },
-  "plugins": [
-    "prettier"
-  ],
-  "extends": [
-    "airbnb/base",
-    "eslint:recommended",
-    "plugin:eslint-comments/recommended",
-    "plugin:prettier/recommended",
-    "prettier"
-  ],
   "rules": {
     "import/no-extraneous-dependencies": "off",
-    "@typescript-eslint/no-use-before-define": ["error", { "functions": false }]
+    "import/no-relative-parent-imports":"off"
   }
 }
