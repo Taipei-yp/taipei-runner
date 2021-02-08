@@ -15,7 +15,7 @@ const config: Configuration = {
   output: {
     path: distDir(),
     publicPath: "/",
-    filename: pathData => clientJsFileName(IS_DEV, pathData?.chunk?.name),
+    filename: pathData => clientJsFileName(pathData?.chunk?.name),
     assetModuleFilename: "assets/[contenthash][ext][query]",
   },
   plugins: [

@@ -95,6 +95,7 @@
     "clean-webpack-plugin": "3.0.0",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
+    "css-hot-loader": "1.4.4",
     "css-loader": "5.0.1",
     "css-minimizer-webpack-plugin": "1.1.5",
     "cssnano": "4.1.10",

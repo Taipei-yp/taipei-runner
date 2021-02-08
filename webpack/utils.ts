@@ -48,9 +48,9 @@ export function getBuildInfo() {
   };
 }
 
-export function clientJsFileName(isDev: boolean, pathDataChunkName?: string) {
+export function clientJsFileName(pathDataChunkName?: string) {
   let name = "[name].js";
-  if (!isDev && pathDataChunkName !== undefined) {
+  if (!IS_DEV && pathDataChunkName !== undefined) {
     if (pathDataChunkName === "sw") {
       name =
         pathDataChunkName === "sw" ? "sw.js" : "js/[name].[contenthash].js";
