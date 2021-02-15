@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { profileApi } from "../client/api";
+import { profileApi } from "client/api";
+import { AuthKey } from "client/service/cookie/types";
 import { ServerCookieManager } from "./server-cookie-manager";
-
-const authCookieName = "taipeiauth";
 
 function expressAuthMiddleware(
   req: Request,
@@ -10,13 +9,13 @@ function expressAuthMiddleware(
   next: NextFunction,
 ) {
   const { get, set } = ServerCookieManager(req, res);
-  const authCookie = get(authCookieName);
+  const authCookie = get(AuthKey);
   if (!authCookie || authCookie !== "AUTH") {
     profileApi()
       .getProfile()
       .then(apiRes => {
         if (apiRes.status === 200) {
-          set(authCookieName, "AUTH");
+          set(AuthKey, "AUTH");
         }
       });
   }
