@@ -365,7 +365,7 @@ export default class Runner {
     document.addEventListener(browserEvents.MOUSEUP, this);
     window.addEventListener(browserEvents.GAMEPADCONNECTED, this);
 
-    if (navigator.getGamepads().length > 0) {
+    if (navigator.getGamepads().filter(g => g !== null).length > 0) {
       window.setInterval(this.pollGamepads.bind(this), 10);
     }
   }
@@ -387,11 +387,7 @@ export default class Runner {
     for (let i = 0; i < gamepads.length; i++) {
       const gamepad = gamepads[i];
       if (gamepad != null) {
-        if (
-          gamepad.buttons.filter(e => {
-            return e.pressed === true;
-          }).length > 0
-        ) {
+        if (gamepad.buttons.some(e => e.pressed === true)) {
           keydown = true;
         }
       }
