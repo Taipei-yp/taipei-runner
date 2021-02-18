@@ -22,9 +22,11 @@ export type AuthState = {
 };
 
 const AUTH_LS_KEY = "taipei-auth";
-const savedAuthStatus = localStorage.getItem(AUTH_LS_KEY) as AuthStatus | null;
+// TODO change after auth completed
+// const savedAuthStatus = localStorage.getItem(AUTH_LS_KEY) as AuthStatus | null;
+const savedAuthStatus = "AUTH";
 
-const initialState: AuthState = {
+export const initialState: AuthState = {
   status: savedAuthStatus || "NO_AUTH",
   stage: AuthStages.INIT,
 };
@@ -32,7 +34,7 @@ const initialState: AuthState = {
 export const authReducer = (
   state: AuthState = initialState,
   action: AuthAction,
-) => {
+): AuthState => {
   switch (action.type) {
     case INIT:
       return {

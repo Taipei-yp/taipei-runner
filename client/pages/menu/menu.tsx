@@ -3,6 +3,7 @@ import React, { FC, memo } from "react";
 import { Heading } from "client/components/heading";
 import { LinkView } from "client/components/link-view";
 import { Page } from "client/components/page";
+import { PageMeta } from "client/components/page-meta";
 
 import "./menu.css";
 
@@ -37,23 +38,26 @@ const MenuItems = [
 
 const Menu: FC<Props> = ({ className = "" }) => {
   return (
-    <Page fixHeader fullHeight>
-      <div className={b.mix(className)}>
-        <Heading
-          color="primary"
-          text="Taipei Runner"
-          size="l"
-          className={b("heading")}
-        />
-        <ul className={b("list")}>
-          {MenuItems.map(({ label, to }) => (
-            <li className={b("item")} key={label}>
-              <LinkView to={to} label={label} size="xxl" />
-            </li>
-          ))}
-        </ul>
-      </div>
-    </Page>
+    <>
+      <PageMeta title="title" description="description" />
+      <Page fixHeader fullHeight>
+        <div className={b.mix(className)}>
+          <Heading
+            color="primary"
+            text="Taipei Runner"
+            size="l"
+            className={b("heading")}
+          />
+          <ul className={b("list")}>
+            {MenuItems.map(({ label, to }) => (
+              <li className={b("item")} key={label}>
+                <LinkView to={to} label={label} size="xxl" />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Page>
+    </>
   );
 };
 
