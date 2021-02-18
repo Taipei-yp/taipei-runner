@@ -10,11 +10,11 @@ import {
 
 export type ProfileState = {
   stage: ProfileStages;
-  user: User;
+  user: User | null;
   error?: string;
 };
 
-const initialState: ProfileState = {
+export const initialState: ProfileState = {
   user: {
     id: null,
     first_name: "",
@@ -31,7 +31,7 @@ const initialState: ProfileState = {
 export const profileReducer = (
   state: ProfileState = initialState,
   action: ProfileAction,
-) => {
+): ProfileState => {
   switch (action.type) {
     case PROFILE_INIT:
       return {
