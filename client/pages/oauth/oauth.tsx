@@ -1,15 +1,13 @@
 import block from "bem-cn";
-import React, { FC, memo, useCallback, useEffect, useMemo } from "react";
+import React, { FC, memo, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { oauthApi } from "client/api";
-import { FormView, FormViewField } from "client/components/form-view";
 import { Heading } from "client/components/heading";
 import { LinkView } from "client/components/link-view";
 import { Page } from "client/components/page";
 import { Panel } from "client/components/panel";
 import { Text } from "client/components/text";
-import { OauthCode } from "client/models/oauth";
 import { oauthSingIn } from "client/redux/auth/auth-actions";
 import { authSelector } from "client/redux/auth/auth-selectors";
 import { AuthStages } from "client/redux/auth/auth-stages";
@@ -17,18 +15,7 @@ import { AuthStages } from "client/redux/auth/auth-stages";
 import "./oauth.css";
 
 const b = block("oauth");
-const devClientId = "4e6403c4c04942098c6c8bef6f353985";
 const yandexOauthUrl = "https://oauth.yandex.ru/authorize?response_type=code&";
-
-const SignInFields: FormViewField[] = [
-  {
-    labelText: "Code",
-    pattern: /^\S+$/,
-    errorMessage: "Require",
-    type: "text",
-    name: "code",
-  },
-];
 
 type Props = {
   className?: string;
@@ -39,26 +26,18 @@ const Oauth: FC<Props> = ({ className = "" }) => {
 
   const dispatch = useDispatch();
 
-  const formSubmit = useCallback(
-    (formValue: OauthCode) => {
-      dispatch(oauthSingIn(formValue));
-    },
-    [dispatch],
-  );
-
   useEffect(() => {
     async function redirectProd() {
       const redirectUrl = `${window.location.protocol}//${window.location.host}/oauth`;
-      const resp = await oauthApi().clientId();
-      const clientId = resp.data;
-      document.location.href = `${yandexOauthUrl}client_id=${clientId.service_id}&redirect_uri=${redirectUrl}`;
+      try {
+        const resp = await oauthApi().clientId();
+        const clientId = resp.data;
+        document.location.href = `${yandexOauthUrl}client_id=${clientId.service_id}&redirect_uri=${redirectUrl}`; // &redirect_uri=${redirectUrl}
+      } catch {}
     }
-
     const code = new URLSearchParams(window.location.search).get("code");
     if (code != null) {
       dispatch(oauthSingIn({ code }));
-    } else if (process.env.NODE_ENV === "development") {
-      window.open(`${yandexOauthUrl}client_id=${devClientId}`);
     } else {
       redirectProd();
     }
@@ -100,10 +79,9 @@ const Oauth: FC<Props> = ({ className = "" }) => {
           <Panel>
             <Heading
               color="accent"
-              text="Oauth Code"
+              text="Oauth Autorization"
               className={b("heading")}
             />
-            <FormView onSubmit={formSubmit} fields={SignInFields} />
             <LinkView
               to="/signin"
               label="Return to signin page"
@@ -112,7 +90,7 @@ const Oauth: FC<Props> = ({ className = "" }) => {
           </Panel>
         );
     }
-  }, [error, formSubmit, isAuthorized, stage]);
+  }, [error, isAuthorized, stage]);
 
   return (
     <Page fixHeader fullHeight align="center">

@@ -8,6 +8,7 @@ import { matchPath, StaticRouter } from "react-router-dom";
 import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
 import url from "url";
+import { signedIn } from "client/redux/auth/auth-actions";
 import { App } from "../client/app";
 import { getInitialState } from "../client/redux/get-Initial-state";
 import { RootState } from "../client/redux/root-reducer";
@@ -19,6 +20,10 @@ export default (req: Request, res: Response) => {
   const context: StaticRouterContext = {};
 
   const { store } = configureStore(getInitialState(location), location);
+
+  if (res.locals.userIsAuth) {
+    store.dispatch(signedIn());
+  }
 
   function renderApp() {
     const reduxState = store.getState();

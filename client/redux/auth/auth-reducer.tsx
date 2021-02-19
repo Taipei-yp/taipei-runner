@@ -1,5 +1,3 @@
-import { clientCookieManager } from "client/service/cookie/manager";
-import { AuthKey, AuthStatus } from "client/service/cookie/types";
 import { AuthAction } from "./auth-actions";
 import { AuthStages } from "./auth-stages";
 import {
@@ -15,17 +13,16 @@ import {
   SIGNING_UP,
 } from "./types";
 
+export type AuthStatus = "NO_AUTH" | "AUTH";
+
 export type AuthState = {
   status: AuthStatus;
   stage: AuthStages;
   error?: string;
 };
 
-const manager = clientCookieManager();
-const savedAuthStatus = manager.get(AuthKey) as AuthStatus | null;
-
 export const initialState: AuthState = {
-  status: savedAuthStatus || "NO_AUTH",
+  status: "NO_AUTH",
   stage: AuthStages.INIT,
 };
 
@@ -47,7 +44,6 @@ export const authReducer = (
       };
 
     case SIGNED_UP:
-      manager.set(AuthKey, "AUTH");
       return {
         ...state,
         stage: AuthStages.SIGNED_UP,
@@ -68,7 +64,6 @@ export const authReducer = (
       };
 
     case SIGNED_IN:
-      manager.set(AuthKey, "AUTH");
       return {
         ...state,
         stage: AuthStages.SIGNED_IN,
@@ -89,7 +84,6 @@ export const authReducer = (
       };
 
     case LOGGED_OUT:
-      manager.del(AuthKey);
       return {
         ...state,
         stage: AuthStages.LOGGED_OUT,
