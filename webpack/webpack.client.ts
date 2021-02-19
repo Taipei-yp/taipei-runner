@@ -2,6 +2,7 @@ import { CleanWebpackPlugin } from "clean-webpack-plugin";
 import CssMinimizerPlugin from "css-minimizer-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import { Configuration } from "webpack";
+import { WebpackManifestPlugin } from "webpack-manifest-plugin";
 import cssLoader from "./loaders/css";
 import fileLoader from "./loaders/file";
 import tjsLoader from "./loaders/tjs";
@@ -26,6 +27,7 @@ const config: Configuration = {
       filename: "styles/[name].[contenthash].css",
       chunkFilename: "[id].css",
     }),
+    new WebpackManifestPlugin(),
   ],
   resolve: {
     extensions: [".ts", ".tsx", ".js"],

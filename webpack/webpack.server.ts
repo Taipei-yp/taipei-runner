@@ -1,4 +1,6 @@
+import WebpackBeforeBuildPlugin from "before-build-webpack";
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
+import { existsSync } from "fs";
 import { Configuration } from "webpack";
 import nodeExternals from "webpack-node-externals";
 import cssLoader from "./loaders/css";
@@ -25,6 +27,24 @@ const config: Configuration = {
   plugins: [
     new CleanWebpackPlugin({
       cleanOnceBeforeBuildPatterns: ["server*"],
+    }),
+    new WebpackBeforeBuildPlugin((_stats: unknown, callback: () => void) => {
+      const fileName = "./dist/manifest.json";
+      const timeout = 30000;
+      const interval = 100;
+
+      const start = Date.now();
+
+      function poll() {
+        if (existsSync(fileName)) {
+          callback();
+        } else if (Date.now() - start > timeout) {
+          throw Error("Can't wait anymore");
+        } else {
+          setTimeout(poll, interval);
+        }
+      }
+      poll();
     }),
   ],
   resolve: {

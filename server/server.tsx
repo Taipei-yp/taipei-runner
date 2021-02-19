@@ -1,5 +1,6 @@
 import cookieParser from "cookie-parser";
 import express from "express";
+import path from "path";
 import webpack from "webpack";
 import webpackDevMiddleware from "webpack-dev-middleware";
 import webpackHotMiddleware from "webpack-hot-middleware";
@@ -23,6 +24,7 @@ if (process.env.NODE_ENV === "development") {
     }),
   );
 }
+app.use(express.static(path.resolve(__dirname, "../dist")));
 
 app.get("/*", serverRenderMiddleware);
 
