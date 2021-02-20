@@ -8,6 +8,7 @@ import { Game } from "./pages/game";
 import { GameOver } from "./pages/gameover";
 import { Leaderboard } from "./pages/leaderboard";
 import { Menu } from "./pages/menu";
+import { Oauth } from "./pages/oauth";
 import { Profile } from "./pages/profile";
 import { SignIn } from "./pages/signin";
 import { SignUp } from "./pages/signup";
@@ -27,6 +28,12 @@ export default [
   {
     path: "/signup",
     component: SignUp,
+    exact: true,
+    isPrivate: false,
+  },
+  {
+    path: "/oauth",
+    component: Oauth,
     exact: true,
     isPrivate: false,
   },

@@ -1,18 +1,20 @@
 import { createBrowserHistory, createMemoryHistory } from "history";
 import { applyMiddleware, compose, createStore } from "redux";
 import thunk from "redux-thunk";
-import { authApi, profileApi } from "client/api";
+import { authApi, oauthApi, profileApi } from "client/api";
 import { getInitialState } from "./get-Initial-state";
 import { createRootReducer, RootState } from "./root-reducer";
 
 export type Api = {
   authApi: typeof authApi;
   profileApi: typeof profileApi;
+  oauthApi: typeof oauthApi;
 };
 
 const api: Api = {
   authApi,
   profileApi,
+  oauthApi,
 };
 
 const isServer = !(

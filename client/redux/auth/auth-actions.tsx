@@ -1,5 +1,6 @@
 import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
+import { OauthCode } from "client/models/oauth";
 import { SignInUser, SignUpUser } from "client/models/user";
 import { Api } from "client/redux/store";
 import {
@@ -167,6 +168,22 @@ export const logout = (): ThunkAction<void, unknown, Api, AnyAction> => async (
     dispatch(loggedOut());
   } catch (error) {
     dispatch(logoutFailure(error));
+  }
+};
+
+export const oauthSingIn = (
+  code: OauthCode,
+): ThunkAction<void, unknown, Api, AnyAction> => async (
+  dispatch,
+  _state,
+  api,
+) => {
+  const { signIn: signInApi } = api.oauthApi();
+  try {
+    await signInApi(code);
+    dispatch(signedIn());
+  } catch (error) {
+    dispatch(signInFailure(error));
   }
 };
 
