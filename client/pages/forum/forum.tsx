@@ -25,7 +25,7 @@ const headers = [
   { title: "Replies", field: "repliesCount" },
 ];
 
-// TODO: remove this mock data
+// TODO: remove this mock data after API connected
 const data = [
   {
     id: 0,

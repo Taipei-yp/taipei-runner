@@ -365,7 +365,9 @@ export default class Runner {
     document.addEventListener(browserEvents.MOUSEUP, this);
     window.addEventListener(browserEvents.GAMEPADCONNECTED, this);
 
-    if (navigator.getGamepads().filter(g => g !== null).length > 0) {
+    if (
+      Object.values(navigator.getGamepads()).filter(g => g !== null).length > 0
+    ) {
       window.setInterval(this.pollGamepads.bind(this), 10);
     }
   }
