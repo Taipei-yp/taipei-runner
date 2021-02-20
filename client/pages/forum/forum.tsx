@@ -2,10 +2,12 @@ import block from "bem-cn";
 import React, { FC, memo, useCallback } from "react";
 import { Button } from "client/components/button";
 import { LinkView } from "client/components/link-view";
+import { Meta } from "client/components/meta";
 import { Page } from "client/components/page";
 import { Pagination, useDefaultPagination } from "client/components/pagination";
 import { Panel } from "client/components/panel";
 import { Table, useNullableTableSort } from "client/components/table";
+import { environment } from "client/enviroment";
 
 import "./forum.css";
 
@@ -25,7 +27,7 @@ const headers = [
   { title: "Replies", field: "repliesCount" },
 ];
 
-// TODO: remove this mock data
+// TODO: remove this mock data after API connected
 const data = [
   {
     id: 0,
@@ -63,43 +65,46 @@ const Forum: FC<Props> = ({ className }) => {
   } = useDefaultPagination(pagesCount, visiblePagesCount);
 
   return (
-    <Page
-      fullHeight
-      fixHeader
-      align="center"
-      left={<LinkView to="/" label="Menu" size="xl" />}
-    >
-      <div className={b.mix(className)}>
-        <Panel className={b("panel")}>
-          <section className={b("table")}>
-            <Table
-              headers={headers}
-              data={data}
-              components={{
-                topic: TestComponent,
-              }}
-              sort={sort}
-              onHeaderClick={handleSortRequest}
-            />
-          </section>
-          <section className={b("pagination")}>
-            <Pagination
-              firstPage={firstVisiblePage}
-              lastPage={lastVisiblePage}
-              currentPage={currentPage}
-              canGoToNextPage={canGoToNextPage}
-              canGoToPrevPage={canGoToPrevPage}
-              onPageClick={goToPage}
-              onGoToPrevPageClick={goToPrevPage}
-              onGoToNextPageClick={goToNextPage}
-            />
-          </section>
-          <section className={b("create-topic")}>
-            <Button onClick={handleCreateTopicClick}>Create Topic</Button>
-          </section>
-        </Panel>
-      </div>
-    </Page>
+    <>
+      <Meta title={`${environment.title} | Forum`} />
+      <Page
+        fullHeight
+        fixHeader
+        align="center"
+        left={<LinkView to="/" label="Menu" size="xl" />}
+      >
+        <div className={b.mix(className)}>
+          <Panel className={b("panel")}>
+            <section className={b("table")}>
+              <Table
+                headers={headers}
+                data={data}
+                components={{
+                  topic: TestComponent,
+                }}
+                sort={sort}
+                onHeaderClick={handleSortRequest}
+              />
+            </section>
+            <section className={b("pagination")}>
+              <Pagination
+                firstPage={firstVisiblePage}
+                lastPage={lastVisiblePage}
+                currentPage={currentPage}
+                canGoToNextPage={canGoToNextPage}
+                canGoToPrevPage={canGoToPrevPage}
+                onPageClick={goToPage}
+                onGoToPrevPageClick={goToPrevPage}
+                onGoToNextPageClick={goToNextPage}
+              />
+            </section>
+            <section className={b("create-topic")}>
+              <Button onClick={handleCreateTopicClick}>Create Topic</Button>
+            </section>
+          </Panel>
+        </div>
+      </Page>
+    </>
   );
 };
 

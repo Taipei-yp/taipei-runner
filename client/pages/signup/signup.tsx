@@ -6,9 +6,11 @@ import { Button } from "client/components/button";
 import { FormView, FormViewField } from "client/components/form-view";
 import { Heading } from "client/components/heading";
 import { LinkView } from "client/components/link-view";
+import { Meta } from "client/components/meta";
 import { Page } from "client/components/page";
 import { Panel } from "client/components/panel";
 import { Text } from "client/components/text";
+import { environment } from "client/enviroment";
 import { SignUpUser } from "client/models/user";
 import { init, signUp } from "client/redux/auth/auth-actions";
 import { authSelector } from "client/redux/auth/auth-selectors";
@@ -129,9 +131,12 @@ const SignUp: FC<Props> = ({ className = "" }) => {
   }, [formSubmit, reset, isAuthorized, error, stage]);
 
   return (
-    <Page fixHeader fullHeight align="center">
-      <div className={b.mix(className)}>{content}</div>
-    </Page>
+    <>
+      <Meta title={`${environment.title} | Sign up`} />
+      <Page fixHeader fullHeight align="center">
+        <div className={b.mix(className)}>{content}</div>
+      </Page>
+    </>
   );
 };
 

@@ -2,8 +2,9 @@ import block from "bem-cn";
 import React, { FC, memo } from "react";
 import { Heading } from "client/components/heading";
 import { LinkView } from "client/components/link-view";
+import { Meta } from "client/components/meta";
 import { Page } from "client/components/page";
-import { PageMeta } from "client/components/page-meta";
+import { environment } from "client/enviroment";
 
 import "./menu.css";
 
@@ -39,7 +40,7 @@ const MenuItems = [
 const Menu: FC<Props> = ({ className = "" }) => {
   return (
     <>
-      <PageMeta title="title" description="description" />
+      <Meta title={`${environment.title} | Menu`} />
       <Page fixHeader fullHeight>
         <div className={b.mix(className)}>
           <Heading

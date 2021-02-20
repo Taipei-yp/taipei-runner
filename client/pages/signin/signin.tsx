@@ -6,9 +6,11 @@ import { Button } from "client/components/button";
 import { FormView, FormViewField } from "client/components/form-view";
 import { Heading } from "client/components/heading";
 import { LinkView } from "client/components/link-view";
+import { Meta } from "client/components/meta";
 import { Page } from "client/components/page";
 import { Panel } from "client/components/panel";
 import { Text } from "client/components/text";
+import { environment } from "client/enviroment";
 import { SignInUser } from "client/models/user";
 import { init, signIn } from "client/redux/auth/auth-actions";
 import { authSelector } from "client/redux/auth/auth-selectors";
@@ -105,9 +107,12 @@ const SignIn: FC<Props> = ({ className = "" }) => {
   }, [error, stage, formSubmit, reset, isAuthorized]);
 
   return (
-    <Page fixHeader fullHeight align="center">
-      <div className={b.mix(className)}>{content}</div>
-    </Page>
+    <>
+      <Meta title={`${environment.title} | Sign in`} />
+      <Page fixHeader fullHeight align="center">
+        <div className={b.mix(className)}>{content}</div>
+      </Page>
+    </>
   );
 };
 

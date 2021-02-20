@@ -1,3 +1,4 @@
+import manifest from "dist/manifest.json";
 import { Request, Response } from "express";
 import React from "react";
 import { renderToString } from "react-dom/server";
@@ -28,6 +29,7 @@ export default (req: Request, res: Response) => {
   function renderApp() {
     const reduxState = store.getState();
     const helmetData = Helmet.renderStatic();
+    const { "main.css": mainStyleSrc, "main.js": mainScriptSrc } = manifest;
 
     const jsx = (
       <Provider store={store}>
@@ -38,7 +40,9 @@ export default (req: Request, res: Response) => {
     );
     const reactHtml = renderToString(jsx);
 
-    res.send(getHtml(reactHtml, reduxState, helmetData));
+    res.send(
+      getHtml(reactHtml, reduxState, helmetData, mainStyleSrc, mainScriptSrc),
+    );
   }
 
   const dataRequirements: (void | ThunkAction<
@@ -81,6 +85,8 @@ function getHtml(
   reactHtml: string,
   reduxState: RootState,
   helmetData: HelmetData,
+  mainStyleSrc: string,
+  mainScriptSrc: string,
 ) {
   return `
         <!DOCTYPE html>
@@ -91,7 +97,7 @@ function getHtml(
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <meta http-equiv="X-UA-Compatible" content="ie=edge">
             <link rel="shortcut icon" type="image/png" href="/images/favicon.png">
-            <link href="/main.css" rel="stylesheet">
+            <link href="${mainStyleSrc}" rel="stylesheet">
             ${helmetData.title.toString()}
             ${helmetData.meta.toString()}
         </head>
@@ -100,7 +106,7 @@ function getHtml(
             <script>
               window.__INITIAL_STATE__ = ${JSON.stringify(reduxState)}
             </script>
-            <script src="/main.js"></script>
+            <script src="${mainScriptSrc}"></script>
         </body>
         </html>
     `;

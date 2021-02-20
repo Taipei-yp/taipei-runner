@@ -5,9 +5,11 @@ import { Redirect } from "react-router-dom";
 import { oauthApi } from "client/api";
 import { Heading } from "client/components/heading";
 import { LinkView } from "client/components/link-view";
+import { Meta } from "client/components/meta";
 import { Page } from "client/components/page";
 import { Panel } from "client/components/panel";
 import { Text } from "client/components/text";
+import { environment } from "client/enviroment";
 import { oauthSingIn } from "client/redux/auth/auth-actions";
 import { authSelector } from "client/redux/auth/auth-selectors";
 import { AuthStages } from "client/redux/auth/auth-stages";
@@ -93,9 +95,12 @@ const Oauth: FC<Props> = ({ className = "" }) => {
   }, [error, isAuthorized, stage]);
 
   return (
-    <Page fixHeader fullHeight align="center">
-      <div className={b.mix(className)}>{content}</div>
-    </Page>
+    <>
+      <Meta title={`${environment.title} | Auth`} />
+      <Page fixHeader fullHeight align="center">
+        <div className={b.mix(className)}>{content}</div>
+      </Page>
+    </>
   );
 };
 

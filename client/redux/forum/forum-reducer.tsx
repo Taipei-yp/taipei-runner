@@ -1,7 +1,7 @@
 const initialState = {
   forum: {},
 };
-// TODO Поменять тип переменной state
+// TODO change type of state variable after API connected
 export const forumReducer = (state: unknown = initialState) => {
   return state;
 };

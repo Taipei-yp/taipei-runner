@@ -4,8 +4,10 @@ import { FormView, FormViewField } from "client/components/form-view";
 import { ForumMsg } from "client/components/forum-msg";
 import { Heading } from "client/components/heading";
 import { LinkView } from "client/components/link-view";
+import { Meta } from "client/components/meta";
 import { Page } from "client/components/page";
 import { Panel } from "client/components/panel";
+import { environment } from "client/enviroment";
 
 import "./forum-topic.css";
 
@@ -88,29 +90,32 @@ const ForumTopic: FC<Props> = ({ className }) => {
   }, []);
 
   return (
-    <Page left={<LinkView to="/" label="Menu" size="xl" />}>
-      <div className={b.mix(className)}>
-        <Panel>
-          <Heading
-            text={ForumTopicData.topic}
-            size="s"
-            color="accent"
-            className={b("heading")}
-          />
-          <div className={b("content")}>
-            <ForumMsg className={b("topic-msg")} msg={ForumTopicData.msg} />
-            {ForumTopicData.replies.map(msg => (
-              <ForumMsg className={b("reply")} msg={msg} key={msg.id} />
-            ))}
-            <FormView
-              onSubmit={formSubmit}
-              fields={ReplyFormFields}
-              fullWidth
+    <>
+      <Meta title={`${environment.title} | Topic`} />
+      <Page left={<LinkView to="/" label="Menu" size="xl" />}>
+        <div className={b.mix(className)}>
+          <Panel>
+            <Heading
+              text={ForumTopicData.topic}
+              size="s"
+              color="accent"
+              className={b("heading")}
             />
-          </div>
-        </Panel>
-      </div>
-    </Page>
+            <div className={b("content")}>
+              <ForumMsg className={b("topic-msg")} msg={ForumTopicData.msg} />
+              {ForumTopicData.replies.map(msg => (
+                <ForumMsg className={b("reply")} msg={msg} key={msg.id} />
+              ))}
+              <FormView
+                onSubmit={formSubmit}
+                fields={ReplyFormFields}
+                fullWidth
+              />
+            </div>
+          </Panel>
+        </div>
+      </Page>
+    </>
   );
 };
 

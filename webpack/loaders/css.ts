@@ -3,11 +3,7 @@ import { IS_DEV } from "../utils";
 
 const usedRules = () => {
   const rules = [];
-  if (IS_DEV) {
-    rules.push("style-loader");
-  } else {
-    rules.push(MiniCssExtractPlugin.loader);
-  }
+  rules.push(MiniCssExtractPlugin.loader);
   rules.push({
     loader: "css-loader",
     options: {
