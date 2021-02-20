@@ -1,11 +1,13 @@
 import block from "bem-cn";
 import React, { FC, memo } from "react";
 import { LinkView } from "client/components/link-view";
+import { Meta } from "client/components/meta";
 import { Page } from "client/components/page";
 import { Pagination, useDefaultPagination } from "client/components/pagination";
 import { Panel } from "client/components/panel";
 import { Table, useNullableTableSort } from "client/components/table";
 import { User } from "client/components/user";
+import { environment } from "client/enviroment";
 
 import "./leaderboard.css";
 
@@ -48,37 +50,40 @@ const Leaderboard: FC<Props> = ({ className }) => {
   } = useDefaultPagination(pagesCount, visiblePagesCount);
 
   return (
-    <Page
-      fullHeight
-      fixHeader
-      align="center"
-      left={<LinkView to="/" label="Menu" size="xl" />}
-    >
-      <div className={b.mix(className)}>
-        <Panel className={b("panel")}>
-          <Table
-            className={b("table")}
-            headers={headers}
-            data={data}
-            components={{
-              user: User,
-            }}
-            sort={sort}
-            onHeaderClick={handleSortRequest}
-          />
-          <Pagination
-            firstPage={firstVisiblePage}
-            lastPage={lastVisiblePage}
-            currentPage={currentPage}
-            canGoToNextPage={canGoToNextPage}
-            canGoToPrevPage={canGoToPrevPage}
-            onPageClick={goToPage}
-            onGoToPrevPageClick={goToPrevPage}
-            onGoToNextPageClick={goToNextPage}
-          />
-        </Panel>
-      </div>
-    </Page>
+    <>
+      <Meta title={`${environment.title} | Leaderboard`} />
+      <Page
+        fullHeight
+        fixHeader
+        align="center"
+        left={<LinkView to="/" label="Menu" size="xl" />}
+      >
+        <div className={b.mix(className)}>
+          <Panel className={b("panel")}>
+            <Table
+              className={b("table")}
+              headers={headers}
+              data={data}
+              components={{
+                user: User,
+              }}
+              sort={sort}
+              onHeaderClick={handleSortRequest}
+            />
+            <Pagination
+              firstPage={firstVisiblePage}
+              lastPage={lastVisiblePage}
+              currentPage={currentPage}
+              canGoToNextPage={canGoToNextPage}
+              canGoToPrevPage={canGoToPrevPage}
+              onPageClick={goToPage}
+              onGoToPrevPageClick={goToPrevPage}
+              onGoToNextPageClick={goToNextPage}
+            />
+          </Panel>
+        </div>
+      </Page>
+    </>
   );
 };
 

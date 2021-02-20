@@ -35,7 +35,7 @@ const config: Configuration = {
 
       const start = Date.now();
 
-      function poll() {
+      const poll = () => {
         if (existsSync(fileName)) {
           callback();
         } else if (Date.now() - start > timeout) {
@@ -43,7 +43,7 @@ const config: Configuration = {
         } else {
           setTimeout(poll, interval);
         }
-      }
+      };
       poll();
     }),
   ],

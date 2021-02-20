@@ -1,9 +1,10 @@
 import React, { FC, memo } from "react";
 import { Helmet } from "react-helmet";
+import { environment } from "client/enviroment";
 
 export type Props = {
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
   image?: string;
 };
 
@@ -19,7 +20,11 @@ const prepareData = (title: string, description: string, image?: string) => {
   };
 };
 
-const PageMeta: FC<Props> = ({ title, description, image }: Props) => {
+const Meta: FC<Props> = ({
+  title = environment.title,
+  description = environment.description,
+  image,
+}: Props) => {
   const data = prepareData(title, description, image);
   return (
     <Helmet>
@@ -36,5 +41,5 @@ const PageMeta: FC<Props> = ({ title, description, image }: Props) => {
   );
 };
 
-const WrappedPageMeta = memo(PageMeta);
-export { WrappedPageMeta as PageMeta };
+const WrappedMeta = memo(Meta);
+export { WrappedMeta as Meta };
