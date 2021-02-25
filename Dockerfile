@@ -4,7 +4,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN HUSKY_SKIP_INSTALL=true npm install --unsafe-perm
 COPY . .
-RUN npm run build-prod
+RUN npm run start-prod
 
 FROM nginx:1.19.4-alpine as production-stage
 COPY --from=build-stage /app/dist /usr/share/nginx/html

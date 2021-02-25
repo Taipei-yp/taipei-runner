@@ -1,0 +1,36 @@
+version: "3"
+services:
+  taipei_runner:
+    build:
+      context: .
+    container_name: taipei_runner
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgres://postgres:1234@postgres:5000/taipei-runner
+      NODE_ENV: development
+      PORT: 4000
+    ports:
+      - "4000:4000"
+    restart: always
+  postgres:
+    container_name: postgress
+    image: postgres:13
+    ports:
+      - "5000:5432"
+    volumes: 
+      - ./postgresdata:/var/lib/postgresql/data
+      - ./src/migrations/dbinit.sql:/docker-entrypoint-initdb.d/dbinit.sql
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: taipei-runner
+  mongo:
+    image: mongo
+    ports:
+    - "6000:27017"
+    volumes:
+    - data-volume:/data/db
+volumes:
+  data-volume:
