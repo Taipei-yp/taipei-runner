@@ -1,4 +1,3 @@
-import { IS_DEV } from "webpack/utils";
 import { api } from "client/api/api";
 import {
   GameResultForAPI,
@@ -10,7 +9,7 @@ import {
   GetLeaderboardDataRequest as DevGetLeaderboardDataRequest,
 } from "client/models/leaderboard-dev";
 
-const path = `/liderboard`;
+const path = `/leaderboard`;
 const { client } = api();
 
 const pageSize = 10;
@@ -50,9 +49,10 @@ const prodMappers = {
   }),
 };
 
-const mappers = IS_DEV ? devMappers : prodMappers;
+const isProd = process.env.NODE_ENV !== "production";
+const mappers = isProd ? prodMappers : devMappers;
 
-const liderboardApi = () => {
+const leaderboardApi = () => {
   const saveScore = (userName: string, score: number) => {
     const data = mappers.toGameResultForAPI(userName, score);
     return client.post(`${path}`, data, {
@@ -73,4 +73,4 @@ const liderboardApi = () => {
   };
 };
 
-export { liderboardApi };
+export { leaderboardApi };
