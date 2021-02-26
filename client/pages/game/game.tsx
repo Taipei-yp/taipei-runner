@@ -28,7 +28,6 @@ const Game: FC<Props> = ({ className = "" }) => {
   ] = useState(false);
 
   const dispatch = useDispatch();
-  dispatch(leaderboardInit());
 
   const sendScore = useCallback(
     (gameScore: number) => {
@@ -46,6 +45,8 @@ const Game: FC<Props> = ({ className = "" }) => {
   );
 
   useEffect(() => {
+    dispatch(leaderboardInit());
+
     const runner = new Runner(
       "#runner",
       setScore,
@@ -55,7 +56,7 @@ const Game: FC<Props> = ({ className = "" }) => {
     runner.init();
 
     return () => runner.close();
-  }, [gameRunningToggle, sendScore]);
+  }, [gameRunningToggle, sendScore, dispatch]);
   return (
     <>
       <Meta title={`${environment.title} | Game`} />

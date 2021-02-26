@@ -14,6 +14,9 @@ const { client } = api();
 
 const pageSize = 10;
 
+const toGameResultsData = (gameResults: GameResults) => {
+  return gameResults.map((gr, key) => ({ ...gr.data, id: key }));
+};
 const devMappers = {
   toGameResultForAPI: (login: string, score: number): DevGameResultForAPI => ({
     data: {
@@ -34,13 +37,13 @@ const prodMappers = {
   toGameResultForAPI: (login: string, score: number): GameResultForAPI => ({
     data: {
       login,
-      taipeiscore: score,
+      taipeirunnerscore: score,
     },
-    ratingFieldName: "taipeiscore",
+    ratingFieldName: "taipeirunnerscore",
   }),
 
   toGetLeaderboardDataRequest: (page = 0): GetLeaderboardDataRequest => ({
-    ratingFieldName: "taipeiscore",
+    ratingFieldName: "taipeirunnerscore",
     cursor: page * pageSize,
     limit: pageSize,
   }),
@@ -59,9 +62,11 @@ const leaderboardApi = () => {
 
   const get = (page = 0) => {
     const data = mappers.toGetLeaderboardDataRequest(page);
-    return client.post<GameResults>(`${path}/all`, data, {
-      withCredentials: true,
-    });
+    return client
+      .post<GameResults>(`${path}/all`, data, {
+        withCredentials: true,
+      })
+      .then(gameResults => toGameResultsData(gameResults.data));
   };
 
   return {

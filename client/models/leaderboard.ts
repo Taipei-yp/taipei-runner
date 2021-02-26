@@ -1,20 +1,33 @@
+type GameResultData = {
+  id: number;
+  login: string;
+  taipeirunnerscore: number;
+};
+
 type GameResult = {
   data: {
     login: string;
-    taipeiscore: number;
+    taipeirunnerscore: number;
   };
 };
 
 type GameResultForAPI = GameResult & {
-  ratingFieldName: "taipeiscore";
+  ratingFieldName: "taipeirunnerscore";
 };
 
 type GetLeaderboardDataRequest = {
-  ratingFieldName: "taipeiscore";
+  ratingFieldName: "taipeirunnerscore";
   cursor: number;
   limit: number;
 };
 
 type GameResults = GameResult[];
+type GameResultsData = GameResultData[];
 
-export { GameResult, GameResultForAPI, GameResults, GetLeaderboardDataRequest };
+export {
+  GameResult,
+  GameResultForAPI,
+  GameResults,
+  GameResultsData,
+  GetLeaderboardDataRequest,
+};

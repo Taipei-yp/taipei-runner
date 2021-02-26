@@ -1,4 +1,4 @@
-import { GameResults } from "client/models/leaderboard";
+import { GameResultsData } from "client/models/leaderboard";
 import { LeaderboardAction } from "./leaderboard-actions";
 import { LeaderboardStages } from "./leaderboard-stages";
 import {
@@ -10,12 +10,12 @@ import {
 
 export type LeaderboardState = {
   stage: LeaderboardStages;
-  gameResults: GameResults | null;
+  gameResultsData: GameResultsData | null;
   error?: string;
 };
 
 const initialState = {
-  gameResults: [],
+  gameResultsData: [],
   stage: LeaderboardStages.INIT,
 };
 
@@ -47,7 +47,7 @@ export const leaderboardReducer = (
       return {
         ...state,
         stage: LeaderboardStages.LOADED,
-        gameResults: action.payload.gameResults,
+        gameResultsData: action.payload.gameResultsData,
       };
 
     default:

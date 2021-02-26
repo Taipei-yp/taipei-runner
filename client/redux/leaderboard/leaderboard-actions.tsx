@@ -1,6 +1,6 @@
 import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
-import { GameResults } from "client/models/leaderboard";
+import { GameResultsData } from "client/models/leaderboard";
 import { loadProfile } from "client/redux/profile/profile-actions";
 import { ProfileStages } from "client/redux/profile/profile-stages";
 import { RootState } from "client/redux/root-reducer";
@@ -22,7 +22,7 @@ type LeaderboardLoading = {
 
 type LeaderboardLoaded = {
   type: typeof LEADERBOARD_LOADED;
-  payload: { gameResults: GameResults | null };
+  payload: { gameResultsData: GameResultsData | null };
 };
 
 type LeaderboardFailure = {
@@ -43,11 +43,11 @@ export const leaderboardLoading = (): LeaderboardLoading => {
 };
 
 export const leaderboardLoaded = (
-  gameResults: GameResults,
+  gameResultsData: GameResultsData,
 ): LeaderboardLoaded => {
   return {
     type: LEADERBOARD_LOADED,
-    payload: { gameResults },
+    payload: { gameResultsData },
   };
 };
 
@@ -84,6 +84,23 @@ export const saveScore = (
 
     await saveScoreApi(user.login, score);
     dispatch(leaderboardInit());
+  } catch (error) {
+    dispatch(leaderboardLoadingFailure(error));
+  }
+};
+
+export const loadLeaderboard = (
+  page = 0,
+): ThunkAction<void, RootState, Api, AnyAction> => async (
+  dispatch,
+  _state,
+  api,
+) => {
+  dispatch(leaderboardLoading());
+  const { get: getLeaderboardApi } = api.leaderboardApi();
+  try {
+    const gameResultsData = await getLeaderboardApi(page);
+    dispatch(leaderboardLoaded(gameResultsData));
   } catch (error) {
     dispatch(leaderboardLoadingFailure(error));
   }
