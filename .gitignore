@@ -4,9 +4,9 @@
 
 node_modules/
 dist/
-ssl/
 .tmp/
 .eslintcache
+ssl/
 
 # Logs
 logs
