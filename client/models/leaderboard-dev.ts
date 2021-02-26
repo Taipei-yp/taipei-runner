@@ -1,6 +1,6 @@
 type GameResult = {
   data: {
-    userName: string;
+    login: string;
     taipeidev: number;
   };
 };

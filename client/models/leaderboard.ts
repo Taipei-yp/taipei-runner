@@ -1,6 +1,6 @@
 type GameResult = {
   data: {
-    userName: string;
+    login: string;
     taipeiscore: number;
   };
 };
@@ -17,4 +17,4 @@ type GetLeaderboardDataRequest = {
 
 type GameResults = GameResult[];
 
-export { GameResultForAPI, GameResults, GetLeaderboardDataRequest };
+export { GameResult, GameResultForAPI, GameResults, GetLeaderboardDataRequest };

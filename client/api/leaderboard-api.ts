@@ -15,12 +15,9 @@ const { client } = api();
 const pageSize = 10;
 
 const devMappers = {
-  toGameResultForAPI: (
-    userName: string,
-    score: number,
-  ): DevGameResultForAPI => ({
+  toGameResultForAPI: (login: string, score: number): DevGameResultForAPI => ({
     data: {
-      userName,
+      login,
       taipeidev: score,
     },
     ratingFieldName: "taipeidev",
@@ -34,9 +31,9 @@ const devMappers = {
 };
 
 const prodMappers = {
-  toGameResultForAPI: (userName: string, score: number): GameResultForAPI => ({
+  toGameResultForAPI: (login: string, score: number): GameResultForAPI => ({
     data: {
-      userName,
+      login,
       taipeiscore: score,
     },
     ratingFieldName: "taipeiscore",
@@ -53,8 +50,8 @@ const isProd = process.env.NODE_ENV !== "production";
 const mappers = isProd ? prodMappers : devMappers;
 
 const leaderboardApi = () => {
-  const saveScore = (userName: string, score: number) => {
-    const data = mappers.toGameResultForAPI(userName, score);
+  const saveScore = (login: string, score: number) => {
+    const data = mappers.toGameResultForAPI(login, score);
     return client.post(`${path}`, data, {
       withCredentials: true,
     });

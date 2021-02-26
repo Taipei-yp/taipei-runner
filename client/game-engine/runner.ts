@@ -242,6 +242,7 @@ export default class Runner {
     this.gameAudio.stopBgSound();
     this.gameAudio.actionSound(SoundAction.GAMEOVER);
     this.gameRunning(false);
+    this.gameOverFunc(this.convertDistanceToScore(this.distanceRan));
   }
 
   /**
@@ -463,9 +464,13 @@ export default class Runner {
   /** Y координата земли */
   groundPosY = () => this.sizes.height - config.global.GROUND_POS;
 
-  setRunScore(distanse: number) {
-    const score = Math.round(distanse * config.global.SCORE_COEFFICIENT);
+  setRunScore(distance: number) {
+    const score = this.convertDistanceToScore(distance);
     this.printScore(score);
+  }
+
+  convertDistanceToScore(distance: number) {
+    return Math.round(distance * config.global.SCORE_COEFFICIENT);
   }
 
   close() {

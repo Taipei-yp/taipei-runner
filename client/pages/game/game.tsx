@@ -1,14 +1,16 @@
 import block from "bem-cn";
 import React, { FC, memo, useCallback, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { leaderboardApi } from "client/api";
+import { useDispatch } from "react-redux";
 import { LinkView } from "client/components/link-view";
 import { Meta } from "client/components/meta";
 import { Page } from "client/components/page";
 import { ScoreCounter } from "client/components/score-counter";
 import { environment } from "client/enviroment";
 import Runner from "client/game-engine/runner";
-import { profileSelector } from "client/redux/profile/profile-selectors";
+import {
+  leaderboardInit,
+  saveScore,
+} from "client/redux/leaderboard/leaderboard-actions";
 
 import "./game.css";
 
@@ -18,43 +20,42 @@ type Props = {
   className?: string;
 };
 
-const api = leaderboardApi();
-
 const Game: FC<Props> = ({ className = "" }) => {
   const [score, setScore] = useState(0);
-  const [running, setRunning] = useState(false);
+  const [
+    isBackgroundAnimationActive,
+    setIsBackgroundAnimationActive,
+  ] = useState(false);
 
-  const { user } = useSelector(profileSelector);
+  const dispatch = useDispatch();
+  dispatch(leaderboardInit());
 
   const sendScore = useCallback(
-    async (finalScore: number) => {
-      const userName =
-        user.display_name || `${user.first_name} ${user.second_name}`;
-      try {
-        await api.saveScore(userName, finalScore);
-      } catch {
-        // go to error page
-      }
+    (gameScore: number) => {
+      dispatch(saveScore(gameScore));
     },
-    [user.display_name, user.first_name, user.second_name],
+    [dispatch],
   );
 
-  const updateRunning = useCallback(
-    newRunning => {
-      if (running && !newRunning && score) {
-        sendScore(score);
-      }
-      setRunning(newRunning);
+  const gameRunningToggle = useCallback(
+    (running: boolean) => {
+      setIsBackgroundAnimationActive(running);
+      dispatch(leaderboardInit());
     },
-    [running, score, sendScore],
+    [dispatch],
   );
 
   useEffect(() => {
-    const runner = new Runner("#runner", setScore, updateRunning);
+    const runner = new Runner(
+      "#runner",
+      setScore,
+      gameRunningToggle,
+      sendScore,
+    );
     runner.init();
 
     return () => runner.close();
-  }, [sendScore, updateRunning]);
+  }, [gameRunningToggle, sendScore]);
   return (
     <>
       <Meta title={`${environment.title} | Game`} />
@@ -64,7 +65,7 @@ const Game: FC<Props> = ({ className = "" }) => {
         fullHeight
         fullWidth
         align="stretch"
-        animateBack={running}
+        animateBack={isBackgroundAnimationActive}
       >
         <div className={b.mix(className)} id="runner">
           <canvas className={b("canvas")} />
