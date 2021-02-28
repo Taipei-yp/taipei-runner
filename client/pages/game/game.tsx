@@ -1,11 +1,16 @@
 import block from "bem-cn";
-import React, { FC, memo, useEffect, useState } from "react";
+import React, { FC, memo, useCallback, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { LinkView } from "client/components/link-view";
 import { Meta } from "client/components/meta";
 import { Page } from "client/components/page";
 import { ScoreCounter } from "client/components/score-counter";
 import { environment } from "client/enviroment";
 import Runner from "client/game-engine/runner";
+import {
+  leaderboardInit,
+  saveScore,
+} from "client/redux/leaderboard/leaderboard-actions";
 
 import "./game.css";
 
@@ -17,14 +22,41 @@ type Props = {
 
 const Game: FC<Props> = ({ className = "" }) => {
   const [score, setScore] = useState(0);
-  const [running, setRunning] = useState(false);
+  const [
+    isBackgroundAnimationActive,
+    setIsBackgroundAnimationActive,
+  ] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const sendScore = useCallback(
+    (gameScore: number) => {
+      dispatch(saveScore(gameScore));
+    },
+    [dispatch],
+  );
+
+  const gameRunningToggle = useCallback(
+    (running: boolean) => {
+      setIsBackgroundAnimationActive(running);
+      dispatch(leaderboardInit());
+    },
+    [dispatch],
+  );
 
   useEffect(() => {
-    const runner = new Runner("#runner", setScore, setRunning);
+    dispatch(leaderboardInit());
+
+    const runner = new Runner(
+      "#runner",
+      setScore,
+      gameRunningToggle,
+      sendScore,
+    );
     runner.init();
 
     return () => runner.close();
-  }, []);
+  }, [gameRunningToggle, sendScore, dispatch]);
   return (
     <>
       <Meta title={`${environment.title} | Game`} />
@@ -34,7 +66,7 @@ const Game: FC<Props> = ({ className = "" }) => {
         fullHeight
         fullWidth
         align="stretch"
-        animateBack={running}
+        animateBack={isBackgroundAnimationActive}
       >
         <div className={b.mix(className)} id="runner">
           <canvas className={b("canvas")} />
