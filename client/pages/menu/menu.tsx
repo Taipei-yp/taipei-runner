@@ -2,7 +2,9 @@ import block from "bem-cn";
 import React, { FC, memo } from "react";
 import { Heading } from "client/components/heading";
 import { LinkView } from "client/components/link-view";
+import { Meta } from "client/components/meta";
 import { Page } from "client/components/page";
+import { environment } from "client/enviroment";
 
 import "./menu.css";
 
@@ -37,23 +39,26 @@ const MenuItems = [
 
 const Menu: FC<Props> = ({ className = "" }) => {
   return (
-    <Page fixHeader fullHeight>
-      <div className={b.mix(className)}>
-        <Heading
-          color="primary"
-          text="Taipei Runner"
-          size="l"
-          className={b("heading")}
-        />
-        <ul className={b("list")}>
-          {MenuItems.map(({ label, to }) => (
-            <li className={b("item")} key={label}>
-              <LinkView to={to} label={label} size="xxl" />
-            </li>
-          ))}
-        </ul>
-      </div>
-    </Page>
+    <>
+      <Meta title={`${environment.title} | Menu`} />
+      <Page fixHeader fullHeight>
+        <div className={b.mix(className)}>
+          <Heading
+            color="primary"
+            text="Taipei Runner"
+            size="l"
+            className={b("heading")}
+          />
+          <ul className={b("list")}>
+            {MenuItems.map(({ label, to }) => (
+              <li className={b("item")} key={label}>
+                <LinkView to={to} label={label} size="xxl" />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Page>
+    </>
   );
 };
 

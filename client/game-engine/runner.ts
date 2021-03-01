@@ -23,6 +23,7 @@ const browserEvents = {
   BLUR: "blur",
   FOCUS: "focus",
   LOAD: "load",
+  GAMEPADCONNECTED: "gamepadconnected",
 };
 
 /**
@@ -74,6 +75,8 @@ export default class Runner {
   distanceRan!: number;
   /** Число игр */
   playCount!: number;
+  /** Флаг выбора события нажатия кнопки гейпада */
+  gamepadPreviousKeyDown!: boolean;
 
   printScore!: (distance: number) => void;
   gameOverFunc!: (score: number) => void;
@@ -239,6 +242,7 @@ export default class Runner {
     this.gameAudio.stopBgSound();
     this.gameAudio.actionSound(SoundAction.GAMEOVER);
     this.gameRunning(false);
+    this.gameOverFunc(this.convertDistanceToScore(this.distanceRan));
   }
 
   /**
@@ -292,7 +296,11 @@ export default class Runner {
    * Событие keydown.
    */
   onKeyDown(e: KeyboardEvent) {
-    if (!this.status.crashed && Runner.keycodes.JUMP[e.code]) {
+    if (
+      !this.status.crashed &&
+      (Runner.keycodes.JUMP[e.code] ||
+        e.type === browserEvents.GAMEPADCONNECTED)
+    ) {
       if (!this.status.activated) {
         this.status.activated = true;
       }
@@ -330,10 +338,11 @@ export default class Runner {
    */
   handleEvent(e: Event) {
     const event = e as KeyboardEvent & MouseEvent;
-    const f = (evtType: string, events: Record<string, string>): void => {
+    const f = (evtType: string, events: typeof browserEvents): void => {
       switch (evtType) {
         case events.KEYDOWN:
         case events.MOUSEDOWN:
+        case events.GAMEPADCONNECTED:
           this.onKeyDown(event);
           break;
         case events.KEYUP:
@@ -355,6 +364,13 @@ export default class Runner {
     document.addEventListener(browserEvents.KEYUP, this);
     document.addEventListener(browserEvents.MOUSEDOWN, this);
     document.addEventListener(browserEvents.MOUSEUP, this);
+    window.addEventListener(browserEvents.GAMEPADCONNECTED, this);
+
+    if (
+      Object.values(navigator.getGamepads()).filter(g => g !== null).length > 0
+    ) {
+      window.setInterval(this.pollGamepads.bind(this), 10);
+    }
   }
 
   /**
@@ -365,6 +381,31 @@ export default class Runner {
     document.removeEventListener(browserEvents.KEYUP, this);
     document.removeEventListener(browserEvents.MOUSEDOWN, this);
     document.removeEventListener(browserEvents.MOUSEUP, this);
+  }
+
+  /** Преобразование событий ввода геймпада в события keydown/up (пробел) */
+  pollGamepads() {
+    const gamepads = navigator.getGamepads();
+    let keydown = false;
+    for (let i = 0; i < gamepads.length; i++) {
+      const gamepad = gamepads[i];
+      if (gamepad != null) {
+        if (gamepad.buttons.some(e => e.pressed === true)) {
+          keydown = true;
+        }
+      }
+    }
+    if (keydown !== this.gamepadPreviousKeyDown) {
+      this.gamepadPreviousKeyDown = keydown;
+      const event = new KeyboardEvent(keydown ? "keydown" : "keyup", {
+        code: "Space",
+        altKey: false,
+        ctrlKey: true,
+        shiftKey: false,
+        metaKey: false,
+      });
+      document.dispatchEvent(event);
+    }
   }
 
   /**
@@ -423,9 +464,13 @@ export default class Runner {
   /** Y координата земли */
   groundPosY = () => this.sizes.height - config.global.GROUND_POS;
 
-  setRunScore(distanse: number) {
-    const score = Math.round(distanse * config.global.SCORE_COEFFICIENT);
+  setRunScore(distance: number) {
+    const score = this.convertDistanceToScore(distance);
     this.printScore(score);
+  }
+
+  convertDistanceToScore(distance: number) {
+    return Math.round(distance * config.global.SCORE_COEFFICIENT);
   }
 
   close() {

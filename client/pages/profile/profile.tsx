@@ -8,9 +8,11 @@ import { Button } from "client/components/button";
 import { FormView, FormViewField } from "client/components/form-view";
 import { Heading } from "client/components/heading";
 import { LinkView } from "client/components/link-view";
+import { Meta } from "client/components/meta";
 import { Page } from "client/components/page";
 import { Panel } from "client/components/panel";
 import { Text } from "client/components/text";
+import { environment } from "client/enviroment";
 import { UserProfile } from "client/models/user";
 import { logout } from "client/redux/auth/auth-actions";
 import { authSelector } from "client/redux/auth/auth-selectors";
@@ -102,7 +104,7 @@ const Profile: FC<Props> = ({ className = "" }) => {
     stage: profileStage,
   } = useSelector(profileSelector);
 
-  const { error: authError, stage: authStage } = useSelector(authSelector);
+  const { stage: authStage } = useSelector(authSelector);
 
   const dispatch = useDispatch();
 
@@ -182,8 +184,7 @@ const Profile: FC<Props> = ({ className = "" }) => {
           </Button>
         );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authStage, logoutButtonClick, authError]);
+  }, [authStage, logoutButtonClick, profileError]);
   const profileContent = useMemo(() => {
     switch (profileStage) {
       case ProfileStages.FAILURE:
@@ -259,14 +260,17 @@ const Profile: FC<Props> = ({ className = "" }) => {
   ]);
 
   return (
-    <Page
-      left={<LinkView to="/" label="Menu" size="xl" />}
-      right={logoutContent}
-    >
-      <div className={b.mix(className)}>
-        <Panel className={b("panel")}>{profileContent}</Panel>
-      </div>
-    </Page>
+    <>
+      <Meta title={`${environment.title} | Profile`} />
+      <Page
+        left={<LinkView to="/" label="Menu" size="xl" />}
+        right={logoutContent}
+      >
+        <div className={b.mix(className)}>
+          <Panel className={b("panel")}>{profileContent}</Panel>
+        </div>
+      </Page>
+    </>
   );
 };
 

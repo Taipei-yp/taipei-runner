@@ -3,8 +3,10 @@ import React, { FC, memo, useCallback } from "react";
 import { FormView, FormViewField } from "client/components/form-view";
 import { Heading } from "client/components/heading";
 import { LinkView } from "client/components/link-view";
+import { Meta } from "client/components/meta";
 import { Page } from "client/components/page";
 import { Panel } from "client/components/panel";
+import { environment } from "client/enviroment";
 
 import "./feedback.css";
 
@@ -39,25 +41,28 @@ const Feedback: FC<Props> = ({ className }) => {
   }, []);
 
   return (
-    <Page
-      fullHeight
-      fixHeader
-      align="center"
-      left={<LinkView to="/" label="Menu" size="xl" />}
-    >
-      <div className={b.mix(className)}>
-        <Panel className={b("panel")}>
-          <Heading className={b("header")} text="Contact Us" />
-          <FormView
-            className={b("feedback-form")}
-            onSubmit={handleSubmit}
-            fields={FeedbackFields}
-            fullWidth
-            align="center"
-          />
-        </Panel>
-      </div>
-    </Page>
+    <>
+      <Meta title={`${environment.title} | Feedback`} />
+      <Page
+        fullHeight
+        fixHeader
+        align="center"
+        left={<LinkView to="/" label="Menu" size="xl" />}
+      >
+        <div className={b.mix(className)}>
+          <Panel className={b("panel")}>
+            <Heading className={b("header")} text="Contact Us" />
+            <FormView
+              className={b("feedback-form")}
+              onSubmit={handleSubmit}
+              fields={FeedbackFields}
+              fullWidth
+              align="center"
+            />
+          </Panel>
+        </div>
+      </Page>
+    </>
   );
 };
 

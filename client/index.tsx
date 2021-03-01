@@ -1,33 +1,28 @@
+import { ConnectedRouter } from "connected-react-router";
 import React from "react";
-import ReactDOM from "react-dom";
+import { hydrate } from "react-dom";
 import { Provider } from "react-redux";
 import { App } from "./app";
-import { store } from "./redux/store";
+import { RootState } from "./redux/root-reducer";
+import { configureStore } from "./redux/store";
 
 import "./styles/style.css";
 
-interface IBuildInfo {
-  buildDate: number;
-  version: string;
-  branchName: string;
-  commitId: string;
-  test: string;
+declare global {
+  interface Window {
+    __INITIAL_STATE__?: RootState;
+  }
 }
 
-const printBuildInfo = (buildInfoString: string): void => {
-  try {
-    const buildInfo = JSON.parse(buildInfoString) as IBuildInfo;
-    console.info(`version: ${buildInfo.version}`);
-    console.info(`build date: ${new Date(buildInfo.buildDate).toISOString()}`);
-    console.info(`branch: "${buildInfo.branchName}"`);
-    console.info(`commit: "${buildInfo.commitId}"`);
-  } catch {}
-};
+const initialState = window.__INITIAL_STATE__;
+delete window.__INITIAL_STATE__;
 
-printBuildInfo((process.env.BUILD_INFO as unknown) as string);
-ReactDOM.render(
+const { store, history } = configureStore(initialState);
+hydrate(
   <Provider store={store}>
-    <App />
+    <ConnectedRouter history={history}>
+      <App />
+    </ConnectedRouter>
   </Provider>,
   document.getElementById("app"),
 );

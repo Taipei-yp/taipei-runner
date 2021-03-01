@@ -4,6 +4,7 @@
 
 node_modules/
 dist/
+ssl/
 .tmp/
 .eslintcache
 
@@ -13,5 +14,3 @@ logs
 npm-debug.log*
 
 .env
-
-_reference
