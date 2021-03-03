@@ -12,5 +12,6 @@ type User = {
 type SignUpUser = Omit<User, "id" | "avatar" | "display_name">;
 type SignInUser = Pick<User, "login" | "password">;
 type UserProfile = Omit<User, "id" | "password" | "avatar">;
+type ServerUser = Pick<User, "id" | "login">;
 
-export { SignInUser, SignUpUser, User, UserProfile };
+export { ServerUser, SignInUser, SignUpUser, User, UserProfile };
