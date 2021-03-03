@@ -1,6 +1,6 @@
-import UserTheme from "server/db/models/schemes/user-theme";
+import UserTheme from "server/db/schemes/user-theme";
 import { psqlConnection as conn } from "../../connections";
-import SiteTheme from "../../models/schemes/site-theme";
+import SiteTheme from "../../schemes/site-theme";
 import { SiteThemeAdd, SiteThemeEdit } from "../models/site-theme";
 
 const siteThemeRepository = () => {
