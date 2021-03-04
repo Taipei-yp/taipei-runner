@@ -96,7 +96,7 @@ export const loadUserTheme = (): ThunkAction<
   const { userTheme } = api.themeApi();
   try {
     const response = await userTheme();
-    dispatch(themeNowLoaded(response.data));
+    dispatch(themeNowLoaded(response.data.theme));
   } catch (error) {
     dispatch(themeNowFailure(error));
   }

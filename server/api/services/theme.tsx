@@ -20,14 +20,7 @@ const themeService = () => {
     const user = userInfo(res);
     return userThemeRep
       .getByUserId(user.id)
-      .then(data => {
-        const resData = {
-          id: data?.theme.id,
-          name: data?.theme.theme,
-          description: data?.theme.description,
-        };
-        res.status(200).json({ resData });
-      })
+      .then(data => res.status(200).json(data))
       .catch(err =>
         res.status(500).json({ error: { type: "db error", data: err } }),
       );

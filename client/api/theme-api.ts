@@ -1,4 +1,4 @@
-import { Theme } from "client/models/theme";
+import { Theme, UserThemeResponce } from "client/models/theme";
 import { api } from "./api";
 
 const path = `/theme`;
@@ -10,7 +10,9 @@ const themeApi = () => {
   };
 
   const userTheme = () => {
-    return client.get<Theme>(`${path}/user`, { withCredentials: true });
+    return client.get<UserThemeResponce>(`${path}/user`, {
+      withCredentials: true,
+    });
   };
 
   const updateUserTheme = (theme: Theme) => {

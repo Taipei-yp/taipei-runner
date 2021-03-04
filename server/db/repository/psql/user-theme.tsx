@@ -1,4 +1,3 @@
-import { psqlConnection as conn } from "../../connections";
 import SiteThemeTable from "../../schemes/site-theme";
 import UserThemeTable from "../../schemes/user-theme";
 

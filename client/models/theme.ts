@@ -3,5 +3,10 @@ type Theme = {
   name: string;
   description?: string;
 };
-
-export { Theme };
+type UserThemeResponce = {
+  id: number;
+  user_id: number;
+  theme: Theme;
+  description?: string;
+};
+export { Theme, UserThemeResponce };
