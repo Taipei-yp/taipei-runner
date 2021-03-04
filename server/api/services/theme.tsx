@@ -29,9 +29,7 @@ const themeService = () => {
         res.status(200).json({ resData });
       })
       .catch(err =>
-        res
-          .status(500)
-          .json({ error: { type: "db error", data: JSON.stringify(err) } }),
+        res.status(500).json({ error: { type: "db error", data: err } }),
       );
   };
   const updateUserTheme = (req: Request, res: Response) => {
