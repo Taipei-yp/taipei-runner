@@ -2,7 +2,7 @@ import { createSelector } from "reselect";
 import { Theme } from "client/models/theme";
 import { RootState } from "client/redux/root-reducer";
 
-export const authSelector = createSelector(
+export const themeSelector = createSelector(
   [
     (state: RootState) => state.theme.list,
     (state: RootState) => state.theme.now,
