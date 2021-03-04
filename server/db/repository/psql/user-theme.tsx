@@ -18,7 +18,7 @@ const userThemeRepository = () => {
   const updateByUserId = (userId: number, themeId: number) => {
     return UserThemeTable.update(
       {
-        themeId,
+        theme_id: themeId,
       },
       {
         where: {

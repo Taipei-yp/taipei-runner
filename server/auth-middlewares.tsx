@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { setUserAuth, setUserInfo, userIsAuth } from "server/helpers";
 import { ServerUser } from "server/user-model";
-import { api, profileApi } from "client/api";
+import { api } from "client/api";
 
 export async function checkAuthCkookieMiddleware(
   req: Request,

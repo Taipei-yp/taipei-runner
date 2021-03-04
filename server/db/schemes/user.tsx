@@ -7,14 +7,13 @@ import {
   PrimaryKey,
   Table,
 } from "sequelize-typescript";
-import { User } from "../models/user";
 
 @Table({
   timestamps: false,
   paranoid: true,
   tableName: "user",
 })
-class UserTable extends Model<User> {
+class UserTable extends Model {
   @AutoIncrement
   @PrimaryKey
   @Column(DataType.INTEGER)

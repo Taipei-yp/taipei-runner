@@ -12,7 +12,7 @@ const themeService = () => {
     siteThemeRepository()
       .getAll()
       .then(themes => {
-        res.status(200).json(themes);
+        res.status(200).json({ themes });
       })
       .catch(err => res.status(500).json({ error: ["db error", err] }));
   };
@@ -24,12 +24,28 @@ const themeService = () => {
       .catch(err =>
         res
           .status(500)
-          .json({ error: { type: "db-error", data: JSON.stringify(err) } }),
+          .json({ error: { type: "db error", data: JSON.stringify(err) } }),
       );
   };
-  const updateUserTheme = (_req: Request, res: Response) => {
+  const updateUserTheme = (req: Request, res: Response) => {
+    const { themeId } = JSON.parse(req.body);
+    if (!themeId || Number.isNaN(Number(themeId))) {
+      res.status(400).json({
+        error: {
+          type: "request parameter error",
+          data: "incorrect themeId parameter",
+        },
+      });
+    }
     const user = userInfo(res);
-    return 1;
+    userThemeRep
+      .updateByUserId(user.id, Number(themeId))
+      .then(() => res.status(200).send("ok"))
+      .catch(err =>
+        res
+          .status(500)
+          .json({ error: { type: "db error", data: JSON.stringify(err) } }),
+      );
   };
   return { getAll, getUserTheme, updateUserTheme };
 };
