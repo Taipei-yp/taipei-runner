@@ -1,20 +1,21 @@
-import UserTheme from "server/db/schemes/user-theme";
-import { psqlConnection as conn } from "../../connections";
-import SiteTheme from "../../schemes/site-theme";
-import { SiteThemeAdd, SiteThemeEdit } from "../models/site-theme";
+import SiteThemeTable from "../../schemes/site-theme";
 
 const siteThemeRepository = () => {
-  const addTheme = (data: SiteThemeAdd) => {
-    return conn.model(SiteTheme).create({ data, ...{ deteted: false } });
+  const addTheme = (data: { theme: string; description: string }) => {
+    const theme = new SiteThemeTable({ deleted: false, ...data });
+    return theme.save();
   };
-  const editTheme = (id: number, data: SiteThemeEdit) => {
-    return conn.model(SiteTheme).update(data, { where: { id } });
+  const editTheme = (
+    id: number,
+    data: { theme: string; description: string },
+  ) => {
+    return SiteThemeTable.update(data, { where: { id } });
   };
   const deleteTheme = (id: number) => {
-    return conn.model(SiteTheme).update({ deleted: true }, { where: { id } });
+    return SiteThemeTable.update({ deleted: true }, { where: { id } });
   };
   const getAll = () => {
-    return conn.model(SiteTheme).findAll({
+    return SiteThemeTable.findAll({
       where: {
         deleted: false,
       },

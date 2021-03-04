@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { setUserAuth, setUserInfo, userIsAuth } from "server/helpers";
-import { profileApi } from "client/api";
-import { ServerUser } from "client/models/user";
+import { ServerUser } from "server/user-model";
+import { api, profileApi } from "client/api";
 
 export async function checkAuthCkookieMiddleware(
   req: Request,
@@ -12,11 +12,17 @@ export async function checkAuthCkookieMiddleware(
     const { authCookie } = req.cookies;
     if (authCookie) {
       setUserAuth(res);
-      let user: ServerUser = { id: -1, login: "" };
+      const user: ServerUser = { id: -1, login: "" };
       try {
-        const api = profileApi();
-        const profileRes = await api.getProfile();
-        user = profileRes.data;
+        const apiClient = api().client;
+        const profileRes = await apiClient.get<ServerUser>(`/auth/user`, {
+          withCredentials: true,
+          headers: {
+            Cookie: req.headers.cookie,
+          },
+        });
+        user.id = profileRes.data.id || -1;
+        user.login = profileRes.data.login;
       } catch (error) {
         console.log(`Failed to load user data: ${error}`);
       }
@@ -33,5 +39,7 @@ export function isAuthMiddleware(
   next: NextFunction,
 ) {
   if (userIsAuth(res)) next();
-  res.status(401).send("You are not authorized for api requests");
+  else {
+    res.status(401).send("You are not authorized for api requests");
+  }
 }

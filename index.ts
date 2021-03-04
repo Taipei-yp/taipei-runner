@@ -1,6 +1,6 @@
 import fs from "fs";
 import https from "https";
-import { app, initDadabases } from "./dist/server,js";
+import { app, initDadabases } from "./dist/server.js";
 
 const key = fs.readFileSync("./ssl/key.pem");
 const cert = fs.readFileSync("./ssl/cert.pem");
