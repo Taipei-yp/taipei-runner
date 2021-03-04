@@ -1,8 +1,11 @@
 import axios from "axios";
 import { environment } from "client/enviroment";
 
-const api = () => {
-  const client = axios.create({ baseURL: environment.apiUrl, timeout: 5000 });
+const api = (localApi = false) => {
+  const client = axios.create({
+    baseURL: localApi ? environment.localApiUrl : environment.apiUrl,
+    timeout: 5000,
+  });
   client.interceptors.response.use(
     res => res,
     error => {

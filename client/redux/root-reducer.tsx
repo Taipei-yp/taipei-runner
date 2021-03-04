@@ -7,12 +7,14 @@ import {
   LeaderboardState,
 } from "./leaderboard/leaderboard-reducer";
 import { profileReducer, ProfileState } from "./profile/profile-reducer";
+import { themeReducer, ThemeState } from "./theme/theme-reducer";
 
 export type RootState = {
   auth: AuthState;
   profile: ProfileState;
   leaderboard: LeaderboardState;
   router: RouterState;
+  theme: ThemeState;
 };
 
 export const createRootReducer = (history: History) =>
@@ -21,4 +23,5 @@ export const createRootReducer = (history: History) =>
     profile: profileReducer,
     leaderboard: leaderboardReducer,
     router: connectRouter(history),
+    theme: themeReducer,
   });

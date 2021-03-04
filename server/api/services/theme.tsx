@@ -20,7 +20,14 @@ const themeService = () => {
     const user = userInfo(res);
     return userThemeRep
       .getByUserId(user.id)
-      .then(data => res.status(200).json(data?.toJSON()))
+      .then(data => {
+        const resData = {
+          id: data?.theme.id,
+          name: data?.theme.theme,
+          description: data?.theme.description,
+        };
+        res.status(200).json({ resData });
+      })
       .catch(err =>
         res
           .status(500)
@@ -28,7 +35,7 @@ const themeService = () => {
       );
   };
   const updateUserTheme = (req: Request, res: Response) => {
-    const { themeId } = JSON.parse(req.body);
+    const { themeId } = req.params;
     if (!themeId || Number.isNaN(Number(themeId))) {
       res.status(400).json({
         error: {

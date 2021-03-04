@@ -14,7 +14,7 @@ export type LeaderboardState = {
   error?: string;
 };
 
-const initialState = {
+export const initialState = {
   gameResultsData: [],
   stage: LeaderboardStages.INIT,
 };
