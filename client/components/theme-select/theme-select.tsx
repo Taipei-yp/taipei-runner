@@ -37,7 +37,7 @@ const ThemeSelect: FC<Props> = ({ className = "" }) => {
 
   return (
     <select className={b.mix(className)} onChange={changeFunc} value={now.id}>
-      <option value="0">default</option>
+      <option value="99999">default</option>
       {optionList}
     </select>
   );
