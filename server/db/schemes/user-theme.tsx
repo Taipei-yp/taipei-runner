@@ -1,45 +1,48 @@
 import {
   AllowNull,
   AutoIncrement,
+  BelongsTo,
   Column,
   DataType,
   ForeignKey,
   Model,
   PrimaryKey,
   Table,
+  Unique,
 } from "sequelize-typescript";
-import SiteTheme from "./site-theme";
-import User from "./user";
+import SiteThemeTable from "./site-theme";
+import UserTable from "./user";
 
 @Table({
   timestamps: false,
   paranoid: true,
   tableName: "user_theme",
 })
-class UserTheme extends Model<UserTheme> {
+class UserThemeTable extends Model {
   @AutoIncrement
   @PrimaryKey
   @Column(DataType.INTEGER)
   id!: number;
 
-  @ForeignKey(() => SiteTheme)
+  @ForeignKey(() => UserTable)
   @AllowNull(false)
-  @Column({
-    type: DataType.INTEGER,
-    field: "id",
-  })
-  themeId!: number;
-
-  @Column(DataType.STRING)
-  device!: string;
-
-  @ForeignKey(() => User)
-  @AllowNull(false)
+  @Unique
   @Column({
     type: DataType.INTEGER,
     field: "user_id",
   })
   user_id!: number;
+
+  @ForeignKey(() => SiteThemeTable)
+  @AllowNull(false)
+  @Column(DataType.INTEGER)
+  theme_id!: number;
+
+  @Column(DataType.STRING)
+  device!: string;
+
+  @BelongsTo(() => SiteThemeTable, "theme_id")
+  theme!: SiteThemeTable;
 }
 
-export default UserTheme;
+export default UserThemeTable;

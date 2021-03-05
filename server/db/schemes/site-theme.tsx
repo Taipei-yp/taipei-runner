@@ -15,7 +15,7 @@ import {
   paranoid: true,
   tableName: "site_theme",
 })
-class SiteTheme extends Model<SiteTheme> {
+class SiteThemeTable extends Model {
   @AutoIncrement
   @PrimaryKey
   @Column(DataType.INTEGER)
@@ -36,4 +36,4 @@ class SiteTheme extends Model<SiteTheme> {
   deleted!: boolean;
 }
 
-export default SiteTheme;
+export default SiteThemeTable;

@@ -13,7 +13,7 @@ import {
   paranoid: true,
   tableName: "user",
 })
-class User extends Model<User> {
+class UserTable extends Model {
   @AutoIncrement
   @PrimaryKey
   @Column(DataType.INTEGER)
@@ -28,4 +28,4 @@ class User extends Model<User> {
   login!: string;
 }
 
-export default User;
+export default UserTable;

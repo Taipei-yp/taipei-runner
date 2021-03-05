@@ -1,7 +1,14 @@
 import { createBrowserHistory, createMemoryHistory } from "history";
 import { applyMiddleware, compose, createStore } from "redux";
 import thunk from "redux-thunk";
-import { authApi, leaderboardApi, oauthApi, profileApi } from "client/api";
+import {
+  authApi,
+  leaderboardApi,
+  oauthApi,
+  profileApi,
+  themeApi,
+} from "client/api";
+import { isServer } from "client/helpers/check-server";
 import { getInitialState } from "./get-Initial-state";
 import { createRootReducer, RootState } from "./root-reducer";
 
@@ -10,20 +17,10 @@ export type Api = {
   profileApi: typeof profileApi;
   oauthApi: typeof oauthApi;
   leaderboardApi: typeof leaderboardApi;
+  themeApi: typeof themeApi;
 };
 
-const api: Api = {
-  authApi,
-  profileApi,
-  oauthApi,
-  leaderboardApi,
-};
-
-const isServer = !(
-  typeof window !== "undefined" &&
-  window.document &&
-  window.document.createElement
-);
+const api: Api = { authApi, profileApi, oauthApi, leaderboardApi, themeApi };
 
 const configureStore = (
   initialState: RootState = getInitialState(),

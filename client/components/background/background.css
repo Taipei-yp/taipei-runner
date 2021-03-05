@@ -22,7 +22,13 @@
     animation-play-state: running;
   }
 }
-
+.app.light .background {
+  background: url("../../assets/images/bg-buildings-middle-l.png") repeat 0
+      bottom,
+    url("../../assets/images/bg-buildings-far-l.png") repeat 0 bottom,
+    url("../../assets/images/bg-sky-l.png") repeat 0 bottom;
+  background-repeat-y: no-repeat;
+}
 @keyframes slide {
   from {
     background-position-x: 0, 0, 0;

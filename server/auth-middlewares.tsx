@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { setUserAuth, setUserInfo, userIsAuth } from "server/helpers";
+import { ServerUser } from "server/user-model";
 import { profileApi } from "client/api";
-import { ServerUser } from "client/models/user";
+import { apiCookies } from "client/api/api";
 
 export async function checkAuthCkookieMiddleware(
   req: Request,
@@ -12,11 +13,13 @@ export async function checkAuthCkookieMiddleware(
     const { authCookie } = req.cookies;
     if (authCookie) {
       setUserAuth(res);
-      let user: ServerUser = { id: -1, login: "" };
+      apiCookies.set(req.headers.cookie);
+      const user: ServerUser = { id: -1, login: "" };
       try {
         const api = profileApi();
         const profileRes = await api.getProfile();
-        user = profileRes.data;
+        user.id = profileRes.data.id || -1;
+        user.login = profileRes.data.login;
       } catch (error) {
         console.log(`Failed to load user data: ${error}`);
       }
@@ -33,5 +36,7 @@ export function isAuthMiddleware(
   next: NextFunction,
 ) {
   if (userIsAuth(res)) next();
-  res.status(401).send("You are not authorized for api requests");
+  else {
+    res.status(401).send("You are not authorized for api requests");
+  }
 }

@@ -48,4 +48,13 @@
     cursor: pointer;
     z-index: 2;
   }
+
+  &__change-pass {
+    margin-bottom: 20px;
+  }
+
+  &__theme-label {
+    margin-bottom: 10px;
+    display: inline-block;
+  }
 }
