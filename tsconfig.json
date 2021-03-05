@@ -1,11 +1,6 @@
 {
-  "include": [
-    "./client",
-    "./server"
-  ],
-  "exclude": [
-    "node_modules"
-  ],
+  "include": ["./client", "./server"],
+  "exclude": ["node_modules"],
   "compilerOptions": {
     "target": "ES2020",
     "module": "ESNext",
@@ -29,10 +24,7 @@
     "inlineSources": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "types": [
-      "node",
-      "jest"
-    ],
+    "types": ["node", "jest"],
     "jsx": "react"
   }
 }

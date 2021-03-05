@@ -1,0 +1,14 @@
+{
+  "include": ["./index.ts"],
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "jsx": "react",
+    "inlineSources": true,
+    "resolveJsonModule": true,
+    "types": ["node"]
+  }
+}
