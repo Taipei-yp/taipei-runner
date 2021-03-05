@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { setUserAuth, setUserInfo, userIsAuth } from "server/helpers";
 import { ServerUser } from "server/user-model";
-import { api } from "client/api";
+import { profileApi } from "client/api";
 import { apiCookies } from "client/api/api";
 
 export async function checkAuthCkookieMiddleware(
@@ -16,13 +16,8 @@ export async function checkAuthCkookieMiddleware(
       apiCookies.set(req.headers.cookie);
       const user: ServerUser = { id: -1, login: "" };
       try {
-        const apiClient = api().client;
-        const profileRes = await apiClient.get<ServerUser>(`/auth/user`, {
-          withCredentials: true,
-          headers: {
-            Cookie: req.headers.cookie,
-          },
-        });
+        const api = profileApi();
+        const profileRes = await api.getProfile();
         user.id = profileRes.data.id || -1;
         user.login = profileRes.data.login;
       } catch (error) {
