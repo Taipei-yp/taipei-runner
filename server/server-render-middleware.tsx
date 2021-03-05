@@ -23,11 +23,6 @@ export default (req: Request, res: Response) => {
 
   const { store } = configureStore(getInitialState(location), location);
 
-  if (res.locals.userIsAuth) {
-    store.dispatch(signedIn());
-    store.dispatch(loadUserTheme());
-  }
-
   function renderApp() {
     const reduxState = store.getState();
     const helmetData = Helmet.renderStatic();
@@ -53,6 +48,11 @@ export default (req: Request, res: Response) => {
     Api,
     AnyAction
   >)[] = [];
+
+  if (res.locals.userIsAuth) {
+    store.dispatch(signedIn());
+    dataRequirements.push(store.dispatch(loadUserTheme()));
+  }
 
   routes.some(route => {
     const { fetchData: fetchMethod } = route;

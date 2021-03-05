@@ -2,9 +2,10 @@ import { Theme, UserThemeResponce } from "client/models/theme";
 import { api } from "./api";
 
 const path = `/theme`;
-const { client } = api(true);
 
 const themeApi = () => {
+  const { client } = api(true);
+
   const themesList = () => {
     return client.get<Theme[]>(`${path}/`, { withCredentials: true });
   };

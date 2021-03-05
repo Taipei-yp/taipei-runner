@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { setUserAuth, setUserInfo, userIsAuth } from "server/helpers";
 import { ServerUser } from "server/user-model";
 import { api } from "client/api";
+import { apiCookies } from "client/api/api";
 
 export async function checkAuthCkookieMiddleware(
   req: Request,
@@ -12,6 +13,7 @@ export async function checkAuthCkookieMiddleware(
     const { authCookie } = req.cookies;
     if (authCookie) {
       setUserAuth(res);
+      apiCookies.set(req.headers.cookie);
       const user: ServerUser = { id: -1, login: "" };
       try {
         const apiClient = api().client;

@@ -9,7 +9,7 @@ export const App: FC = () => {
   const { isAuthorized } = useAuth();
   const { nowTheme } = useTheme();
   return (
-    <div className={`app ${nowTheme.name}`}>
+    <div className={`app ${nowTheme.theme}`}>
       <Switch>
         {routes.map(({ isPrivate, path, component, exact }) => {
           return isPrivate ? (

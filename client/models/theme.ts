@@ -1,6 +1,6 @@
 type Theme = {
   id: number;
-  name: string;
+  theme: string;
   description?: string;
 };
 type UserThemeResponce = {
