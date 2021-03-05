@@ -1,0 +1,8 @@
+.theme-select {
+  font-size: var(--tpr-fontsize);
+  line-height: var(--tpr-fontsize);
+  letter-spacing: 1px;
+  border: 2px solid var(--tpr-color-primary);
+  max-width: 100%;
+  width: 180px;
+}

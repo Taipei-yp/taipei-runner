@@ -8,6 +8,7 @@ import {
   Model,
   PrimaryKey,
   Table,
+  Unique,
 } from "sequelize-typescript";
 import SiteThemeTable from "./site-theme";
 import UserTable from "./user";
@@ -25,6 +26,7 @@ class UserThemeTable extends Model {
 
   @ForeignKey(() => UserTable)
   @AllowNull(false)
+  @Unique
   @Column({
     type: DataType.INTEGER,
     field: "user_id",

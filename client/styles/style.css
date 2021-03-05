@@ -29,7 +29,6 @@ body {
 
 body {
   background-color: var(--tpr-color-dark-deep);
-  color: var(--tpr-color-dark-contrast);
   font-size: var(--tpr-fontsize);
   font-family: ArcadeClassic, sans-serif;
 }
@@ -38,4 +37,5 @@ body {
 .app {
   width: 100%;
   height: 100%;
+  color: var(--tpr-color-dark-contrast);
 }

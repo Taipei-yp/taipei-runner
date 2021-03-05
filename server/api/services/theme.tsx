@@ -11,9 +11,7 @@ const themeService = () => {
   const getAll = (_req: Request, res: Response) => {
     siteThemeRepository()
       .getAll()
-      .then(themes => {
-        res.status(200).json({ themes });
-      })
+      .then(themes => res.status(200).json(themes))
       .catch(err => res.status(500).json({ error: ["db error", err] }));
   };
   const getUserTheme = (_req: Request, res: Response) => {

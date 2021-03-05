@@ -15,16 +15,26 @@ const userThemeRepository = () => {
     });
   };
   const updateByUserId = (userId: number, themeId: number) => {
-    return UserThemeTable.update(
-      {
+    return UserThemeTable.findOrCreate({
+      where: {
+        user_id: userId,
+      },
+      defaults: {
         theme_id: themeId,
       },
-      {
-        where: {
-          user_id: userId,
+    }).then(([row, created]) => {
+      if (created) {
+        return [1, [row]];
+      }
+      return UserThemeTable.update(
+        { theme_id: themeId },
+        {
+          where: {
+            user_id: userId,
+          },
         },
-      },
-    );
+      );
+    });
   };
 
   return {

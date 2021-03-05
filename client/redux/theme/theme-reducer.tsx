@@ -18,7 +18,7 @@ export type ThemeState = {
 
 export const initialState: ThemeState = {
   list: [],
-  now: { id: -1, name: "default" },
+  now: { id: 0, theme: "default" },
 };
 
 export const themeReducer = (
