@@ -11,6 +11,7 @@ export type Props = {
   children?: ReactNode;
   className?: string;
   fixHeader?: boolean;
+  hideHeader?: boolean;
   align?: "center" | "bottom" | "stretch";
   fullWidth?: boolean;
   fullHeight?: boolean;
@@ -26,6 +27,7 @@ const Page: FC<Props> = ({
   right,
   className = "",
   fixHeader = false,
+  hideHeader = false,
   align = "center",
   fullWidth = false,
   fullHeight = false,
@@ -35,7 +37,7 @@ const Page: FC<Props> = ({
   return (
     <div className={b.mix(className)}>
       <Background animate={animateBack} shade={shadeBack} />
-      <div className={b("header", { fix: fixHeader })}>
+      <div className={b("header", { fix: fixHeader, hide: hideHeader })}>
         <Header left={left} right={right} />
       </div>
       <div className={b("content", { align, grow: fullHeight })}>

@@ -200,7 +200,7 @@ export default class Runner {
           this.currentSpeed += config.global.ACCELERATION;
         }
       } else {
-        this.endGame();
+        this.endGame(true);
       }
       this.setRunScore(this.distanceRan);
     }
@@ -234,15 +234,19 @@ export default class Runner {
   /**
    * Конец игры
    */
-  endGame() {
+  endGame(gameover = false) {
     this.stop();
     this.status.crashed = true;
     this.hero.update(100, HeroStatus.CRASHED);
     this.time = getTimeStamp();
     this.gameAudio.stopBgSound();
-    this.gameAudio.actionSound(SoundAction.GAMEOVER);
     this.gameRunning(false);
-    this.gameOverFunc(this.convertDistanceToScore(this.distanceRan));
+    if (gameover) {
+      this.gameAudio.actionSound(SoundAction.GAMEOVER);
+      setTimeout(() => {
+        this.gameOverFunc(this.convertDistanceToScore(this.distanceRan));
+      }, 1000);
+    }
   }
 
   /**

@@ -27,7 +27,11 @@ const ThemeSelect: FC<Props> = ({ className = "" }) => {
 
   const optionList = useMemo(() => {
     return list.map(el => {
-      return <option value={el.id}>{el.theme}</option>;
+      return (
+        <option value={el.id} key={el.id}>
+          {el.theme}
+        </option>
+      );
     });
   }, [list]);
 
@@ -37,7 +41,6 @@ const ThemeSelect: FC<Props> = ({ className = "" }) => {
 
   return (
     <select className={b.mix(className)} onChange={changeFunc} value={now.id}>
-      <option value="99999">default</option>
       {optionList}
     </select>
   );

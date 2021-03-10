@@ -1,16 +1,14 @@
 import block from "bem-cn";
 import React, { FC, memo, useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { Redirect, useHistory } from "react-router";
 import { LinkView } from "client/components/link-view";
 import { Meta } from "client/components/meta";
 import { Page } from "client/components/page";
 import { ScoreCounter } from "client/components/score-counter";
 import { environment } from "client/enviroment";
 import Runner from "client/game-engine/runner";
-import {
-  leaderboardInit,
-  saveScore,
-} from "client/redux/leaderboard/leaderboard-actions";
+import { saveScore } from "client/redux/leaderboard/leaderboard-actions";
 
 import "./game.css";
 
@@ -21,6 +19,7 @@ type Props = {
 };
 
 const Game: FC<Props> = ({ className = "" }) => {
+  const history = useHistory();
   const [score, setScore] = useState(0);
   const [
     isBackgroundAnimationActive,
@@ -29,34 +28,24 @@ const Game: FC<Props> = ({ className = "" }) => {
 
   const dispatch = useDispatch();
 
-  const sendScore = useCallback(
+  const gameOver = useCallback(
     (gameScore: number) => {
       dispatch(saveScore(gameScore));
+      history.push("/game-over", { gameScore });
     },
-    [dispatch],
+    [dispatch, history],
   );
 
-  const gameRunningToggle = useCallback(
-    (running: boolean) => {
-      setIsBackgroundAnimationActive(running);
-      dispatch(leaderboardInit());
-    },
-    [dispatch],
-  );
+  const gameRunningToggle = useCallback((running: boolean) => {
+    setIsBackgroundAnimationActive(running);
+  }, []);
 
   useEffect(() => {
-    dispatch(leaderboardInit());
-
-    const runner = new Runner(
-      "#runner",
-      setScore,
-      gameRunningToggle,
-      sendScore,
-    );
+    const runner = new Runner("#runner", setScore, gameRunningToggle, gameOver);
     runner.init();
 
     return () => runner.close();
-  }, [gameRunningToggle, sendScore, dispatch]);
+  }, [gameRunningToggle, gameOver]);
   return (
     <>
       <Meta title={`${environment.title} | Game`} />

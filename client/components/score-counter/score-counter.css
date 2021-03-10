@@ -1,4 +1,5 @@
 .score-counter {
   font-size: var(--tpr-fontsize-xl);
   line-height: var(--tpr-fontsize-xl);
+  color: var(--tpr-color-accent-contrast);
 }
