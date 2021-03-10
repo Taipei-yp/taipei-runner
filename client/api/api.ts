@@ -21,16 +21,20 @@ const api = (localApi = false) => {
     baseURL: localApi ? environment.localApiUrl : environment.apiUrl,
     timeout: 5000,
   });
-  const cookies = apiCookies.get();
-  if (cookies !== undefined && isServer) {
-    client.interceptors.request.use(config => {
+
+  client.interceptors.request.use(config => {
+    const cookies = apiCookies.get();
+    if (cookies !== undefined && isServer) {
       // eslint-disable-next-line no-param-reassign
-      config.headers = {
-        Cookie: cookies,
-      };
-      return config;
-    });
-  }
+      config.headers = { ...config.headers, Cookie: cookies };
+    }
+    if (process.env.NODE_ENV !== "development") {
+      console.log(config.baseURL);
+      console.log(config.headers);
+    }
+    return config;
+  });
+
   client.interceptors.response.use(
     res => res,
     error => {
