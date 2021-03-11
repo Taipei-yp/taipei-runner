@@ -24,7 +24,7 @@
     "start:webpack": "webpack --mode=development --config webpack/webpack.config.ts",
     "start-prod:webpack": "webpack --mode=production --config webpack/webpack.config.ts",
     "start:server": "nodemon",
-    "start-prod:server": "nodemon",
+    "start-prod:server": "ts-node --project ./tsconfig.node.json ./index.ts",
     "build": "run-s build-prod",
     "build-dev": "cross-env NODE_ENV=development webpack --config webpack/webpack.dev.js",
     "build-prod": "cross-env NODE_ENV=production webpack --config webpack/webpack.prod.js",
