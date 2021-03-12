@@ -1,6 +1,6 @@
 version: "3.6"
 services:
-  taipei_runner:
+  taipei-runner:
     build:
       context: .
       args: 
@@ -30,3 +30,4 @@ services:
     volumes:
       - ./db_init/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
       - ./dockerdata/mongo:/data/db
+    restart: always
