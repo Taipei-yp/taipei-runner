@@ -34,4 +34,4 @@ jobs:
         run: |
           docker-compose build
           docker tag taipei-runner_app cr.yandex/crpuidt47oer2qhm9a1m/taipei-runner_app:latest
-          docker-compose push
+          docker push cr.yandex/crpuidt47oer2qhm9a1m/taipei-runner_app:latest
