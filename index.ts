@@ -11,7 +11,7 @@ const port = process.env.PORT || 4000;
 
 initDadabases()
   .finally(() => {
-    server.listen({ port, host: "local.ya-praktikum.tech" }, () => {
+    server.listen({ port }, () => {
       console.log("Application is started on localhost:", port);
     });
   })

@@ -2,15 +2,16 @@
 *.iml
 .vscode/
 
-node_modules/
-dist/
+.env
 .tmp/
 .eslintcache
+node_modules/
+dist/
 ssl/
-
+dockerdata/
 # Logs
 logs
 *.log
 npm-debug.log*
 
-.env
+
