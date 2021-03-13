@@ -33,4 +33,8 @@ jobs:
       - name: Build and YCR Push
         run: |
           docker-compose build
-          docker-compose images | while read i ; do docker push cr.yandex/crpuidt47oer2qhm9a1m/$i ; done
+          docker tag postgres cr.yandex/crpuidt47oer2qhm9a1m/postgres:latest
+          docker tag mongo cr.yandex/crpuidt47oer2qhm9a1m/mongo:latest
+          docker tag node cr.yandex/crpuidt47oer2qhm9a1m/node:latest
+          docker tag taipei-runner_app cr.yandex/crpuidt47oer2qhm9a1m/taipei-runner_app:latest
+          docker-compose push
