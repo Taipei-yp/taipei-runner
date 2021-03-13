@@ -27,6 +27,7 @@ jobs:
       - name: YCR Login
         run: |
           echo "${{ secrets.YCR_KEY_JSON_BASE64 }}" | base64 --decode > key.json
+          echo cat key.json
           cat key.json | docker login -u json_key --password-stdin cr.yandex
       - name: Build and YCR Push
         run: |
