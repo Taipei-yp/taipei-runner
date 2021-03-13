@@ -26,7 +26,7 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: YCR Login
         run: |
-          echo "${{ secrets.YCR_KEY_JSON }}" > key.json
+          echo "${{ secrets.YCR_KEY_JSON }}" | base64 --decode > key.json
           cat key.json | docker login -u json_key --password-stdin cr.yandex
       - name: Build and YCR Push
         run: |
