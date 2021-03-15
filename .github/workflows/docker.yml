@@ -32,16 +32,14 @@ jobs:
           password: ${{ secrets.YCR_KEY_JSON }}
       - name: Build and YCR Push
         run: |
-          docker-compose build
-          docker tag taipei-runner_app cr.yandex/crpuidt47oer2qhm9a1m/taipei-runner_app:latest
-          docker push cr.yandex/crpuidt47oer2qhm9a1m/taipei-runner_app:latest
+          
       - name: SSH User Setup
         run: |
           mkdir -p ~/.ssh/
           echo "$SSH_PRIVATE_KEY" > ../private.key
           sudo chmod 600 ../private.key
           echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-          sftp -i $SSH_KEY_PATH github-actions@host
+          sftp -i $SSH_KEY_PATH github-actions@$SSH_KNOWN_HOSTS
           sftp ~/db_init/postgres-initdb.sh /var/local
           sftp ~/db_init/init-mongo.js /var/local
           exit
