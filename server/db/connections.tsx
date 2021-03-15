@@ -9,7 +9,7 @@ import UserTheme from "./schemes/user-theme";
 const psqlConnection = new Sequelize(psqlConfig);
 psqlConnection.addModels([UserTheme, SiteTheme, User]);
 
-SiteTheme.afterSync(() => {
+psqlConnection.afterSync(() => {
   SiteThemesData.forEach(v => {
     SiteTheme.findOrCreate({
       where: {
@@ -17,7 +17,7 @@ SiteTheme.afterSync(() => {
       },
       defaults: {
         description: v.description,
-        delete: false,
+        deleted: false,
       },
     });
   });
