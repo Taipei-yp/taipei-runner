@@ -1,11 +1,15 @@
 import fs from "fs";
 import https from "https";
+import { env } from "process";
 import { app, initDadabases } from "./dist/server.js";
 
-const key = fs.readFileSync("./ssl/key.pem");
-const cert = fs.readFileSync("./ssl/cert.pem");
+const server = https.createServer(app);
 
-const server = https.createServer({ key, cert }, app);
+if (process.env.NODE_ENV === "development") {
+  const key = fs.readFileSync("./ssl/key.pem");
+  const cert = fs.readFileSync("./ssl/cert.pem");
+  server.setSecureContext({ key, cert });
+}
 
 const port = process.env.PORT || 4000;
 
