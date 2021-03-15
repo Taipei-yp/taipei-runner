@@ -35,3 +35,20 @@ jobs:
           docker-compose build
           docker tag taipei-runner_app cr.yandex/crpuidt47oer2qhm9a1m/taipei-runner_app:latest
           docker push cr.yandex/crpuidt47oer2qhm9a1m/taipei-runner_app:latest
+      - name: SSH User Setup
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ../private.key
+          sudo chmod 600 ../private.key
+          echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          sftp -i $SSH_KEY_PATH github-actions@host
+          sftp ~/db_init/postgres-initdb.sh /var/local
+          sftp ~/db_init/init-mongo.js /var/local
+          exit
+        shell: bash
+        env:
+          SSH_PRIVATE_KEY: ${{secrets.YCR_SECRET}}
+          SSH_KNOWN_HOSTS: ${{secrets.YCR_HOST}}
+          SSH_KEY_PATH: ${{ github.workspace }}/../private.key
+          
+        
