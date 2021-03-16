@@ -40,8 +40,8 @@ jobs:
           sudo chmod 600 private.key
           echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
           sftp -i $SSH_KEY_PATH ${{secrets.YCR_USERHOST}}
-          sftp ${{ github.workspace }}/db_init/postgres-initdb.sh /var/local
-          sftp ${{ github.workspace }}/db_init/init-mongo.js /var/local
+          sftp put ${{ github.workspace }}/db_init/postgres-initdb.sh /var/local
+          sftp put ${{ github.workspace }}/db_init/init-mongo.js /var/local
           exit
         shell: bash
         env:
