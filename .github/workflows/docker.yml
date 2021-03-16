@@ -36,8 +36,8 @@ jobs:
       - name: SSH User Setup
         run: |
           mkdir -p ~/.ssh/
-          echo "$SSH_PRIVATE_KEY" > ../private.key
-          sudo chmod 600 ../private.key
+          echo "$SSH_PRIVATE_KEY" > private.key
+          sudo chmod 600 private.key
           echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
           sftp -i $SSH_KEY_PATH github-actions@$SSH_KNOWN_HOSTS
           sftp ~/db_init/postgres-initdb.sh /var/local
@@ -47,6 +47,6 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{secrets.YCR_SECRET}}
           SSH_KNOWN_HOSTS: ${{secrets.YCR_HOST}}
-          SSH_KEY_PATH: ${{ github.workspace }}/../private.key
+          SSH_KEY_PATH: ${{ github.workspace }}/private.key
           
         
