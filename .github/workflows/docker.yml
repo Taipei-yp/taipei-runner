@@ -32,7 +32,9 @@ jobs:
           password: ${{ secrets.YCR_KEY_JSON }}
       - name: Build and YCR Push
         run: |
-          
+          docker-compose build
+          docker tag taipei-runner_app cr.yandex/crpuidt47oer2qhm9a1m/taipei-runner_app:latest
+          docker push cr.yandex/crpuidt47oer2qhm9a1m/taipei-runner_app:latest
       - name: SSH User Setup
         run: |
           mkdir -p ~/.ssh/
