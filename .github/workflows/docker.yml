@@ -39,15 +39,14 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > private.key
           sudo chmod 600 private.key
           echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-          echo $SSH_KNOWN_HOSTS
-          sftp -i $SSH_KEY_PATH github-actions@${{secrets.YCR_HOST}}
+          sftp -i $SSH_KEY_PATH github-actions@178.154.208.27
           sftp ~/db_init/postgres-initdb.sh /var/local
           sftp ~/db_init/init-mongo.js /var/local
           exit
         shell: bash
         env:
           SSH_PRIVATE_KEY: ${{secrets.YCR_SECRET}}
-          SSH_KNOWN_HOSTS: ${{secrets.YCR_HOST}}
+          SSH_KNOWN_HOSTS: ${{secrets.YCR_KNOWN_HOSTS}}
           SSH_KEY_PATH: ${{ github.workspace }}/private.key
           
         
