@@ -4,8 +4,8 @@ services:
     build:
       context: .
       args: 
-        DATABASE_URL_PSQL: "postgres://runner:runner@localhost:5432/taipei-runner"
-        DATABASE_URL_MONGO: "mongodb://runner:runner@localhost:27017/taipei-runner"
+        DATABASE_URL_PSQL: "postgres://runner:runner@taipei-runner_postgresdb:5432/taipei-runner"
+        DATABASE_URL_MONGO: "mongodb://runner:runner@taipei-runner_mongodb:27017/taipei-runner"
         NODE_ENV: "development"
         PORT: 4000
     depends_on:
