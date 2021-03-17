@@ -7,6 +7,12 @@ async function initDadabases() {
       return createSiteThemes();
     }),
     mongoConnection.connect(),
-  ]);
+  ]).then(results => {
+    results.forEach(result => {
+      if (result.status === "rejected") {
+        console.log(result.reason);
+      }
+    });
+  });
 }
 export { initDadabases, mongoConnection, psqlConnection };

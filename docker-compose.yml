@@ -6,11 +6,13 @@ services:
       args: 
         DATABASE_URL_PSQL: "postgres://runner:runner@postgresdb:5432/taipei-runner"
         DATABASE_URL_MONGO: "mongodb://runner:runner@mongodb:27017/taipei-runner"
-        NODE_ENV: "development"
+        NODE_ENV: "production"
         PORT: 4000
     depends_on:
-      - postgresdb
-      - mongodb
+      postgresdb:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
     ports:
       - "4000:4000"
   postgresdb:
@@ -22,6 +24,11 @@ services:
     volumes: 
       - ./db_init/postgres-initdb.sh:/docker-entrypoint-initdb.d/init.sh
       - ./dockerdata/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 10  
     restart: always
   mongodb:
     image: mongo
