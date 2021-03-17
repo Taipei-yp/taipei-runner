@@ -37,11 +37,7 @@ jobs:
           docker push cr.yandex/crpuidt47oer2qhm9a1m/taipei-runner_app:latest
       - name: SSH User Setup
         run: |
-          mkdir -p ~/.ssh/
-          echo "$SSH_PRIVATE_KEY" > private.key
-          sudo chmod 600 private.key
-          echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-          scp -i $SSH_KEY_PATH -r ${{ github.workspace }}/db_init/* ${{secrets.YCR_USERHOST}}:dbinit
+          scp -r ${{ github.workspace }}/db_init/* ${{secrets.YCR_USERHOST}}:dbinit -i ${{secrets.YCR_SECRET}}
         shell: bash
         env:
           SSH_PRIVATE_KEY: ${{secrets.YCR_SECRET}}
