@@ -1,7 +1,4 @@
-import fs from "fs";
-import https from "https";
 import http from "http";
-import { env } from "process";
 import { app, initDadabases } from "./dist/server.js";
 
 const server = http.createServer(app);
