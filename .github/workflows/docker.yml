@@ -32,16 +32,10 @@ jobs:
           password: ${{ secrets.YCR_KEY_JSON }}
       - name: Build and YCR Push
         run: |
-          docker-compose build
-          docker tag taipei-runner_app cr.yandex/crpuidt47oer2qhm9a1m/taipei-runner_app:latest
-          docker push cr.yandex/crpuidt47oer2qhm9a1m/taipei-runner_app:latest
+          echo 1
       - name: SSH User Setup
         run: |
           scp -r ${{ github.workspace }}/db_init/* ${{secrets.YCR_USERHOST}}:dbinit -i ${{secrets.YCR_SECRET}}
         shell: bash
-        env:
-          SSH_PRIVATE_KEY: ${{secrets.YCR_SECRET}}
-          SSH_KNOWN_HOSTS: ${{secrets.YCR_KNOWN_HOSTS}}
-          SSH_KEY_PATH: ${{ github.workspace }}/private.key
           
         
