@@ -2,6 +2,7 @@ import { connectRouter, RouterState } from "connected-react-router";
 import { History } from "history";
 import { combineReducers } from "redux";
 import { authReducer, AuthState } from "./auth/auth-reducer";
+import { forumReducer, ForumState } from "./forum/forum-reducer";
 import {
   leaderboardReducer,
   LeaderboardState,
@@ -15,6 +16,7 @@ export type RootState = {
   leaderboard: LeaderboardState;
   router: RouterState;
   theme: ThemeState;
+  forum: ForumState;
 };
 
 export const createRootReducer = (history: History) =>
@@ -24,4 +26,5 @@ export const createRootReducer = (history: History) =>
     leaderboard: leaderboardReducer,
     router: connectRouter(history),
     theme: themeReducer,
+    forum: forumReducer,
   });

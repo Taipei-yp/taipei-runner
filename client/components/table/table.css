@@ -2,6 +2,10 @@
   width: 100%;
   border-collapse: collapse;
 
+  td {
+    padding: 15px;
+  }
+
   thead {
     color: var(--tpr-color-accent);
     font-size: var(--tpr-fontsize-xl);

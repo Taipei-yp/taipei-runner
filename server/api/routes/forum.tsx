@@ -5,6 +5,12 @@ import { forumService } from "../services";
 export const forumRouter = (apiRouter: Router) => {
   const router: Router = Router();
   const service = forumService();
-  router.get("/", isAuthMiddleware, service.getAll());
+  // router.get("/", isAuthMiddleware, service.getAll());
+  router.get("/topic", service.getTopics);
+  router.get("/topic/:id", service.getTopic);
+  router.post("/topic", service.addTopic);
+
+  router.post("/message/:id/reply", service.replyToMessage);
+
   apiRouter.use("/forum", router);
 };

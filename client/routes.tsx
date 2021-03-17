@@ -4,6 +4,7 @@ import { Dispatch } from "redux";
 import { Error } from "./pages/error";
 import { Forum } from "./pages/forum";
 import { ForumTopic } from "./pages/forum-topic";
+import { ForumTopicCreate } from "./pages/forum-topic-create";
 import { Game } from "./pages/game";
 import { GameOver } from "./pages/gameover";
 import { Leaderboard } from "./pages/leaderboard";
@@ -61,6 +62,12 @@ export default [
   {
     path: "/forum",
     component: Forum,
+    exact: true,
+    isPrivate: true,
+  },
+  {
+    path: "/forum/topic/new",
+    component: ForumTopicCreate,
     exact: true,
     isPrivate: true,
   },

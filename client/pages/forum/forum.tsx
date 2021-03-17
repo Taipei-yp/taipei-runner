@@ -1,13 +1,19 @@
 import block from "bem-cn";
-import React, { FC, memo, useCallback } from "react";
+import React, { FC, memo, useCallback, useEffect, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import { Button } from "client/components/button";
+import { Heading } from "client/components/heading";
 import { LinkView } from "client/components/link-view";
 import { Meta } from "client/components/meta";
 import { Page } from "client/components/page";
-import { Pagination, useDefaultPagination } from "client/components/pagination";
 import { Panel } from "client/components/panel";
 import { Table, useNullableTableSort } from "client/components/table";
+import { Text } from "client/components/text";
 import { environment } from "client/enviroment";
+import { loadTopics } from "client/redux/forum/forum-actions";
+import { forumSelector } from "client/redux/forum/forum-selectors";
+import { ForumStages } from "client/redux/forum/forum-stages";
 
 import "./forum.css";
 
@@ -17,52 +23,81 @@ type Props = {
   className?: string;
 };
 
-const TestComponent: FC<{ value: unknown }> = ({ value }) => {
-  return <LinkView to="/forum/topic/1" label={value as string} size="l" />;
+const TopicComponent: FC<{ value: { id: number; name: string } }> = ({
+  value,
+}) => {
+  const { id, name } = value;
+  return <LinkView to={`/forum/topic/${id}`} label={name} size="l" />;
+};
+
+const CreatedAtComponent: FC<{ value: unknown }> = ({ value }) => {
+  const date = new Date(value as string);
+  return <Text size="l" text={`${date.toLocaleDateString()}`} />;
 };
 
 const headers = [
   { title: "Topics", field: "topic" },
-  { title: "Last Update", field: "lastUpdate" },
-  { title: "Replies", field: "repliesCount" },
+  { title: "Created at", field: "createdAt" },
 ];
-
-// TODO: remove this mock data after API connected
-const data = [
-  {
-    id: 0,
-    topic: "First Topic",
-    lastUpdate: "11 september 2001",
-    repliesCount: 345,
-  },
-  {
-    id: 1,
-    topic: "Second Topic",
-    lastUpdate: "36 february 2781",
-    repliesCount: 3,
-  },
-];
-
-const pagesCount = 8;
-const visiblePagesCount = 5;
 
 const Forum: FC<Props> = ({ className }) => {
   const [sort, handleSortRequest] = useNullableTableSort();
 
-  const handleCreateTopicClick = useCallback(() => {
-    console.warn("need to create a new topic!");
-  }, []);
+  const history = useHistory();
 
-  const {
-    currentPage,
-    firstVisiblePage,
-    lastVisiblePage,
-    canGoToPrevPage,
-    canGoToNextPage,
-    goToNextPage,
-    goToPrevPage,
-    goToPage,
-  } = useDefaultPagination(pagesCount, visiblePagesCount);
+  const handleCreateTopicClick = useCallback(() => {
+    history.push("/forum/topic/new");
+  }, [history]);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadTopics());
+  }, [dispatch]);
+
+  const { stage, error, topics } = useSelector(forumSelector);
+
+  const content = useMemo(() => {
+    switch (stage) {
+      case ForumStages.FAILURE:
+        return (
+          <div>
+            <Heading text="Error" color="primary" />
+            <p>
+              <Text text={error} />
+            </p>
+          </div>
+        );
+      case ForumStages.LOADED:
+        return (
+          <Panel className={b("panel")}>
+            <section className={b("table")}>
+              <Table
+                headers={headers}
+                data={
+                  topics.map(({ id, name, ...t }) => ({
+                    ...t,
+                    id,
+                    topic: { id, name },
+                  })) || []
+                }
+                components={{
+                  topic: TopicComponent,
+                  createdAt: CreatedAtComponent,
+                }}
+                sort={sort}
+                onHeaderClick={handleSortRequest}
+              />
+            </section>
+            <section className={b("create-topic")}>
+              <Button onClick={handleCreateTopicClick}>Create Topic</Button>
+            </section>
+          </Panel>
+        );
+      default:
+        return <p>Loading...</p>;
+    }
+  }, [error, stage, topics, handleCreateTopicClick, handleSortRequest, sort]);
 
   return (
     <>
@@ -73,36 +108,7 @@ const Forum: FC<Props> = ({ className }) => {
         align="center"
         left={<LinkView to="/" label="Menu" size="xl" />}
       >
-        <div className={b.mix(className)}>
-          <Panel className={b("panel")}>
-            <section className={b("table")}>
-              <Table
-                headers={headers}
-                data={data}
-                components={{
-                  topic: TestComponent,
-                }}
-                sort={sort}
-                onHeaderClick={handleSortRequest}
-              />
-            </section>
-            <section className={b("pagination")}>
-              <Pagination
-                firstPage={firstVisiblePage}
-                lastPage={lastVisiblePage}
-                currentPage={currentPage}
-                canGoToNextPage={canGoToNextPage}
-                canGoToPrevPage={canGoToPrevPage}
-                onPageClick={goToPage}
-                onGoToPrevPageClick={goToPrevPage}
-                onGoToNextPageClick={goToNextPage}
-              />
-            </section>
-            <section className={b("create-topic")}>
-              <Button onClick={handleCreateTopicClick}>Create Topic</Button>
-            </section>
-          </Panel>
-        </div>
+        <div className={b.mix(className)}>{content}</div>
       </Page>
     </>
   );

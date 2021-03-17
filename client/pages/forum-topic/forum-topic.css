@@ -19,5 +19,15 @@
 
   &__reply {
     margin-bottom: 20px;
+    cursor: pointer;
+  }
+
+  &__reply_secondary {
+    padding-left: 40px;
+    cursor: default;
+  }
+
+  &__message-to-reply {
+    cursor: pointer;
   }
 }
