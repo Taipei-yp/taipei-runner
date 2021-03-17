@@ -6,7 +6,7 @@ services:
       args: 
         DATABASE_URL_PSQL: "postgres://runner:runner@postgresdb:5432/taipei-runner"
         DATABASE_URL_MONGO: "mongodb://runner:runner@mongodb:27017/taipei-runner"
-        API_HOST: "https://taipei-runner-02.ya-praktikum.tech"
+        API_HOST: "https://taipei-runner-02.ya-praktikum.tech/api"
         PORT: 4000
     depends_on:
       postgresdb:
