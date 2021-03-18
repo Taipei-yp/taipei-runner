@@ -1,7 +1,15 @@
+import fs from "fs";
+import https from "https";
 import http from "http";
 import { app, initDadabases } from "./dist/server.js";
 
-const server = http.createServer(app);
+let server = http.createServer(app);
+
+if (process.env.NODE_ENV === "development") {
+  const key = fs.readFileSync("./ssl/key.pem");
+  const cert = fs.readFileSync("./ssl/cert.pem");
+  server = https.createServer({ key, cert }, app);
+}
 
 const port = process.env.PORT || 4000;
 

@@ -3,7 +3,7 @@ import { createSiteThemes } from "./initial-data";
 
 async function initDadabases() {
   return Promise.allSettled([
-    psqlConnection.sync().then(async () => {
+    psqlConnection.sync({ alter: true }).then(async () => {
       return createSiteThemes();
     }),
     mongoConnection.connect(),
