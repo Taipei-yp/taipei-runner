@@ -5,13 +5,13 @@ import { forumService } from "../services";
 export const forumRouter = (apiRouter: Router) => {
   const router: Router = Router();
   const service = forumService();
-  // router.get("/", isAuthMiddleware, service.getAll());
-  router.get("/topic", service.getTopics);
-  router.get("/topic/:id", service.getTopic);
-  router.post("/topic", service.addTopic);
 
-  router.post("/message/:id/reply", service.replyToMessage);
-  router.post("/message/:id/like", service.addMessageLike);
+  router.get("/topic", isAuthMiddleware, service.getTopics);
+  router.get("/topic/:id", isAuthMiddleware, service.getTopic);
+  router.post("/topic", isAuthMiddleware, service.addTopic);
+
+  router.post("/message/:id/reply", isAuthMiddleware, service.replyToMessage);
+  router.post("/message/:id/like", isAuthMiddleware, service.addMessageLike);
 
   apiRouter.use("/forum", router);
 };

@@ -1,6 +1,7 @@
 import {
   AllowNull,
   AutoIncrement,
+  BelongsTo,
   Column,
   DataType,
   Default,
@@ -10,6 +11,7 @@ import {
   PrimaryKey,
   Table,
 } from "sequelize-typescript";
+import UserTable from "./user";
 
 @Table({
   timestamps: true,
@@ -34,8 +36,8 @@ class MessageTable extends Model {
   @HasMany(() => MessageTable, "parent_id")
   reply!: MessageTable;
 
-  // @HasMany(() => MessageTable, "children_id")
-  // children!: MessageTable;
+  @BelongsTo(() => UserTable, "user_id")
+  author!: UserTable;
 }
 
 export default MessageTable;

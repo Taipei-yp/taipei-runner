@@ -9,15 +9,13 @@ const messageRepository = () => {
     });
   };
 
-  const add = (parentId: number, text: string, _user_id: number) => {
+  const add = (parentId: number, text: string, user_id: number) => {
     return MessageTable.findByPk(parentId).then(parent => {
       if (!parent) {
-        console.log("parent not found");
         throw new Error("Can not find message to reply");
       }
-      console.log(parent);
 
-      return parent.$create("reply", { text });
+      return parent.$create("reply", { text, user_id });
     });
   };
 

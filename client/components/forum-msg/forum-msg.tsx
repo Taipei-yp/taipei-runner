@@ -43,7 +43,7 @@ const ForumMsg: FC<Props> = ({
             className={b("created-at")}
             color="light"
             size="s"
-            text={createdAt}
+            text={new Date(createdAt).toLocaleString()}
           />
         </div>
         <div className={b("body")}>

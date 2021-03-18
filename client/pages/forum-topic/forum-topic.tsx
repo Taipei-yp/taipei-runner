@@ -65,19 +65,7 @@ const Reply = ({
         <div key={`block${msg.id}`}>
           <ForumMsg
             className={b("reply", { secondary })}
-            msg={{
-              ...msg,
-              author: {
-                phone: "123",
-                password: "",
-                display_name: "",
-                id: 1,
-                login: "",
-                email: "",
-                first_name: "hello",
-                second_name: "world",
-              },
-            }}
+            msg={msg}
             onReplyButtonClick={() => onReplyButtonClick(msg)}
             onLikeButtonClick={() => onLikeButtonClick(msg)}
             disableReplyButton={secondary}
@@ -182,19 +170,7 @@ const ForumTopic: FC<Props> = ({ className, match }) => {
                   onReplyButtonClick={() => onReplyButtonClick(topic?.message)}
                   onLikeButtonClick={() => onLikeButtonClick(topic?.message)}
                   className={b("topic-msg")}
-                  msg={{
-                    ...topic.message,
-                    author: {
-                      phone: "123",
-                      password: "",
-                      display_name: "",
-                      id: 1,
-                      login: "",
-                      email: "",
-                      first_name: "hello",
-                      second_name: "world",
-                    },
-                  }}
+                  msg={topic?.message}
                   disableReplyButton
                 />
               )}

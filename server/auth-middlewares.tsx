@@ -14,12 +14,21 @@ export async function checkAuthCkookieMiddleware(
     if (authCookie) {
       setUserAuth(res);
       apiCookies.set(req.headers.cookie);
-      const user: ServerUser = { id: -1, login: "" };
+      const user: ServerUser = {
+        id: -1,
+        login: "",
+        first_name: "",
+        second_name: "",
+        avatar: "",
+      };
       try {
         const api = profileApi();
         const profileRes = await api.getProfile();
         user.id = profileRes.data.id || -1;
         user.login = profileRes.data.login;
+        user.first_name = profileRes.data.first_name;
+        user.second_name = profileRes.data.second_name;
+        user.avatar = profileRes.data.avatar;
       } catch (error) {
         console.log(`Failed to load user data: ${error}`);
       }

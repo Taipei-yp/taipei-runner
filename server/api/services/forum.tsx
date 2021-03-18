@@ -1,8 +1,12 @@
 import { Request, Response } from "express";
 import { messageRepository, topicRepository } from "../../db/repository/psql";
+import { userRepository } from "../../db/repository/psql/user";
+import { userInfo } from "../../helpers";
+import { ServerUser } from "../../user-model";
 
 const topicRepo = topicRepository();
 const messageRepo = messageRepository();
+const userRepo = userRepository();
 
 const forumService = () => {
   const getTopics = (_req: Request, res: Response) => {
@@ -30,24 +34,6 @@ const forumService = () => {
       .catch(err => res.status(500).json({ error: ["db error", err] }));
   };
 
-  // const getReplies = (req: Request, res: Response) => {
-  //   const { id } = req.params;
-  //
-  //   if (!id || Number.isNaN(Number(id))) {
-  //     res.status(400).json({
-  //       error: {
-  //         type: "request parameter error",
-  //         data: "incorrect id parameter",
-  //       },
-  //     });
-  //   }
-  //
-  //   messageRepo
-  //     .get(Number(id))
-  //     .then(messages => res.status(200).json(messages))
-  //     .catch(err => res.status(500).json({ error: ["db error", err] }));
-  // };
-
   const addTopic = (req: Request, res: Response) => {
     const { name, message } = req.body;
 
@@ -63,26 +49,21 @@ const forumService = () => {
       });
     }
 
-    return topicRepo
-      .add(name, message, 123)
-      .then(topic => {
-        res.status(200).send(topic);
-      })
-      .catch(err => {
-        res
-          .status(500)
-          .json({ error: { type: "db error", data: JSON.stringify(err) } });
-      });
-
-    // const user = userInfo(res);
-    // userThemeRep
-    //   .updateByUserId(user.id, Number(themeId))
-    //   .then(() => res.status(200).send("ok"))
-    //   .catch(err =>
-    //     res
-    //       .status(500)
-    //       .json({ error: { type: "db error", data: JSON.stringify(err) } }),
-    //   );
+    userRepo.updateOrCreateAndGet(userInfo(res)).then(user => {
+      if (!user) {
+        throw new Error("Can not update or update user");
+      }
+      return topicRepo
+        .add(name, message, user.toJSON() as ServerUser)
+        .then(topic => {
+          res.status(200).send(topic);
+        })
+        .catch(err => {
+          res
+            .status(500)
+            .json({ error: { type: "db error", data: JSON.stringify(err) } });
+        });
+    });
   };
 
   const replyToMessage = (req: Request, res: Response) => {
@@ -98,21 +79,26 @@ const forumService = () => {
       });
     }
 
-    return messageRepo
-      .add(Number(id), text, 123)
-      .then(message => {
-        res.status(200).send(message);
-      })
-      .catch(err => {
-        res
-          .status(500)
-          .json({ error: { type: "db error", data: JSON.stringify(err) } });
-      });
+    userRepo.updateOrCreateAndGet(userInfo(res)).then(user => {
+      if (!user) {
+        throw new Error("Can not create user");
+      }
+
+      return messageRepo
+        .add(Number(id), text, (user.toJSON() as ServerUser).id)
+        .then(message => {
+          res.status(200).send(message);
+        })
+        .catch(err => {
+          res
+            .status(500)
+            .json({ error: { type: "db error", data: JSON.stringify(err) } });
+        });
+    });
   };
 
   const addMessageLike = (req: Request, res: Response) => {
     const { id } = req.params;
-    console.log(id);
 
     if (!id || Number.isNaN(Number(id))) {
       res.status(400).json({
