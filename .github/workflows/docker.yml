@@ -52,7 +52,7 @@ jobs:
           SSH_KEY_PATH: ${{ github.workspace }}/private.key    
       - name: Rebuild and Start Docker
         run: |
-          ssh ${{secrets.YCR_USERHOST}} -i $SSH_KEY_PATH "docker pull ${{ secrets.YCR_PULL}} && docker-compose down && docker-compose up"
+          ssh ${{secrets.YCR_USERHOST}} -i $SSH_KEY_PATH "docker pull ${{ secrets.YCR_PULL}} && docker-compose down && docker-compose up -d"
           curl https://taipei-runner-02.ya-praktikum.tech/ - i | grep status
         env:
           SSH_KEY_PATH: ${{ github.workspace }}/private.key
