@@ -1,3 +1,4 @@
+import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import express from "express";
 import path from "path";
@@ -25,6 +26,8 @@ if (process.env.NODE_ENV === "development") {
 app.use(express.static(path.resolve(__dirname, "../dist")));
 
 app.use(cookieParser());
+
+app.use(bodyParser.json());
 
 app.use(checkAuthCkookieMiddleware);
 

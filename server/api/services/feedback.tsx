@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 
 const feedbackService = () => {
-  const addMessage = (_req: Request, res: Response) => {
-    return res.status(200).send("ok");
+  const addMessage = (req: Request, res: Response) => {
+    return res.status(200).send(req.body);
   };
   return { addMessage };
 };
