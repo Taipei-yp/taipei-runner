@@ -1,7 +1,9 @@
+import { Request, Response } from "express";
+
 const feedbackService = () => {
-  const getAll = () => {
-    return [];
+  const addMessage = (_req: Request, res: Response) => {
+    return res.status(200).send("ok");
   };
-  return { getAll };
+  return { addMessage };
 };
 export { feedbackService };

@@ -5,6 +5,6 @@ import { feedbackService } from "../services";
 export const feedbackRouter = (apiRouter: Router) => {
   const router: Router = Router();
   const service = feedbackService();
-  router.get("/", isAuthMiddleware, service.getAll());
+  router.post("/", isAuthMiddleware, service.addMessage);
   apiRouter.use("/feedback", router);
 };
