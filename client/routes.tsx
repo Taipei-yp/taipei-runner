@@ -1,6 +1,7 @@
 import React from "react";
 import { match } from "react-router";
 import { Dispatch } from "redux";
+import { Feedback } from "client/pages/feedback";
 import { Error } from "./pages/error";
 import { Forum } from "./pages/forum";
 import { ForumTopic } from "./pages/forum-topic";
@@ -66,7 +67,7 @@ export default [
   },
   {
     path: "/feedback",
-    component: Profile,
+    component: Feedback,
     exact: true,
     isPrivate: true,
   },

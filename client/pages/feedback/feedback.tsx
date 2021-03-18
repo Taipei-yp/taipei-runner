@@ -1,5 +1,6 @@
 import block from "bem-cn";
 import React, { FC, memo, useCallback } from "react";
+import { feedbackApi } from "client/api/feedback-api";
 import { FormView, FormViewField } from "client/components/form-view";
 import { Heading } from "client/components/heading";
 import { LinkView } from "client/components/link-view";
@@ -35,9 +36,17 @@ const FeedbackFields: FormViewField[] = [
   },
 ];
 
+const api = feedbackApi();
+
 const Feedback: FC<Props> = ({ className }) => {
   const handleSubmit = useCallback(formValue => {
     console.log(formValue);
+    api.sendFeedback({
+      authorLogin: "test",
+      createdAt: Date.now(),
+      topic: formValue.topic,
+      message: formValue.message,
+    });
   }, []);
 
   return (
