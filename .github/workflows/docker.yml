@@ -34,7 +34,6 @@ jobs:
         run: |
           echo 1
       - name: SSH User Setup
-        run: scp -r ${{ github.workspace }}/db_init/* ${{secrets.YCR_USERHOST}}:dbinit -i "${{ secrets.YCR_SECRET }}"
-        shell: bash
+        run: scp -r ${{ github.workspace }}/db_init/* ${{secrets.YCR_USERHOST}}:dbinit -i ${{ secrets.YCR_SECRET }}
           
         
