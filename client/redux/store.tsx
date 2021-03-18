@@ -3,6 +3,7 @@ import { applyMiddleware, compose, createStore } from "redux";
 import thunk from "redux-thunk";
 import {
   authApi,
+  forumApi,
   leaderboardApi,
   oauthApi,
   profileApi,
@@ -18,9 +19,17 @@ export type Api = {
   oauthApi: typeof oauthApi;
   leaderboardApi: typeof leaderboardApi;
   themeApi: typeof themeApi;
+  forumApi: typeof forumApi;
 };
 
-const api: Api = { authApi, profileApi, oauthApi, leaderboardApi, themeApi };
+const api: Api = {
+  authApi,
+  profileApi,
+  oauthApi,
+  leaderboardApi,
+  themeApi,
+  forumApi,
+};
 
 const configureStore = (
   initialState: RootState = getInitialState(),

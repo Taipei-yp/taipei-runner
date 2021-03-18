@@ -1,6 +1,12 @@
 .forum-topic {
   display: flex;
 
+  &__panel {
+    min-width: 600px;
+    min-height: 75%;
+    padding: 2% 5%;
+  }
+
   &__heading {
     margin-top: 0;
   }
@@ -19,5 +25,13 @@
 
   &__reply {
     margin-bottom: 20px;
+  }
+
+  &__reply_secondary {
+    padding-left: 40px;
+  }
+
+  &__message-to-reply {
+    cursor: pointer;
   }
 }

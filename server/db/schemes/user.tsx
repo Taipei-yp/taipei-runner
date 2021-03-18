@@ -26,6 +26,15 @@ class UserTable extends Model {
   @AllowNull(false)
   @Column(DataType.STRING)
   login!: string;
+
+  @Column(DataType.STRING)
+  first_name!: string;
+
+  @Column(DataType.STRING)
+  second_name!: string;
+
+  @Column(DataType.STRING)
+  avatar!: string;
 }
 
 export default UserTable;
