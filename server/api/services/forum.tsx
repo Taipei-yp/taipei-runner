@@ -93,7 +93,7 @@ const forumService = () => {
       res.status(400).json({
         error: {
           type: "request parameter error",
-          data: "incorrect themeId parameter",
+          data: "incorrect parameters parameter",
         },
       });
     }
@@ -109,6 +109,32 @@ const forumService = () => {
           .json({ error: { type: "db error", data: JSON.stringify(err) } });
       });
   };
-  return { getTopics, getTopic, addTopic, replyToMessage };
+
+  const addMessageLike = (req: Request, res: Response) => {
+    const { id } = req.params;
+    console.log(id);
+
+    if (!id || Number.isNaN(Number(id))) {
+      res.status(400).json({
+        error: {
+          type: "request parameter error",
+          data: "incorrect id parameter",
+        },
+      });
+    }
+
+    return messageRepo
+      .addLike(Number(id))
+      .then(message => {
+        res.status(200).send(message);
+      })
+      .catch(err => {
+        res
+          .status(500)
+          .json({ error: { type: "db error", data: JSON.stringify(err) } });
+      });
+  };
+
+  return { getTopics, getTopic, addTopic, replyToMessage, addMessageLike };
 };
 export { forumService };

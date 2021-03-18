@@ -21,9 +21,16 @@ const messageRepository = () => {
     });
   };
 
+  const addLike = (id: number) => {
+    return MessageTable.findByPk(id).then(message => {
+      return message?.increment("likes");
+    });
+  };
+
   return {
     get,
     add,
+    addLike,
   };
 };
 

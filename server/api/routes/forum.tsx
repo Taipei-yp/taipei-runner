@@ -11,6 +11,7 @@ export const forumRouter = (apiRouter: Router) => {
   router.post("/topic", service.addTopic);
 
   router.post("/message/:id/reply", service.replyToMessage);
+  router.post("/message/:id/like", service.addMessageLike);
 
   apiRouter.use("/forum", router);
 };

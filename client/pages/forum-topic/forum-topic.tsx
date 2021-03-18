@@ -20,6 +20,7 @@ import { Text } from "client/components/text";
 import { environment } from "client/enviroment";
 import { Message } from "client/models/forum";
 import {
+  addMessageLike,
   failure,
   loadTopic,
   replyToMessage,
@@ -50,16 +51,18 @@ const ReplyFormFields: FormViewField[] = [
 const Reply = ({
   replies,
   secondary = false,
-  onMessageClick = () => {},
+  onReplyButtonClick = () => {},
+  onLikeButtonClick = () => {},
 }: {
   replies: Message[];
   secondary?: boolean;
-  onMessageClick?: (message: Message) => void;
+  onReplyButtonClick?: (message: Message) => void;
+  onLikeButtonClick?: (message: Message) => void;
 }) => {
   return (
     <>
       {replies.map(msg => (
-        <>
+        <div key={`block${msg.id}`}>
           <ForumMsg
             className={b("reply", { secondary })}
             msg={{
@@ -75,11 +78,18 @@ const Reply = ({
                 second_name: "world",
               },
             }}
-            key={msg.id}
-            onClick={() => onMessageClick(msg)}
+            onReplyButtonClick={() => onReplyButtonClick(msg)}
+            onLikeButtonClick={() => onLikeButtonClick(msg)}
+            disableReplyButton={secondary}
           />
-          {msg.reply && <Reply replies={msg.reply} secondary />}
-        </>
+          {msg.reply && (
+            <Reply
+              onLikeButtonClick={onLikeButtonClick}
+              replies={msg.reply}
+              secondary
+            />
+          )}
+        </div>
       ))}
     </>
   );
@@ -120,7 +130,7 @@ const ForumTopic: FC<Props> = ({ className, match }) => {
     [dispatch, messageToReply, topic],
   );
 
-  const onMessageClick = useCallback(
+  const onReplyButtonClick = useCallback(
     message => {
       formBlockRef.current?.scrollIntoView({
         block: "end",
@@ -136,6 +146,16 @@ const ForumTopic: FC<Props> = ({ className, match }) => {
     [messageToReply, setMessageToReply],
   );
 
+  const onLikeButtonClick = useCallback(
+    message => {
+      if (!(topic && message)) {
+        return;
+      }
+      dispatch(addMessageLike(topic.id, message.id));
+    },
+    [dispatch, topic],
+  );
+
   const content = useMemo(() => {
     switch (stage) {
       case ForumStages.FAILURE:
@@ -149,7 +169,7 @@ const ForumTopic: FC<Props> = ({ className, match }) => {
         );
       case ForumStages.LOADED:
         return (
-          <Panel>
+          <Panel className={b("panel")}>
             <Heading
               text={topic?.name || "Topic"}
               size="s"
@@ -159,6 +179,8 @@ const ForumTopic: FC<Props> = ({ className, match }) => {
             <div className={b("content")}>
               {topic?.message && (
                 <ForumMsg
+                  onReplyButtonClick={() => onReplyButtonClick(topic?.message)}
+                  onLikeButtonClick={() => onLikeButtonClick(topic?.message)}
                   className={b("topic-msg")}
                   msg={{
                     ...topic.message,
@@ -173,12 +195,14 @@ const ForumTopic: FC<Props> = ({ className, match }) => {
                       second_name: "world",
                     },
                   }}
+                  disableReplyButton
                 />
               )}
               {topic?.message.reply && (
                 <Reply
                   replies={topic?.message.reply}
-                  onMessageClick={onMessageClick}
+                  onReplyButtonClick={onReplyButtonClick}
+                  onLikeButtonClick={onLikeButtonClick}
                 />
               )}
               <div ref={formBlockRef}>
@@ -187,7 +211,7 @@ const ForumTopic: FC<Props> = ({ className, match }) => {
                     role="button"
                     tabIndex={0}
                     className={b("message-to-reply")}
-                    onClick={() => onMessageClick(messageToReply)}
+                    onClick={() => onReplyButtonClick(messageToReply)}
                   >
                     <p>
                       <Text size="s" color="primary" text="You reply to:" />
@@ -211,7 +235,15 @@ const ForumTopic: FC<Props> = ({ className, match }) => {
       default:
         return <p>Loading...</p>;
     }
-  }, [error, stage, topic, formSubmit, messageToReply, onMessageClick]);
+  }, [
+    error,
+    stage,
+    topic,
+    formSubmit,
+    messageToReply,
+    onReplyButtonClick,
+    onLikeButtonClick,
+  ]);
 
   return (
     <>

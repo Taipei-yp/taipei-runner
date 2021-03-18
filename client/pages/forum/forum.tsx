@@ -102,12 +102,7 @@ const Forum: FC<Props> = ({ className }) => {
   return (
     <>
       <Meta title={`${environment.title} | Forum`} />
-      <Page
-        fullHeight
-        fixHeader
-        align="center"
-        left={<LinkView to="/" label="Menu" size="xl" />}
-      >
+      <Page left={<LinkView to="/" label="Menu" size="xl" />}>
         <div className={b.mix(className)}>{content}</div>
       </Page>
     </>

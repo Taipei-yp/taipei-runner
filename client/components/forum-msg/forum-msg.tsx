@@ -1,6 +1,7 @@
 import block from "bem-cn";
 import React, { FC, memo, MouseEvent } from "react";
 import { Avatar } from "client/components/avatar";
+import { Button } from "client/components/button";
 import { Text } from "client/components/text";
 import { Message } from "client/models/forum";
 
@@ -11,18 +12,21 @@ const b = block("forum-msg");
 type Props = {
   msg: Message;
   className?: string;
-  onClick?: (e: MouseEvent) => void;
+  onReplyButtonClick?: (e: MouseEvent) => void;
+  onLikeButtonClick?: (e: MouseEvent) => void;
+  disableReplyButton?: boolean;
 };
 
-const ForumMsg: FC<Props> = ({ msg, className = "", onClick }) => {
+const ForumMsg: FC<Props> = ({
+  msg,
+  className = "",
+  onReplyButtonClick,
+  onLikeButtonClick,
+  disableReplyButton,
+}) => {
   const { author, text, createdAt } = msg;
   return (
-    <div
-      className={b.mix(className)}
-      role="button"
-      tabIndex={0}
-      onClick={onClick}
-    >
+    <div className={b.mix(className)}>
       <div className={b("avatar")}>
         <Avatar alt={`${author.first_name} ${author.second_name} avatar`} />
       </div>
@@ -44,6 +48,17 @@ const ForumMsg: FC<Props> = ({ msg, className = "", onClick }) => {
         </div>
         <div className={b("body")}>
           <Text className={b("text")} text={text} />
+        </div>
+        <div className={b("footer")}>
+          <Button onClick={onLikeButtonClick} size="s">
+            <Text text="&#9829;" />
+            <Text text={`(${msg.likes})`} />
+          </Button>
+          {!disableReplyButton && (
+            <Button onClick={onReplyButtonClick} viewType="secondary" size="s">
+              <Text text="&#8627;" />
+            </Button>
+          )}
         </div>
       </div>
     </div>

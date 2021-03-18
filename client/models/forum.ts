@@ -7,6 +7,7 @@ export type Message = {
   createdAt: string;
   reply: Message[] | undefined;
   parent_id: number;
+  likes: number;
 };
 
 export type Topic = {

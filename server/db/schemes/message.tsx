@@ -3,6 +3,7 @@ import {
   AutoIncrement,
   Column,
   DataType,
+  Default,
   HasMany,
   Index,
   Model,
@@ -25,6 +26,10 @@ class MessageTable extends Model {
   @AllowNull(false)
   @Column(DataType.STRING)
   text!: string;
+
+  @Default(0)
+  @Column(DataType.INTEGER)
+  likes!: number;
 
   @HasMany(() => MessageTable, "parent_id")
   reply!: MessageTable;

@@ -119,4 +119,22 @@ export const addTopic = (
   }
 };
 
+export const addMessageLike = (
+  topicId: number,
+  messageId: number,
+): ThunkAction<void, RootState, Api, AnyAction> => async (
+  dispatch,
+  _state,
+  api,
+) => {
+  dispatch(loading());
+  const { addMessageLike: addMessageLikeApi } = api.forumApi();
+  try {
+    await addMessageLikeApi(messageId);
+    dispatch(loadTopic(topicId));
+  } catch (error) {
+    dispatch(failure(error));
+  }
+};
+
 export type ForumAction = Init | Loading | Loaded | Failure;

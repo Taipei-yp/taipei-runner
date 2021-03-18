@@ -46,11 +46,24 @@ const forumApi = () => {
       .then(resp => resp.data);
   };
 
+  const addMessageLike = (messageId: number) => {
+    return client
+      .post<Message>(
+        `${path}/message/${messageId}/like`,
+        {},
+        {
+          withCredentials: true,
+        },
+      )
+      .then(resp => resp.data);
+  };
+
   return {
     getTopics,
     getTopic,
     addTopic,
     replyToMessage,
+    addMessageLike,
   };
 };
 
