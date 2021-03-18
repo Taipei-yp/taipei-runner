@@ -1,11 +1,7 @@
-import fs from "fs";
-import https from "https";
+import http from "http";
 import { app, initDadabases } from "./dist/server.js";
 
-const key = fs.readFileSync("./ssl/key.pem");
-const cert = fs.readFileSync("./ssl/cert.pem");
-
-const server = https.createServer({ key, cert }, app);
+const server = http.createServer(app);
 
 const port = process.env.PORT || 4000;
 

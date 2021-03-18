@@ -1,6 +1,6 @@
 {
   "parserOptions": {
-    "project": "../tsconfig.webpack.json"
+    "project": "tsconfig.webpack.json"
   },
   "rules": {
     "import/no-extraneous-dependencies": "off",
