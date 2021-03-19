@@ -2,6 +2,7 @@ import { connectRouter, RouterState } from "connected-react-router";
 import { History } from "history";
 import { combineReducers } from "redux";
 import { authReducer, AuthState } from "./auth/auth-reducer";
+import { feedbackReducer, FeedbackState } from "./feedback/feedback-reducer";
 import { forumReducer, ForumState } from "./forum/forum-reducer";
 import {
   leaderboardReducer,
@@ -17,6 +18,7 @@ export type RootState = {
   router: RouterState;
   theme: ThemeState;
   forum: ForumState;
+  feedback: FeedbackState;
 };
 
 export const createRootReducer = (history: History) =>
@@ -27,4 +29,5 @@ export const createRootReducer = (history: History) =>
     router: connectRouter(history),
     theme: themeReducer,
     forum: forumReducer,
+    feedback: feedbackReducer,
   });
