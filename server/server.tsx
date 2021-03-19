@@ -1,5 +1,6 @@
 import cookieParser from "cookie-parser";
 import express from "express";
+import { expressCspHeader, INLINE, NONE, SELF } from "express-csp-header";
 import path from "path";
 import webpack from "webpack";
 import webpackDevMiddleware from "webpack-dev-middleware";
@@ -33,5 +34,17 @@ app.use(express.json());
 app.use("/api", apiRouter);
 
 app.get("/*", serverRenderMiddleware);
+
+app.use(
+  expressCspHeader({
+    directives: {
+      "default-src": [SELF],
+      "script-src": [SELF, INLINE],
+      "style-src": [SELF, INLINE],
+      "worker-src": [NONE],
+      "block-all-mixed-content": true,
+    },
+  }),
+);
 
 export { app, initDatabases };

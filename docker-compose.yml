@@ -11,7 +11,7 @@ services:
       postgresdb:
         condition: service_healthy
       mongodb:
-        condition: service_started
+        condition: service_healthy
     ports:
       - "4000:4000"
   postgresdb:
@@ -38,4 +38,10 @@ services:
       - ./dockerdata/mongo:/data/db
     restart: always
     environment:
-      MONGO_INITDB_DATABASE: taipei-runner
+      - MONGO_INITDB_DATABASE=taipei-runner
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo mongodb:27017 --quiet
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
