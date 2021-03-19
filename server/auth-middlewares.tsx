@@ -20,6 +20,7 @@ export async function checkAuthCkookieMiddleware(
         first_name: "",
         second_name: "",
         avatar: "",
+        email: "",
       };
       try {
         const api = profileApi();
@@ -29,6 +30,7 @@ export async function checkAuthCkookieMiddleware(
         user.first_name = profileRes.data.first_name;
         user.second_name = profileRes.data.second_name;
         user.avatar = profileRes.data.avatar;
+        user.email = profileRes.data.email;
       } catch (error) {
         console.log(`Failed to load user data: ${error}`);
       }

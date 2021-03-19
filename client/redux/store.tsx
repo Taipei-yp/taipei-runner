@@ -9,6 +9,7 @@ import {
   profileApi,
   themeApi,
 } from "client/api";
+import { feedbackApi } from "client/api/feedback-api";
 import { isServer } from "client/helpers/check-server";
 import { getInitialState } from "./get-Initial-state";
 import { createRootReducer, RootState } from "./root-reducer";
@@ -20,6 +21,7 @@ export type Api = {
   leaderboardApi: typeof leaderboardApi;
   themeApi: typeof themeApi;
   forumApi: typeof forumApi;
+  feedbackApi: typeof feedbackApi;
 };
 
 const api: Api = {
@@ -29,6 +31,7 @@ const api: Api = {
   leaderboardApi,
   themeApi,
   forumApi,
+  feedbackApi,
 };
 
 const configureStore = (

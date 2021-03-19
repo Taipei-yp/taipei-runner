@@ -6,7 +6,7 @@ import webpackDevMiddleware from "webpack-dev-middleware";
 import webpackHotMiddleware from "webpack-hot-middleware";
 import apiRouter from "./api/routes";
 import { checkAuthCkookieMiddleware } from "./auth-middlewares";
-import { initDadabases } from "./db";
+import { initDatabases } from "./db";
 import serverRenderMiddleware from "./server-render-middleware";
 import webpackClientConfig from "./webpack-client-config";
 
@@ -34,4 +34,4 @@ app.use("/api", apiRouter);
 
 app.get("/*", serverRenderMiddleware);
 
-export { app, initDadabases };
+export { app, initDatabases };
