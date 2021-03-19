@@ -1,7 +1,7 @@
 import { mongoConnection, psqlConnection } from "./connections";
 import { createSiteThemes } from "./initial-data";
 
-async function initDadabases() {
+async function initDatabases() {
   return Promise.allSettled([
     psqlConnection.sync({ alter: true }).then(async () => {
       return createSiteThemes();
@@ -15,4 +15,4 @@ async function initDadabases() {
     });
   });
 }
-export { initDadabases, mongoConnection, psqlConnection };
+export { initDatabases };

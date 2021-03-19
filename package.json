@@ -53,7 +53,6 @@
   "dependencies": {
     "axios": "0.21.1",
     "bem-cn": "3.0.1",
-    "body-parser": "1.19.0",
     "compression": "1.7.4",
     "connected-react-router": "6.8.0",
     "cookie-parser": "1.4.5",
