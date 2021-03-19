@@ -6,11 +6,9 @@ const { client } = api(true);
 
 const feedbackApi = () => {
   const sendFeedback = (message: FeedbackMessage) => {
-    return client
-      .post<FeedbackMessage>(`${feedbackPath}`, message, {
-        withCredentials: true,
-      })
-      .then(resp => resp.data);
+    return client.post<FeedbackMessage>(`${feedbackPath}`, message, {
+      withCredentials: true,
+    });
   };
 
   return {

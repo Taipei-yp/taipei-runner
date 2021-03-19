@@ -1,9 +1,9 @@
 import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { FeedbackMessage } from "client/models/feedback-message";
-import { FAILURE, INIT, LOADED, LOADING } from "client/redux/forum/types";
 import { RootState } from "client/redux/root-reducer";
 import { Api } from "client/redux/store";
+import { FAILURE, INIT, LOADING, SENT } from "./types";
 
 type Init = {
   type: typeof INIT;
@@ -13,8 +13,8 @@ type Loading = {
   type: typeof LOADING;
 };
 
-type Loaded = {
-  type: typeof LOADED;
+type Sent = {
+  type: typeof SENT;
 };
 
 type Failure = {
@@ -34,9 +34,9 @@ export const loading = (): Loading => {
   };
 };
 
-export const loaded = (): Loaded => {
+export const sent = (): Sent => {
   return {
-    type: LOADED,
+    type: SENT,
   };
 };
 
@@ -58,10 +58,10 @@ export const sendFeedback = (
   const { sendFeedback: sendFeedbackApi } = api.feedbackApi();
   try {
     await sendFeedbackApi(message);
-    dispatch(loaded());
+    dispatch(sent());
   } catch (error) {
     dispatch(failure(error));
   }
 };
 
-export type FeedbackAction = Init | Loading | Loaded | Failure;
+export type FeedbackAction = Init | Loading | Sent | Failure;

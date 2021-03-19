@@ -1,6 +1,6 @@
 import { FeedbackAction } from "./feedback-actions";
 import { FeedbackStages } from "./feedback-stages";
-import { FAILURE, INIT, LOADED, LOADING } from "./types";
+import { FAILURE, INIT, LOADING, SENT } from "./types";
 
 export type FeedbackState = {
   stage: FeedbackStages;
@@ -28,7 +28,7 @@ export const feedbackReducer = (
         stage: FeedbackStages.LOADING,
       };
 
-    case LOADED:
+    case SENT:
       return {
         ...state,
         stage: FeedbackStages.LOADED,
