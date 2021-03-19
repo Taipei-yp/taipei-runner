@@ -237,7 +237,8 @@ export default class Runner {
   endGame(gameover = false) {
     this.stop();
     this.status.crashed = true;
-    this.hero.update(100, HeroStatus.CRASHED);
+    this.hero.reset();
+    this.hero.update(0, HeroStatus.CRASHED);
     this.time = getTimeStamp();
     this.gameAudio.stopBgSound();
     this.gameRunning(false);
@@ -513,14 +514,16 @@ export function checkForCollision(
     drawCollisionBoxes(opt_canvasCtx, heroBox, obstacleBox);
   }
   if (boxCompare(heroBox, obstacleBox)) {
+    const scf = Hero.scaleCf();
     const { collisionBoxes } = obstacle;
-    const collisionBoxesHero = heroCollisionBoxes[HeroStatus.RUNNING];
+    const collisionBoxesHero = heroCollisionBoxes[hero.status];
 
     for (let t = 0; t < collisionBoxesHero.length; t++) {
       for (let i = 0; i < collisionBoxes.length; i++) {
         const adjheroBox = createRelativeCollisionBox(
           collisionBoxesHero[t],
           heroBox,
+          scf,
         );
         const adjObstacleBox = createRelativeCollisionBox(
           collisionBoxes[i],
