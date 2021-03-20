@@ -96,11 +96,6 @@ const SignIn: FC<Props> = ({ className = "" }) => {
               label="No account yet?"
               className={b("link")}
             />
-            <LinkView
-              to="/oauth"
-              label="Yandex oauth login"
-              className={b("link")}
-            />
           </Panel>
         );
     }
