@@ -1,13 +1,6 @@
 import cookieParser from "cookie-parser";
 import express from "express";
-import {
-  DATA,
-  EVAL,
-  expressCspHeader,
-  INLINE,
-  NONE,
-  SELF,
-} from "express-csp-header";
+import { DATA, EVAL, expressCspHeader, INLINE, SELF } from "express-csp-header";
 import path from "path";
 import webpack from "webpack";
 import webpackDevMiddleware from "webpack-dev-middleware";
@@ -46,7 +39,7 @@ app.use(
       "default-src": [SELF, "https://ya-praktikum.tech"],
       "script-src": [SELF, INLINE, EVAL],
       "font-src": [SELF, DATA],
-      "img-src": [DATA, SELF, INLINE],
+      "img-src": [DATA, SELF, INLINE, "https://ya-praktikum.tech"],
       "style-src": [SELF, INLINE],
       "worker-src": [SELF],
     },
