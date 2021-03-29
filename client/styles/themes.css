@@ -1,0 +1,13 @@
+.app.light {
+  --tpr-color-primary: #fd00e0;
+  --tpr-color-primary-contrast: #000000;
+  --tpr-color-secondary: #1bff81;
+  --tpr-color-secondary-contrast: #000000;
+  --tpr-color-accent: #ffc700;
+  --tpr-color-accent-contrast: #ffffff;
+  --tpr-color-dark: #ffffff;
+  --tpr-color-dark-contrast: #000000;
+  --tpr-color-dark-deep: #8a8cdc;
+  --tpr-color-dark-shade: #331533;
+  --tpr-color-light: #000000;
+}

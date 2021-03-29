@@ -67,10 +67,25 @@ const obstacleTypes: ObstacleType[] = [
     sizes: { width: 86, height: 80 },
     minGap: 140,
     minSpeed: 0,
+    collisionBoxes: [new CollisionBox(0, 0, 85, 54)],
+  },
+  {
+    type: "BOX2",
+    pos: { x: 88, y: 10 },
+    sizes: { width: 52, height: 90 },
+    minGap: 140,
+    minSpeed: 0,
+    collisionBoxes: [new CollisionBox(0, 0, 52, 90)],
+  },
+  {
+    type: "BOX3",
+    pos: { x: 301, y: 33 },
+    sizes: { width: 176, height: 67 },
+    minGap: 180,
+    minSpeed: 0,
     collisionBoxes: [
-      new CollisionBox(0, 7, 5, 27),
-      new CollisionBox(4, 0, 6, 34),
-      new CollisionBox(10, 4, 7, 14),
+      new CollisionBox(4, 0, 149, 30),
+      new CollisionBox(0, 30, 176, 36),
     ],
   },
 ];

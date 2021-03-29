@@ -23,20 +23,20 @@ const heroFrames: Record<HeroStatus, FrameSetType> = {
   },
   [HeroStatus.RUNNING]: {
     frames: [
-      { x: 0, y: 0, width: 62 },
-      { x: 63, y: 0, width: 70 },
-      { x: 134, y: 0, width: 54 },
-      { x: 189, y: 0, width: 39 },
-      { x: 229, y: 0, width: 63 },
-      { x: 293, y: 0, width: 70 },
-      { x: 364, y: 0, width: 53 },
-      { x: 424, y: 0, width: 46 },
+      { x: 0, y: 0, width: 63 },
+      { x: 64, y: 0, width: 70 },
+      { x: 135, y: 0, width: 54 },
+      { x: 190, y: 0, width: 39 },
+      { x: 230, y: 0, width: 63 },
+      { x: 294, y: 0, width: 70 },
+      { x: 365, y: 0, width: 53 },
+      { x: 425, y: 0, width: 46 },
     ],
     msPerFrame: 1000 / 12,
   },
   [HeroStatus.CRASHED]: {
     frames: [{ x: 126, y: 77, width: 37 }],
-    msPerFrame: 1000 / 60,
+    msPerFrame: 1000 / 1,
   },
   [HeroStatus.JUMPING]: {
     frames: [{ x: 163, y: 77, width: 52 }],
@@ -48,10 +48,12 @@ const heroFrames: Record<HeroStatus, FrameSetType> = {
 export const heroCollisionBoxes = {
   [HeroStatus.RUNNING]: [new CollisionBox(-20, 0, 20, 77)],
   [HeroStatus.JUMPING]: [
-    new CollisionBox(-25, 13, 25, 10),
-    new CollisionBox(-8, -13, 8, 13),
-    new CollisionBox(14, 36, 20, 10),
+    new CollisionBox(-21, 28, 23, 11),
+    new CollisionBox(-26, -19, 7, 15),
+    new CollisionBox(-40, -17, 14, 17),
   ],
+  [HeroStatus.CRASHED]: [],
+  [HeroStatus.WAITING]: [],
 };
 
 /**
@@ -125,10 +127,7 @@ export default class Hero {
   update(deltaTime: number, newStatus?: HeroStatus) {
     this.changeFrameTimer += deltaTime;
     if (newStatus != null) {
-      this.status = newStatus;
-      this.currentFrame = 0;
-      this.msPerFrame = heroFrames[newStatus].msPerFrame;
-      this.currentAnimFrames = heroFrames[newStatus].frames;
+      this.updateStatus(newStatus);
     }
     if (this.status === HeroStatus.WAITING) {
       this.clearCanvas();
@@ -147,6 +146,14 @@ export default class Hero {
       this.changeFrameTimer = 0;
     }
   }
+
+  updateStatus(newStatus: HeroStatus) {
+    this.status = newStatus;
+    this.currentFrame = 0;
+    this.msPerFrame = heroFrames[newStatus].msPerFrame;
+    this.currentAnimFrames = heroFrames[newStatus].frames;
+  }
+
   /**
    * Сброс в состояние бега
    */
@@ -155,7 +162,7 @@ export default class Hero {
     this.jumping = false;
     this.jumpVelocity = 0;
     // this.jumpCount = 0;
-    this.update(0, HeroStatus.RUNNING);
+    this.updateStatus(HeroStatus.RUNNING);
   }
   /** Отрисовка */
   draw(cw: CoordsAndWidth) {
@@ -224,10 +231,13 @@ export default class Hero {
       this.reset();
       this.jumpCount++;
     }
-    this.update(deltaTime);
+    // this.update(deltaTime);
   }
   /** Ширина героя при отрисовке */
   static drawWidth(width: number) {
     return Math.round(config.hero.HEIGHT / config.hero.SRC_HEIGHT) * width;
+  }
+  static scaleCf() {
+    return Math.round(config.hero.HEIGHT / config.hero.SRC_HEIGHT);
   }
 }

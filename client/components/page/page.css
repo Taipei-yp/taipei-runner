@@ -16,6 +16,9 @@
       right: 0;
       top: 0;
     }
+    &_hide {
+      display: none;
+    }
   }
   &__content {
     flex: 0 1 50vh;

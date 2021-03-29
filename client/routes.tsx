@@ -1,9 +1,11 @@
 import React from "react";
 import { match } from "react-router";
 import { Dispatch } from "redux";
+import { Feedback } from "client/pages/feedback";
 import { Error } from "./pages/error";
 import { Forum } from "./pages/forum";
 import { ForumTopic } from "./pages/forum-topic";
+import { ForumTopicCreate } from "./pages/forum-topic-create";
 import { Game } from "./pages/game";
 import { GameOver } from "./pages/gameover";
 import { Leaderboard } from "./pages/leaderboard";
@@ -65,8 +67,14 @@ export default [
     isPrivate: true,
   },
   {
+    path: "/forum/topic/new",
+    component: ForumTopicCreate,
+    exact: true,
+    isPrivate: true,
+  },
+  {
     path: "/feedback",
-    component: Profile,
+    component: Feedback,
     exact: true,
     isPrivate: true,
   },

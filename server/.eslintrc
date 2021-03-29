@@ -1,4 +1,7 @@
 {
+    "parserOptions": {
+        "project": "../tsconfig.json"
+    },
     "rules": {
         "import/no-extraneous-dependencies": "off",
         "import/no-relative-parent-imports": "off"

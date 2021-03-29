@@ -1,7 +1,7 @@
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
 import CssMinimizerPlugin from "css-minimizer-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
-import { Configuration } from "webpack";
+import { Configuration, DefinePlugin } from "webpack";
 import { WebpackManifestPlugin } from "webpack-manifest-plugin";
 import cssLoader from "./loaders/css";
 import fileLoader from "./loaders/file";
@@ -22,6 +22,11 @@ const config: Configuration = {
   plugins: [
     new CleanWebpackPlugin({
       cleanOnceBeforeBuildPatterns: ["**/*", "!server*"],
+    }),
+    new DefinePlugin({
+      "process.env.API_HOST": JSON.stringify(
+        process.env.API_HOST || "development",
+      ),
     }),
     new MiniCssExtractPlugin({
       filename: "styles/[name].[contenthash].css",

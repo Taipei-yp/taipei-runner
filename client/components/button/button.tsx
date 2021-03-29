@@ -11,6 +11,7 @@ export type Props = {
   viewType?: "primary" | "secondary";
   className?: string;
   type?: "submit" | "button" | "reset";
+  size?: "s";
 };
 
 const Button: FC<Props> = ({
@@ -19,11 +20,12 @@ const Button: FC<Props> = ({
   viewType = "primary",
   className = "",
   type = "button",
+  size = null,
 }) => {
   return (
     <button
       type={type}
-      className={b.mix(b({ "view-type": viewType }), className)}
+      className={b.mix(b({ "view-type": viewType, size }), className)}
       onClick={onClick}
     >
       {children}

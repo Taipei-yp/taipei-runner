@@ -1,3 +1,10 @@
 .gameover {
   text-align: center;
+
+  &__score {
+    color: var(--tpr-color-accent-contrast);
+  }
+  &__restart {
+    margin-top: 40px;
+  }
 }

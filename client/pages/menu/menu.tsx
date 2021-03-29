@@ -41,7 +41,7 @@ const Menu: FC<Props> = ({ className = "" }) => {
   return (
     <>
       <Meta title={`${environment.title} | Menu`} />
-      <Page fixHeader fullHeight>
+      <Page fixHeader fullHeight hideHeader>
         <div className={b.mix(className)}>
           <Heading
             color="primary"

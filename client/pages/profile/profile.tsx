@@ -12,6 +12,7 @@ import { Meta } from "client/components/meta";
 import { Page } from "client/components/page";
 import { Panel } from "client/components/panel";
 import { Text } from "client/components/text";
+import { ThemeSelect } from "client/components/theme-select";
 import { environment } from "client/enviroment";
 import { UserProfile } from "client/models/user";
 import { logout } from "client/redux/auth/auth-actions";
@@ -237,11 +238,24 @@ const Profile: FC<Props> = ({ className = "" }) => {
                     <Avatar size="large" src={profileUser.avatar} />
                   </div>
                 </div>
-                <FormView
-                  onSubmit={passwordFormSubmit}
-                  fields={PasswordFields}
-                  buttonText="Change"
-                />
+                <div className={b("change-pass")}>
+                  <FormView
+                    onSubmit={passwordFormSubmit}
+                    fields={PasswordFields}
+                    buttonText="Change"
+                  />
+                </div>
+                <div className={b("theme")}>
+                  <Text
+                    className={b("theme-label")}
+                    text="Theme"
+                    color="light"
+                    size="s"
+                  />
+                  <div className={b("theme-select")}>
+                    <ThemeSelect />
+                  </div>
+                </div>
               </div>
             </div>
           </div>

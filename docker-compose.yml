@@ -1,0 +1,47 @@
+version: "3.6"
+services:
+  app:
+    build:
+      context: .
+      args:
+        DATABASE_URL_PSQL: "postgres://runner:runner@postgresdb:5432/taipei-runner"
+        DATABASE_URL_MONGO: "mongodb://runner:runner@mongodb:27017/taipei-runner"
+        PORT: 4000
+    depends_on:
+      postgresdb:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+    ports:
+      - "4000:4000"
+  postgresdb:
+    image: postgres:13.2-alpine
+    ports:
+      - "5000:5432"
+    environment:
+      POSTGRES_PASSWORD: taipeipassword
+    volumes:
+      - ./db_init/postgres-initdb.sh:/docker-entrypoint-initdb.d/init.sh
+      - ./dockerdata/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: always
+  mongodb:
+    image: mongo
+    ports:
+      - "6000:27017"
+    volumes:
+      - ./db_init/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
+      - ./dockerdata/mongo:/data/db
+    restart: always
+    environment:
+      - MONGO_INITDB_DATABASE=taipei-runner
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo mongodb:27017 --quiet
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 40s

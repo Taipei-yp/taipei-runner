@@ -1,5 +1,7 @@
-export { api } from "./api";
-export { authApi } from "./auth-api";
-export { oauthApi } from "./oauth-api";
-export { profileApi } from "./profile-api";
+export { api } from "client/api/api";
+export { authApi } from "client/api/auth-api";
+export { forumApi } from "client/api/forum-api";
 export { leaderboardApi } from "client/api/leaderboard-api";
+export { oauthApi } from "client/api/oauth-api";
+export { profileApi } from "client/api/profile-api";
+export { themeApi } from "client/api/theme-api";

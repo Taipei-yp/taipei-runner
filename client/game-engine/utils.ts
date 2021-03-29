@@ -26,16 +26,18 @@ export function getTimeStamp(): number {
  * Если координата поля отсчета отрицательное значение отсчет идет от правого края поля отсчета
  * @param box Поле пересечения
  * @param relative Поле отсчета
+ * @param scf Коэффициент изменения размера
  */
 export function createRelativeCollisionBox(
   box: CollisionBox,
   relative: CollisionBox,
+  scf = 1,
 ): CollisionBox {
   return new CollisionBox(
-    relative.x + box.x + (box.x < 0 ? relative.width : 0),
-    relative.y + box.y + (box.y < 0 ? relative.height : 0),
-    box.width,
-    box.height,
+    relative.x + box.x * scf + (box.x < 0 ? relative.width : 0),
+    relative.y + box.y * scf + (box.y < 0 ? relative.height : 0),
+    box.width * scf,
+    box.height * scf,
   );
 }
 

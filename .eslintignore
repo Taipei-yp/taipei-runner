@@ -2,3 +2,5 @@
 *.css
 /index.js
 /config
+/db_init
+/index.ts

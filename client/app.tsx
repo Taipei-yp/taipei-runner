@@ -2,13 +2,14 @@ import React, { FC } from "react";
 import { Route, Switch } from "react-router-dom";
 import { PrivateRoute } from "./components/private-route";
 import { useAuth } from "./hooks/auth";
+import { useTheme } from "./hooks/theme";
 import routes from "./routes";
 
 export const App: FC = () => {
   const { isAuthorized } = useAuth();
-
+  const { nowTheme } = useTheme();
   return (
-    <div className="app">
+    <div className={`app ${nowTheme.theme}`}>
       <Switch>
         {routes.map(({ isPrivate, path, component, exact }) => {
           return isPrivate ? (

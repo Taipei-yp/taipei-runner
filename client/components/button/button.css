@@ -22,4 +22,9 @@
     background-color: var(--tpr-color-secondary);
     color: var(--tpr-color-secondary-contrast);
   }
+
+  &_size_s {
+    min-width: 65px;
+    padding: 2px;
+  }
 }

@@ -1,0 +1,1 @@
+export { feedbackRepository } from "./feedback";
